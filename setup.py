@@ -1,12 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from setuptools import setup
-from djangocms_link import __version__
-
-
-INSTALL_REQUIRES = [
-    #'Django-Select2',
-]
+from djangocms_snippet import __version__
 
 CLASSIFIERS = [
     'Development Status :: 5 - Production/Stable',
@@ -24,14 +19,13 @@ CLASSIFIERS = [
 ]
 
 setup(
-    name='djangocms-link',
+    name='djangocms-snippet',
     version=__version__,
-    description='Link Plugin for django CMS',
+    description='HTML snippet plugin for django CMS',
     author='Divio AG',
     author_email='info@divio.ch',
-    url='https://github.com/divio/djangocms-link',
-    packages=['djangocms_link', 'djangocms_link.migrations'],
-    install_requires=INSTALL_REQUIRES,
+    url='https://github.com/divio/djangocms-snippet',
+    packages=['djangocms_snippet', 'djangocms_snippet.migrations'],
     license='LICENSE.txt',
     platforms=['OS Independent'],
     classifiers=CLASSIFIERS,
