@@ -13,6 +13,18 @@ This plugin requires `django CMS` 3.0 or higher to be properly installed.
 * Add ``'djangocms_snippet'`` to your ``INSTALLED_APPS`` setting.
 * Run ``manage.py migrate djangocms_snippet``.
 
+Warning
+-------
+
+This plugin should mainly be used during development to quickly test HTML snippets.
+
+
+    This plugin is a potential security hazard, since it allows admins to place
+    custom JavaScript on pages. This may allow administrators with the right to
+    add snippets to elevate their privileges to superusers. This plugin should
+    only be used during the initial development phase for rapid prototyping and
+
+
 Translations
 ------------
 
