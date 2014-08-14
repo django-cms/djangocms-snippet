@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: django-cms\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-02-04 11:04+0100\n"
-"PO-Revision-Date: 2014-02-04 10:11+0000\n"
+"PO-Revision-Date: 2014-02-04 21:30+0000\n"
 "Last-Translator: Patrick Lauber <patrick.lauber@divio.ch>\n"
 "Language-Team: Lithuanian (http://www.transifex.com/projects/p/django-cms/language/lt/)\n"
 "MIME-Version: 1.0\n"
@@ -28,15 +28,15 @@ msgstr ""
 
 #: models.py:14
 msgid "name"
-msgstr ""
+msgstr "pavadinimas"
 
 #: models.py:15
 msgid "HTML"
-msgstr ""
+msgstr "HTML"
 
 #: models.py:16
 msgid "template"
-msgstr ""
+msgstr "šablonas"
 
 #: models.py:17
 msgid ""

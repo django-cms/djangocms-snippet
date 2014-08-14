@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Oleg Rybkin <okfish@yandex.ru>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: django-cms\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-02-04 11:04+0100\n"
-"PO-Revision-Date: 2014-02-04 10:30+0000\n"
-"Last-Translator: Patrick Lauber <patrick.lauber@divio.ch>\n"
+"PO-Revision-Date: 2014-03-09 20:30+0000\n"
+"Last-Translator: Oleg Rybkin <okfish@yandex.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/django-cms/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -44,7 +45,7 @@ msgid ""
 "If \"template\" is given, the contents of field \"HTML\" will be passed as "
 "template variable {{ html }} to the template. Else, the content of \"HTML\" "
 "is rendered."
-msgstr ""
+msgstr "Введите имя шаблона (напр. \"snippets/plugin_xy.html\") , который будет отображен. Если \"template\" задан, содержимое поля \"HTML\" будет передано как переменная {{ html }} в этот шаблон. В противном случае, содержимое \"HTML\" будет отображено как есть."
 
 #: models.py:27
 msgid "Snippets"
