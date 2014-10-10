@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Vusheslavov Eduard <vey@live.ru>, 2014
 msgid ""
 msgstr ""
 "Project-Id-Version: django-cms\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-02-04 11:04+0100\n"
-"PO-Revision-Date: 2014-02-04 10:30+0000\n"
-"Last-Translator: Patrick Lauber <patrick.lauber@divio.ch>\n"
+"PO-Revision-Date: 2014-09-26 13:41+0000\n"
+"Last-Translator: Vusheslavov Eduard <vey@live.ru>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/projects/p/django-cms/language/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,12 +20,12 @@ msgstr ""
 
 #: cms_plugins.py:13 models.py:26 models.py:35
 msgid "Snippet"
-msgstr ""
+msgstr "Фрагмент"
 
 #: cms_plugins.py:31
 #, python-format
 msgid "Template %(template)s does not exist."
-msgstr ""
+msgstr "Шаблон %(template)s не існує."
 
 #: models.py:14
 msgid "name"
@@ -32,7 +33,7 @@ msgstr "ім’я"
 
 #: models.py:15
 msgid "HTML"
-msgstr ""
+msgstr "HTML"
 
 #: models.py:16
 msgid "template"
