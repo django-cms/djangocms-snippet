@@ -25,7 +25,7 @@ setup(
     author='Divio AG',
     author_email='info@divio.ch',
     url='https://github.com/divio/djangocms-snippet',
-    packages=['djangocms_snippet', 'djangocms_snippet.migrations'],
+    packages=['djangocms_snippet', 'djangocms_snippet.migrations', 'djangocms_snippet.migrations_django'],
     license='LICENSE.txt',
     platforms=['OS Independent'],
     classifiers=CLASSIFIERS,
