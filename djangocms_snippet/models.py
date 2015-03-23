@@ -6,6 +6,10 @@ from cms.models import CMSPlugin
 from cms.utils.helpers import reversion_register
 
 
+# Search is enabled by default to keep backwards compatibility.
+SEARCH_ENABLED = getattr(settings, 'DJANGOCMS_SNIPPET_SEARCH', True)
+
+
 # Stores the actual data
 @python_2_unicode_compatible
 class Snippet(models.Model):
@@ -27,10 +31,13 @@ class Snippet(models.Model):
         verbose_name = _("Snippet")
         verbose_name_plural = _("Snippets")
 
+
 # Plugin model - just a pointer to Snippet
 @python_2_unicode_compatible
 class SnippetPtr(CMSPlugin):
     snippet = models.ForeignKey(Snippet)
+
+    search_fields = ['snippet__html'] if SEARCH_ENABLED else []
 
     class Meta:
         verbose_name = _("Snippet")
@@ -38,17 +45,6 @@ class SnippetPtr(CMSPlugin):
     def __str__(self):
         # Return the referenced snippet's name rather than the default (ID #)
         return self.snippet.name
-
-    @property
-    def search_fields(self):
-        # Search is enabled by default to keep backwards compatibility.
-        search_enabled = getattr(settings, 'DJANGOCMS_SNIPPET_SEARCH', True)
-
-        if search_enabled:
-            fields = ['snippet__html']
-        else:
-            fields = []
-        return fields
 
 
 # We don't both with SnippetPtr, since all the data is actually in Snippet
