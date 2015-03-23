@@ -51,7 +51,5 @@ class SnippetPtr(CMSPlugin):
         return fields
 
 
-
 # We don't both with SnippetPtr, since all the data is actually in Snippet
 reversion_register(Snippet)
-
