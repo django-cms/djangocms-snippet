@@ -1,4 +1,5 @@
 from cms.utils.compat.dj import python_2_unicode_compatible
+from djanog.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from cms.models import CMSPlugin
@@ -34,11 +35,21 @@ class SnippetPtr(CMSPlugin):
     class Meta:
         verbose_name = _("Snippet")
 
-    search_fields = ('snippet__html',)
-
     def __str__(self):
         # Return the referenced snippet's name rather than the default (ID #)
         return self.snippet.name
+
+    @property
+    def search_fields(self):
+        # Search is enabled by default to keep backwards compatibility.
+        search_enabled = getattr(settings, 'DJANGOCMS_SNIPPET_SEARCH', True)
+
+        if search_enabled:
+            fields = ['snippet__html']
+        else:
+            fields = []
+        return fields
+
 
 
 # We don't both with SnippetPtr, since all the data is actually in Snippet
