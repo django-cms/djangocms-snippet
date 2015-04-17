@@ -26,6 +26,10 @@ This plugin should mainly be used during development to quickly test HTML snippe
     only be used during the initial development phase for rapid prototyping and
 
 
+By default, the contents of a snippet are not searchable when using django-cms's builtin search feature.
+
+To allow the contents of all snippets to be searchable, please set ``DJANGOCMS_SNIPPET_SEARCH`` to ``True`` in your settings.
+
 Translations
 ------------
 

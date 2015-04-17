@@ -7,7 +7,7 @@ from cms.utils.helpers import reversion_register
 
 
 # Search is enabled by default to keep backwards compatibility.
-SEARCH_ENABLED = getattr(settings, 'DJANGOCMS_SNIPPET_SEARCH', True)
+SEARCH_ENABLED = getattr(settings, 'DJANGOCMS_SNIPPET_SEARCH', False)
 
 
 # Stores the actual data
