@@ -27,6 +27,7 @@ This plugin should mainly be used during development to quickly test HTML snippe
 
 
 If you chose to use this in production, know that by default the cms searches the contents of snippets when using the builtin cms search features.
+
 To prevent the contents of all snippets from being searchable, please set ``DJANGOCMS_SNIPPET_SEARCH`` to ``False`` in your settings.
 
 Translations
