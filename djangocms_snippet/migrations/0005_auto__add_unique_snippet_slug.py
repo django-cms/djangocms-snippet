@@ -8,15 +8,13 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Snippet.slug'
-        db.add_column(u'djangocms_snippet_snippet', 'slug',
-                      self.gf('django.db.models.fields.SlugField')(default='', max_length=75),
-                      keep_default=False)
+        # Adding unique constraint on 'Snippet', fields ['slug']
+        db.create_unique(u'djangocms_snippet_snippet', ['slug'])
 
 
     def backwards(self, orm):
-        # Deleting field 'Snippet.slug'
-        db.delete_column(u'djangocms_snippet_snippet', 'slug')
+        # Removing unique constraint on 'Snippet', fields ['slug']
+        db.delete_unique(u'djangocms_snippet_snippet', ['slug'])
 
 
     models = {
@@ -46,7 +44,7 @@ class Migration(SchemaMigration):
             'html': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
-            'slug': ('django.db.models.fields.SlugField', [], {'default': "''", 'max_length': '75'}),
+            'slug': ('django.db.models.fields.SlugField', [], {'default': "''", 'unique': 'True', 'max_length': '75'}),
             'template': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'})
         },
         u'djangocms_snippet.snippetptr': {

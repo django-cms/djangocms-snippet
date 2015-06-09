@@ -1,23 +1,26 @@
 # -*- coding: utf-8 -*-
 from south.utils import datetime_utils as datetime
 from south.db import db
-from south.v2 import SchemaMigration
+from south.v2 import DataMigration
 from django.db import models
+from django.utils.text import slugify
 
-
-class Migration(SchemaMigration):
+class Migration(DataMigration):
 
     def forwards(self, orm):
-        # Adding field 'Snippet.slug'
-        db.add_column(u'djangocms_snippet_snippet', 'slug',
-                      self.gf('django.db.models.fields.SlugField')(default='', max_length=75),
-                      keep_default=False)
-
+        "Write your forwards methods here."
+        # Note: Don't use "from appname.models import ModelName".
+        # Use orm.ModelName to refer to models in this application,
+        # and orm['appname.ModelName'] for models in other applications.
+        for snippet in orm.Snippet.objects.all():
+            snippet.slug = slugify(snippet.name)
+            snippet.save()
 
     def backwards(self, orm):
-        # Deleting field 'Snippet.slug'
-        db.delete_column(u'djangocms_snippet_snippet', 'slug')
-
+        "Write your backwards methods here."
+        for snippet in orm.Snippet.objects.all():
+            snippet.slug = ""
+            snippet.save()
 
     models = {
         'cms.cmsplugin': {
@@ -57,3 +60,4 @@ class Migration(SchemaMigration):
     }
 
     complete_apps = ['djangocms_snippet']
+    symmetrical = True
