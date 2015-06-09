@@ -13,8 +13,9 @@ class Migration(DataMigration):
         # Use orm.ModelName to refer to models in this application,
         # and orm['appname.ModelName'] for models in other applications.
         for snippet in orm.Snippet.objects.all():
-            snippet.slug = slugify(snippet.name)
-            snippet.save()
+            if snippet.slug == "":
+                snippet.slug = slugify(snippet.name)
+                snippet.save()
 
     def backwards(self, orm):
         "Write your backwards methods here."
