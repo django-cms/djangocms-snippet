@@ -27,7 +27,7 @@ def exceptionless(truth):
             pass
         else:
             # Reraising exception
-            raise e
+            raise
 
 
 class SnippetFragment(template.Node):
