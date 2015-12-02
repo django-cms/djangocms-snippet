@@ -23,7 +23,7 @@ def exceptionless(truth):
         yield
     except Exception as e:
         if truth:
-            # WARNING: suppresing expcetion
+            # WARNING: suppressing exception
             pass
         else:
             # Reraising exception
@@ -45,7 +45,10 @@ class SnippetFragment(template.Node):
         self.snippet_id_varname = template.Variable(snippet_id_varname)
         if args and "or" in args:
             # We are in a 'parse util' case
-            # ALERT: Exceptions will be suppresed
+            # ALERT: Exceptions will be suppressed to avoid errors from bad 
+            # tag content
+            # Maybe we could analyze more usage case to catch only exceptions 
+            # related to bad tag content
             self.parse_until = True
             self.nodelist = args[1]
 
