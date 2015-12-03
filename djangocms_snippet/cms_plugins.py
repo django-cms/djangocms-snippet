@@ -1,12 +1,18 @@
+# -*- coding: utf-8 -*-
+
 import sys
-from cms.plugin_base import CMSPluginBase
-from cms.plugin_pool import plugin_pool
-from django.conf import settings
+
 from django import template
+from django.conf import settings
+from django.template.context import Context
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from django.template.context import Context
+
+from cms.plugin_base import CMSPluginBase
+from cms.plugin_pool import plugin_pool
+
 from djangocms_snippet.models import SnippetPtr
+
 
 class SnippetPlugin(CMSPluginBase):
     model = SnippetPtr
@@ -16,8 +22,8 @@ class SnippetPlugin(CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         context.update({
-            'placeholder':placeholder,
-            'object':instance,
+            'placeholder': placeholder,
+            'object': instance,
         })
         try:
             if instance.snippet.template:
@@ -28,7 +34,8 @@ class SnippetPlugin(CMSPluginBase):
                 t = template.Template(instance.snippet.html)
                 content = t.render(Context(context))
         except template.TemplateDoesNotExist:
-            content = _('Template %(template)s does not exist.') % {'template': instance.snippet.template}
+            content = _('Template %(template)s does not exist.') % {
+                'template': instance.snippet.template}
         except Exception:
             exc = sys.exc_info()[0]
             content = str(exc)

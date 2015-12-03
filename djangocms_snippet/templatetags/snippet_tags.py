@@ -21,7 +21,7 @@ def exceptionless(truth):
     # when 'True' any expection will be suppressed
     try:
         yield
-    except Exception as e:
+    except Exception:
         if truth:
             # WARNING: suppressing exception
             pass
@@ -38,16 +38,18 @@ class SnippetFragment(template.Node):
 
     def __init__(self, snippet_id_varname, *args):
         """
-        :type insert_instance_varname: string or object ``django.db.models.Model``
-        :param insert_instance_varname: Instance variable name or a string slug or object id
+        :type insert_instance_varname: string or object
+                                       ``django.db.models.Model``
+        :param insert_instance_varname: Instance variable name or a string slug
+                                        or object id
         """
         self.parse_until = False
         self.snippet_id_varname = template.Variable(snippet_id_varname)
         if args and "or" in args:
             # We are in a 'parse util' case
-            # ALERT: Exceptions will be suppressed to avoid errors from bad 
+            # ALERT: Exceptions will be suppressed to avoid errors from bad
             # tag content
-            # Maybe we could analyze more usage case to catch only exceptions 
+            # Maybe we could analyze more usage case to catch only exceptions
             # related to bad tag content
             self.parse_until = True
             self.nodelist = args[1]
