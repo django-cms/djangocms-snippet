@@ -9,7 +9,7 @@ Installation
 
 This plugin requires `django CMS` 3.0 or higher to be properly installed.
 
-* In your projects `virtualenv`_, run ``pip install djangocms-snippet``.
+* In your projects `virtualenv`, run ``pip install djangocms-snippet``.
 * Add ``'djangocms_snippet'`` to your ``INSTALLED_APPS`` setting.
 * If using Django 1.6 and South < 1.0.2 add ``'djangocms_snippet': 'djangocms_snippet.migrations_django',``
   to ``SOUTH_MIGRATION_MODULES`` (or define ``SOUTH_MIGRATION_MODULES`` if it 
@@ -19,18 +19,21 @@ This plugin requires `django CMS` 3.0 or higher to be properly installed.
 Warning
 -------
 
-This plugin should mainly be used during development to quickly test HTML snippets.
+This plugin should mainly be used during development to quickly test
+HTML snippets.::
 
+    This plugin is a potential security hazard, since it allows authorized-
+    users to place custom markup or Javascript on pages bypassing all of
+    Django's normal sanitization mechanisms. This could be exploited by users
+    with the right to add snippets to elevate their privileges to superusers.
+    This plugin should only be used during the initial development phase for
+    rapid prototyping and testing. 
 
-    This plugin is a potential security hazard, since it allows admins to place
-    custom JavaScript on pages. This may allow administrators with the right to
-    add snippets to elevate their privileges to superusers. This plugin should
-    only be used during the initial development phase for rapid prototyping and
+By default, the contents of a snippet are not searchable when using django-cms's
+builtin search feature.
 
-
-By default, the contents of a snippet are not searchable when using django-cms's builtin search feature.
-
-To allow the contents of all snippets to be searchable, please set ``DJANGOCMS_SNIPPET_SEARCH`` to ``True`` in your settings.
+To allow the contents of all snippets to be searchable, please set
+``DJANGOCMS_SNIPPET_SEARCH`` to ``True`` in your settings.
 
 Template tags
 -------------
@@ -58,7 +61,7 @@ Or with its slug (a string):
 
 Finally, instead of the ID or slug, you can directly give a snippet instance.
 
-Also you can use it as a template block giving a content fallback:
+Also you can use it as a template block giving a content fallback::
 
     {% snippet_fragment 'my-snippet' or %}
         ... your content fallback here ...
