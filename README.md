@@ -30,10 +30,43 @@ By default, the contents of a snippet are not searchable when using django-cms's
 
 To allow the contents of all snippets to be searchable, please set ``DJANGOCMS_SNIPPET_SEARCH`` to ``True`` in your settings.
 
+Template tags
+-------------
+
+There is a template tag you can use in your templates even out of the CMS templates:
+
+    {% load snippet_tags %}
+    {% snippet_fragment [Snippet ID or slug or instance] %}
+
+The first argument is required, you can use either:
+
+* The Snippet ID;
+* The Snippet slug;
+* The Snippet instance.
+
+Target your snippet using its ID (a number):
+
+    {% load snippet_tags %}
+    {% snippet_fragment 42 %}
+
+Or with its slug (a string):
+
+    {% load snippet_tags %}
+    {% snippet_fragment 'my-snippet' %}
+
+Finally, instead of the ID or slug, you can directly give a snippet instance.
+
+Also you can use it as a template block giving a content fallback:
+
+    {% snippet_fragment 'my-snippet' or %}
+        ... your content fallback here ...
+    {% endsnippet_fragment %}
+
+In case there is no matched snippet for the given instance/id/slug, content fallback will be rendered instead.
+
 Translations
 ------------
 
 If you want to help translate the plugin please do it on transifex:
 
 https://www.transifex.com/projects/p/django-cms/resource/djangocms-snippet/
-

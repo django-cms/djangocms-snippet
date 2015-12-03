@@ -22,6 +22,7 @@ class Snippet(models.Model):
         help_text=_('Enter a template (i.e. "snippets/plugin_xy.html") which will be rendered. ' + \
         'If "template" is given, the contents of field "HTML" will be passed as template variable {{ html }} to the template. ' + \
         'Else, the content of "HTML" is rendered.'))
+    slug = models.SlugField(_('slug'), max_length=75, unique=True, blank=False, default='')
 
     def __str__(self):
         return self.name
