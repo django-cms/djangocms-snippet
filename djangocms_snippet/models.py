@@ -21,11 +21,15 @@ class Snippet(models.Model):
     """
     name = models.CharField(_("name"), max_length=255, unique=True)
     html = models.TextField(_("HTML"), blank=True)
-    template = models.CharField(_("template"), max_length=50, blank=True, \
-        help_text=_('Enter a template (i.e. "snippets/plugin_xy.html") which will be rendered. ' + \
-        'If "template" is given, the contents of field "HTML" will be passed as template variable {{ html }} to the template. ' + \
-        'Else, the content of "HTML" is rendered.'))
-    slug = models.SlugField(_('slug'), max_length=75, unique=True, blank=False, default='')
+    template = models.CharField(
+        _("template"), max_length=50, blank=True,
+        help_text=_('Enter a template (i.e. "snippets/plugin_xy.html") which '
+                    'will be rendered. If "template" is given, the contents of '
+                    'field "HTML" will be passed as template variable '
+                    '{{ html }} to the template. Else, the content of "HTML" '
+                    'is rendered.'))
+    slug = models.SlugField(
+        _('slug'), max_length=75, unique=True, blank=False, default='')
 
     def __str__(self):
         return self.name

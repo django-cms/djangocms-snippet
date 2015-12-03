@@ -34,10 +34,11 @@ TEMPLATE_CONTEXT_PROCESSORS = [
 
 ROOT_URLCONF = 'cms.urls'
 
+
 def schemamigration():
     # turn ``schemamigration.py --initial`` into
-    # ``manage.py schemamigration cmsplugin_disqus --initial`` and setup the 
-    # enviroment
+    # ``manage.py schemamigration cmsplugin_disqus --initial`` and setup the
+    # environment
     from django.conf import settings
 
     from django.core.management import ManagementUtility
