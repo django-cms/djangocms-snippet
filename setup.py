@@ -29,7 +29,7 @@ setup(
         'djangocms_snippet',
         'djangocms_snippet.migrations',
         'djangocms_snippet.south_migrations',
-        'djangocms_snippet.templatetags'
+        'djangocms_snippet.templatetags',
     ],
     license='LICENSE.txt',
     platforms=['OS Independent'],
