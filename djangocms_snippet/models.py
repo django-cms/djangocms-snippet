@@ -43,6 +43,14 @@ class Snippet(models.Model):
 # Plugin model - just a pointer to Snippet
 @python_2_unicode_compatible
 class SnippetPtr(CMSPlugin):
+    # Add an app namespace to related_name to avoid field name clashes
+    # with any other plugins that have a field with the same name as the
+    # lowercase of the class name of this model.
+    # https://github.com/divio/django-cms/issues/5030
+    cmsplugin_ptr = models.OneToOneField(
+        CMSPlugin, related_name='djangocms_snippet_snippetptr',
+        parent_link=True)
+
     snippet = models.ForeignKey(Snippet)
 
     search_fields = ['snippet__html'] if SEARCH_ENABLED else []
