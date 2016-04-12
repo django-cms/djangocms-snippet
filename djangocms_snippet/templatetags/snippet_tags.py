@@ -94,10 +94,10 @@ class SnippetFragment(template.Node):
             else:
                 t = template.Template(instance.html)
                 content = t.render(template.Context(context))
-        except template.TemplateDoesNotExist, e:
+        except template.TemplateDoesNotExist as e:
             content = _('Template %(template)s does not exist.') % {
                 'template': instance.template}
-        except Exception, e:
+        except Exception as e:
             content = str(e)
             if self.parse_until:
                 # In case we are running 'exceptionless'
