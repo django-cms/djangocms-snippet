@@ -3,7 +3,7 @@
 """
 Snippet template tags
 """
-
+import six
 from contextlib import contextmanager
 
 from django import template
@@ -66,7 +66,7 @@ class SnippetFragment(template.Node):
         snippet_instance = self.snippet_id_varname.resolve(context)
         # Assume this is slug
         with exceptionless(self.parse_until):
-            if isinstance(snippet_instance, basestring):
+            if isinstance(snippet_instance, six.string_types):
                 snippet_instance = Snippet.objects.get(slug=snippet_instance)
             # Assume this is an id
             elif isinstance(snippet_instance, int):
@@ -94,10 +94,10 @@ class SnippetFragment(template.Node):
             else:
                 t = template.Template(instance.html)
                 content = t.render(template.Context(context))
-        except template.TemplateDoesNotExist, e:
+        except template.TemplateDoesNotExist:
             content = _('Template %(template)s does not exist.') % {
                 'template': instance.template}
-        except Exception, e:
+        except Exception as e:
             content = str(e)
             if self.parse_until:
                 # In case we are running 'exceptionless'
