@@ -36,5 +36,8 @@ setup(
     classifiers=CLASSIFIERS,
     long_description=open('README.rst').read(),
     include_package_data=True,
-    zip_safe=False
+    zip_safe=False,
+    install_requires=(
+        'six',
+    ),
 )
