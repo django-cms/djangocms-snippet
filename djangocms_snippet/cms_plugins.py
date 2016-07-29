@@ -19,6 +19,7 @@ class SnippetPlugin(CMSPluginBase):
     name = _("Snippet")
     render_template = "cms/plugins/snippet.html"
     text_enabled = True
+    text_editor_preview = False
 
     def render(self, context, instance, placeholder):
         context.update({
