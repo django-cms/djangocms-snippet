@@ -1,0 +1,6 @@
+{
+    "package-name": "djangocms-snippet",
+    "installed-apps": [
+        "djangocms_snippet"
+    ]
+}
