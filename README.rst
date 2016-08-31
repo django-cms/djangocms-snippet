@@ -68,7 +68,7 @@ to edit the snippet content. You can customize the
 `theme <https://github.com/ajaxorg/ace/tree/master/lib/ace/theme>`_ and
 `mode <https://github.com/ajaxorg/ace/tree/master/lib/ace/mode>`_ through::
 
-    DJANGOCMS_SNIPPET_THEME = 'twilight'
+    DJANGOCMS_SNIPPET_THEME = 'github'
     DJANGOCMS_SNIPPET_MODE = 'html'
 
 

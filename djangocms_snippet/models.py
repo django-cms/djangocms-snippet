@@ -63,7 +63,7 @@ class SnippetPtr(CMSPlugin):
     # https://github.com/divio/django-cms/issues/5030
     cmsplugin_ptr = models.OneToOneField(
         CMSPlugin,
-        related_name='djangocms_snippet_snippetptr',
+        related_name='%(app_label)s_%(class)s',
         parent_link=True,
     )
 

@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='snippet',
             name='slug',
-            field=models.SlugField(default=b'', unique=True, max_length=255, verbose_name='Slug'),
+            field=models.SlugField(default='', unique=True, max_length=255, verbose_name='Slug'),
         ),
         migrations.AlterField(
             model_name='snippet',
