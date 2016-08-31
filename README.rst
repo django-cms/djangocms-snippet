@@ -1,77 +1,104 @@
-djangocms-snippet
-=================
+==================
+django CMS Snippet
+==================
 
-A HTML snippet plugin for django CMS.
+
+|pypi| |build| |coverage|
 
 
-Installation
-------------
+**django CMS Snippet** provides a plugin for `django CMS <http://django-cms.org>`_
+to inject HTML, CSS or JavaScript snippets into your website.
 
-This plugin requires `django CMS` 3.0 or higher to be properly installed.
+This addon is compatible with `Aldryn <http://aldryn.com>`_ and is also available on the
+`django CMS Marketplace <https://marketplace.django-cms.org/en/addons/browse/djangocms-snippet/>`_
+for easy installation.
 
-* In your projects `virtualenv`, run ``pip install djangocms-snippet``.
-* Add ``'djangocms_snippet'`` to your ``INSTALLED_APPS`` setting.
-* If using Django 1.6 and South < 1.0.2 add ``'djangocms_snippet': 'djangocms_snippet.migrations_django',``
-  to ``SOUTH_MIGRATION_MODULES`` (or define ``SOUTH_MIGRATION_MODULES`` if it 
-  does not exist).
-* Run ``manage.py migrate djangocms_snippet``.
-
-Warning
--------
-
-This plugin should mainly be used during development to quickly test
-HTML snippets.::
+We recommend using this plugin only during development.::
 
     This plugin is a potential security hazard, since it allows authorized-
     users to place custom markup or Javascript on pages bypassing all of
     Django's normal sanitization mechanisms. This could be exploited by users
     with the right to add snippets to elevate their privileges to superusers.
     This plugin should only be used during the initial development phase for
-    rapid prototyping and testing. 
+    rapid prototyping and testing.
 
-By default, the contents of a snippet are not searchable when using django-cms's
-builtin search feature.
 
-To allow the contents of all snippets to be searchable, please set
-``DJANGOCMS_SNIPPET_SEARCH`` to ``True`` in your settings.
+Contributing
+============
 
-Template tags
+This is a an open-source project. We'll be delighted to receive your
+feedback in the form of issues and pull requests. Before submitting your
+pull request, please review our `contribution guidelines
+<http://docs.django-cms.org/en/latest/contributing/index.html>`_.
+
+One of the easiest contributions you can make is helping to translate this addon on
+`Transifex <https://www.transifex.com/projects/p/djangocms-snippet/>`_.
+
+
+Documentation
+=============
+
+See ``REQUIREMENTS`` in the `setup.py <https://github.com/divio/djangocms-snippet/blob/master/setup.py>`_
+file for additional dependencies:
+
+* Python 2.7, 3.3 or higher
+* Django 1.8 or higher
+
+
+Installation
+------------
+
+For a manual install:
+
+* run ``pip install djangocms-snippet``
+* add ``djangocms_snippet`` to your ``INSTALLED_APPS``
+* run ``python manage.py migrate djangocms_snippet``
+
+
+Configuration
 -------------
 
-There is a template tag you can use in your templates even out of the CMS templates:
+To allow the contents of all snippets to be searchable, please set
+``DJANGOCMS_SNIPPET_SEARCH`` to ``True`` in your settings::
+
+    DJANGOCMS_SNIPPET_SEARCH = True
+
+
+Template tag
+------------
+
+You can also use a template tag to render a snippet rather than a plugin::
 
     {% load snippet_tags %}
-    {% snippet_fragment [Snippet ID or slug or instance] %}
+    {% snippet_fragment [reference] %}
 
-The first argument is required, you can use either:
+Replace ``[reference]`` with either:
 
-* The Snippet ID;
-* The Snippet slug;
-* The Snippet instance.
+* The snippet ID, e.g. ``{% snippet_fragment 42 %}``
+* The snippet slug, e.g. ``{% snippet_fragment 'my-snippet' %}``
+* The snippet instance, e.g. ``{% snippet_fragment instance.snippet %}``
 
-Target your snippet using its ID (a number):
-
-    {% load snippet_tags %}
-    {% snippet_fragment 42 %}
-
-Or with its slug (a string):
-
-    {% load snippet_tags %}
-    {% snippet_fragment 'my-snippet' %}
-
-Finally, instead of the ID or slug, you can directly give a snippet instance.
-
-Also you can use it as a template block giving a content fallback::
+Optionally provide a fallback if there is no matching id/slug/instance::
 
     {% snippet_fragment 'my-snippet' or %}
         ... your content fallback here ...
     {% endsnippet_fragment %}
 
-In case there is no matched snippet for the given instance/id/slug, content fallback will be rendered instead.
 
-Translations
-------------
+Running Tests
+-------------
 
-If you want to help translate the plugin please do it on transifex:
+You can run tests by executing::
 
-https://www.transifex.com/projects/p/django-cms/resource/djangocms-snippet/
+    virtualenv env
+    source env/bin/activate
+    pip install -r tests/requirements.txt
+    python setup.py test
+
+
+.. |pypi| image:: https://badge.fury.io/py/djangocms-snippet.svg
+    :target: http://badge.fury.io/py/djangocms-snippet
+.. |build| image:: https://travis-ci.org/divio/djangocms-snippet.svg?branch=master
+    :target: https://travis-ci.org/divio/djangocms-snippet
+.. |coverage| image:: https://codecov.io/gh/divio/djangocms-snippet/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/divio/djangocms-snippet

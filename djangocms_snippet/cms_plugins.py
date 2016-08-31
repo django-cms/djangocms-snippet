@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import sys
 
 from django import template
@@ -16,8 +15,8 @@ from djangocms_snippet.models import SnippetPtr
 
 class SnippetPlugin(CMSPluginBase):
     model = SnippetPtr
-    name = _("Snippet")
-    render_template = "cms/plugins/snippet.html"
+    name = _('Snippet')
+    render_template = 'djangocms_snippet/snippet.html'
     text_enabled = True
     text_editor_preview = False
 
@@ -29,7 +28,9 @@ class SnippetPlugin(CMSPluginBase):
         try:
             if instance.snippet.template:
                 t = template.loader.get_template(instance.snippet.template)
-                context.update({'html': mark_safe(instance.snippet.html)})
+                context.update({
+                    'html': mark_safe(instance.snippet.html)
+                })
                 content = t.render(Context(context))
             else:
                 t = template.Template(instance.snippet.html)
@@ -45,7 +46,5 @@ class SnippetPlugin(CMSPluginBase):
         })
         return context
 
-    def icon_src(self, instance):
-        return settings.STATIC_URL + u"cms/img/icons/plugins/snippet.png"
 
 plugin_pool.register_plugin(SnippetPlugin)

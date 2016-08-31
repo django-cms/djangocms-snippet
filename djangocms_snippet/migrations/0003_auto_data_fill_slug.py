@@ -5,6 +5,7 @@ from collections import Counter
 from django.db import models, migrations
 from django.utils.text import slugify
 
+
 def auto_fill_slugs(apps, schema_editor):
     """
     Go through every snippet to fill them a slug if not any
@@ -19,6 +20,7 @@ def auto_fill_slugs(apps, schema_editor):
                 snippet_item.slug = "{0}-{1}".format(snippet_item.slug, str(SlugCounter[snippet_item.slug]))
             SlugCounter[snippet_item.slug] += 1
             snippet_item.save()
+
 
 class Migration(migrations.Migration):
 
