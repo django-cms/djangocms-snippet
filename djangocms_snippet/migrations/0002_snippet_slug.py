@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='snippet',
             name='slug',
-            field=models.SlugField(default=b'', max_length=75, verbose_name='slug'),
+            field=models.SlugField(default='', max_length=75, verbose_name='slug'),
             preserve_default=True,
         ),
     ]
