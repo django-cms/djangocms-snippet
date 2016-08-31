@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from setuptools import find_packages, setup
 
-from djangocms_video import __version__
+from djangocms_snippet import __version__
 
 
 REQUIREMENTS = [
