@@ -20,7 +20,7 @@ class SnippetAdmin(admin.ModelAdmin):
     }
 
     formfield_overrides = {
-        models.TextField: { 'widget': Textarea(attrs=text_area_attrs)}
+        models.TextField: {'widget': Textarea(attrs=text_area_attrs)}
     }
 
 
