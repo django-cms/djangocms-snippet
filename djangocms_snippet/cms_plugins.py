@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 
-from djangocms_snippet.models import SnippetPtr
+from .models import SnippetPtr
 
 
 class SnippetPlugin(CMSPluginBase):
