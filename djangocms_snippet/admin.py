@@ -13,7 +13,7 @@ class SnippetAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
     change_form_template = 'djangocms_snippet/admin/change_form.html'
     text_area_attrs = {
-        'rows': '20',
+        'rows': 20,
         'data-editor': True,
         'data-mode': getattr(settings, 'DJANGOCMS_SNIPPET_THEME', 'html'),
         'data-theme': getattr(settings, 'DJANGOCMS_SNIPPET_MODE', 'github'),
