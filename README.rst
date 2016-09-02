@@ -22,6 +22,8 @@ We recommend using this plugin only during development::
     This plugin should only be used during the initial development phase for
     rapid prototyping and testing.
 
+.. image:: preview.gif
+
 
 Contributing
 ============
