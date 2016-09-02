@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """
 Snippet template tags
 """
@@ -31,7 +30,6 @@ def exceptionless(truth):
 
 
 class SnippetFragment(template.Node):
-
     """
     Get a snippet HTML fragment
     """
@@ -45,7 +43,7 @@ class SnippetFragment(template.Node):
         """
         self.parse_until = False
         self.snippet_id_varname = template.Variable(snippet_id_varname)
-        if args and "or" in args:
+        if args and 'or' in args:
             # We are in a 'parse util' case
             # ALERT: Exceptions will be suppressed to avoid errors from bad
             # tag content
@@ -89,7 +87,9 @@ class SnippetFragment(template.Node):
         try:
             if instance.template:
                 t = template.loader.get_template(instance.template)
-                context.update({'html': mark_safe(instance.html)})
+                context.update({
+                    'html': mark_safe(instance.html)
+                })
                 content = t.render(template.Context(context))
             else:
                 t = template.Template(instance.html)
@@ -107,13 +107,12 @@ class SnippetFragment(template.Node):
         return content
 
 
-@register.tag(name="snippet_fragment")
+@register.tag(name='snippet_fragment')
 def do_snippet_fragment(parser, token):
     """
     Display a snippet HTML fragment
 
     Usage : ::
-
         {% snippet_fragment [Snippet ID or instance] %}
 
         {% snippet_fragment [Snippet ID or instance] or %}
@@ -123,8 +122,8 @@ def do_snippet_fragment(parser, token):
     args = token.split_contents()
     if len(args) < 2:
         raise template.TemplateSyntaxError(
-            "You need to specify at least an \"Snippet\" ID or instance")
-    if "or" in args:
+            'You need to specify at least a "snippet" ID, slug or instance')
+    if 'or' in args:
         # Catch contents between tags and pass to renderer
         args.append(parser.parse(('endsnippet_fragment',)))
         parser.delete_first_token()
