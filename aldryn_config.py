@@ -4,7 +4,7 @@ from aldryn_client import forms
 
 class Form(forms.BaseForm):
     editor_theme = forms.CharField(
-        'Custom editor theme, (e.g. "github", default: "github")',
+        'Custom editor theme, (e.g. "twilight", default: "github")',
         required=False,
     )
     editor_mode = forms.CharField(
