@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-02 07:32+0200\n"
+"POT-Creation-Date: 2016-09-02 13:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,10 +44,10 @@ msgstr ""
 
 #: models.py:34
 msgid ""
-"Enter a template (i.e. \"snippets/plugin_xy.html\") which will be rendered. "
-"If \"template\" is given, the contents of field \"HTML\" will be passed as "
-"template variable {{ html }} to the template. Else, the content of \"HTML\" "
-"is rendered."
+"Enter a template (e.g. \"snippets/plugin_xy.html\") to be rendered. If "
+"\"template\" is given, the contents of field \"HTML\" will be passed as "
+"template variable {{ html }} to the template. Otherwise, the content of "
+"\"HTML\" is rendered."
 msgstr ""
 
 #: models.py:41

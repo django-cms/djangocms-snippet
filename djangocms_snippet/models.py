@@ -31,11 +31,11 @@ class Snippet(models.Model):
         verbose_name=_('Template'),
         blank=True,
         max_length=255,
-        help_text=_('Enter a template (i.e. "snippets/plugin_xy.html") which '
-                    'will be rendered. If "template" is given, the contents of '
+        help_text=_('Enter a template (e.g. "snippets/plugin_xy.html") to '
+                    'be rendered. If "template" is given, the contents of '
                     'field "HTML" will be passed as template variable '
-                    '{{ html }} to the template. Else, the content of "HTML" '
-                    'is rendered.'),
+                    '{{ html }} to the template. Otherwise, the content of '
+                    '"HTML" is rendered.'),
     )
     slug = models.SlugField(
         verbose_name=_('Slug'),

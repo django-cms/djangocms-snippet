@@ -13,7 +13,7 @@ This addon is compatible with `Aldryn <http://aldryn.com>`_ and is also availabl
 `django CMS Marketplace <https://marketplace.django-cms.org/en/addons/browse/djangocms-snippet/>`_
 for easy installation.
 
-We recommend using this plugin only during development.::
+We recommend using this plugin only during development::
 
     This plugin is a potential security hazard, since it allows authorized-
     users to place custom markup or Javascript on pages bypassing all of
