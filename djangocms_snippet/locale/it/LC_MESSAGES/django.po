@@ -1,52 +1,55 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
-# Translators:
-# Stefano Brentegani <sbrentegani@gmail.com>, 2014
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: django-cms\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-04 11:04+0100\n"
-"PO-Revision-Date: 2014-10-10 14:51+0000\n"
-"Last-Translator: Patrick Lauber <patrick.lauber@divio.ch>\n"
-"Language-Team: Italian (http://www.transifex.com/projects/p/django-cms/language/it/)\n"
+"POT-Creation-Date: 2016-09-02 13:27+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Language-Team: Italian (https://www.transifex.com/divio/teams/58664/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: cms_plugins.py:13 models.py:26 models.py:35
-msgid "Snippet"
-msgstr "Frammento"
+#: apps.py:8 models.py:54 models.py:76
+msgid "Snippets"
+msgstr ""
 
-#: cms_plugins.py:31
+#: cms_plugins.py:18 models.py:53 models.py:75
+msgid "Snippet"
+msgstr ""
+
+#: cms_plugins.py:39 templatetags/snippet_tags.py:98
 #, python-format
 msgid "Template %(template)s does not exist."
-msgstr "Il template %(template)s non esiste."
+msgstr ""
 
-#: models.py:14
-msgid "name"
-msgstr "nome"
-
-#: models.py:15
-msgid "HTML"
-msgstr "HTML"
-
-#: models.py:16
-msgid "template"
-msgstr "template"
-
-#: models.py:17
-msgid ""
-"Enter a template (i.e. \"snippets/plugin_xy.html\") which will be rendered. "
-"If \"template\" is given, the contents of field \"HTML\" will be passed as "
-"template variable {{ html }} to the template. Else, the content of \"HTML\" "
-"is rendered."
-msgstr "Specifica il template (per esempio \"snippets/plugin_xy.html\") da riprodurre. Se viene indicato \"template\", il contenuto del campo \"HTML\" sarà passato al template nella variabile {{ html }}. In caso contrario viene riprodotto il contenuto di \"HTML\"."
+#: models.py:22
+msgid "Name"
+msgstr ""
 
 #: models.py:27
-msgid "Snippets"
-msgstr "Frammenti"
+msgid "HTML"
+msgstr ""
+
+#: models.py:31
+msgid "Template"
+msgstr ""
+
+#: models.py:34
+msgid ""
+"Enter a template (e.g. \"snippets/plugin_xy.html\") to be rendered. If "
+"\"template\" is given, the contents of field \"HTML\" will be passed as "
+"template variable {{ html }} to the template. Otherwise, the content of "
+"\"HTML\" is rendered."
+msgstr ""
+
+#: models.py:41
+msgid "Slug"
+msgstr ""
