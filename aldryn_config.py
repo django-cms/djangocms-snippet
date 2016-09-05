@@ -11,10 +11,10 @@ class Form(forms.BaseForm):
         'Custom editor mode (e.g. "javascript", default: "html")',
         required=False,
     )
-    enable_search = forms.BooleanField(
+    enable_search = forms.CheckboxField(
         'Enable snippet content to be searchable.',
         required=False,
-        default=False,
+        initial=False,
     )
 
     def to_settings(self, data, settings):
