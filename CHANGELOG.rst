@@ -3,13 +3,13 @@ Changelog
 =========
 
 
-1.9.0 (unreleased)
+1.9.0 (2016-09-05)
 ==================
 
 * Added rich text editor
 * Added additional files and did some general cleanup
-* Fixed an issue where fields were restricted to less then 255 characters
 * Removed Django < 1.8 support
+* Fixed an issue where fields were restricted to less then 255 characters
 * Updated translations
 
 
