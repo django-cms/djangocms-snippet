@@ -7,6 +7,7 @@ Changelog
 ==================
 
 * Added a missing migration
+* Updated translations
 
 
 1.9.0 (2016-09-05)
