@@ -3,6 +3,12 @@ Changelog
 =========
 
 
+1.9.1 (unreleased)
+==================
+
+* Added a missing migration
+
+
 1.9.0 (2016-09-05)
 ==================
 
