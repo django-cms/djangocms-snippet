@@ -9,7 +9,7 @@ django CMS Snippet
 **django CMS Snippet** provides a plugin for `django CMS <http://django-cms.org>`_
 to inject HTML, CSS or JavaScript snippets into your website.
 
-This addon is compatible with `Aldryn <http://aldryn.com>`_ and is also available on the
+This addon is compatible with `Divio Cloud <http://divio.com>`_ and is also available on the
 `django CMS Marketplace <https://marketplace.django-cms.org/en/addons/browse/djangocms-snippet/>`_
 for easy installation.
 
