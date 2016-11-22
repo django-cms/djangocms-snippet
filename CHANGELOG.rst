@@ -9,6 +9,7 @@ Changelog
 * Changed naming of ``Aldryn`` to ``Divio Cloud``
 * Adapted testing infrastructure (tox/travis) to incorporate
   django CMS 3.4 and dropped 3.2
+* Updated translations
 
 
 1.9.1 (2016-09-08)
