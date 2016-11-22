@@ -3,7 +3,7 @@ Changelog
 =========
 
 
-1.9.2 (unreleased)
+1.9.2 (2016-11-22)
 ==================
 
 * Changed naming of ``Aldryn`` to ``Divio Cloud``
