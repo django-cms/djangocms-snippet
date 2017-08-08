@@ -42,7 +42,7 @@ class SnippetPlugin(CMSPluginBase):
         except Exception:
             content = ('<pre>\n' +
                        '\n'.join(map(lambda x: escape(str(x)), sys.exc_info())) +
-                       '\n<pre>')
+                       '\n</pre>')
         context.update({
             'content': mark_safe(content),
         })
