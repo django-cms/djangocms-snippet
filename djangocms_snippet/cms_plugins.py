@@ -32,10 +32,11 @@ class SnippetPlugin(CMSPluginBase):
                 context.update({
                     'html': mark_safe(instance.snippet.html)
                 })
-                content = t.render(Context(context))
             else:
                 t = template.Template(instance.snippet.html)
-                content = t.render(Context(context))
+            if not isinstance(context, Context):
+                raise BadType("context should be a Context, not a " + str(type(context)))
+            content = t.render(context)
         except template.TemplateDoesNotExist:
             content = _('Template %(template)s does not exist.') % {
                 'template': instance.snippet.template}
