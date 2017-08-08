@@ -43,6 +43,8 @@ class SnippetPlugin(CMSPluginBase):
             content = ('<pre>\n' +
                        '\n'.join(map(lambda x: escape(str(x)), sys.exc_info())) +
                        '\n</pre>')
+            import traceback
+            content += '\n<pre>\n' + escape(traceback.format_exc()) + '\n</pre>\n'
         context.update({
             'content': mark_safe(content),
         })
