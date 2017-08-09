@@ -5,6 +5,7 @@ from django import template
 from django.conf import settings
 from django.template.context import Context
 from django.utils.safestring import mark_safe
+from django.utils.html import escape
 from django.utils.translation import ugettext_lazy as _
 
 from cms.plugin_base import CMSPluginBase
@@ -19,6 +20,7 @@ class SnippetPlugin(CMSPluginBase):
     render_template = 'djangocms_snippet/snippet.html'
     text_enabled = True
     text_editor_preview = False
+    cache = False
 
     def render(self, context, instance, placeholder):
         context.update({
@@ -31,16 +33,20 @@ class SnippetPlugin(CMSPluginBase):
                 context.update({
                     'html': mark_safe(instance.snippet.html)
                 })
-                content = t.render(Context(context))
             else:
                 t = template.Template(instance.snippet.html)
-                content = t.render(Context(context))
+            if not isinstance(context, Context):
+                raise BadType("context should be a Context, not a " + str(type(context)))
+            content = t.render(context)
         except template.TemplateDoesNotExist:
             content = _('Template %(template)s does not exist.') % {
                 'template': instance.snippet.template}
         except Exception:
-            exc = sys.exc_info()[0]
-            content = str(exc)
+            content = ('<pre>\n' +
+                       '\n'.join(map(lambda x: escape(str(x)), sys.exc_info())) +
+                       '\n</pre>')
+            import traceback
+            content += '\n<pre>\n' + escape(traceback.format_exc()) + '\n</pre>\n'
         context.update({
             'content': mark_safe(content),
         })
