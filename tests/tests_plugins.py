@@ -27,7 +27,7 @@ class SnippetTestCase(TestCase):
         self.faulty_snippet = Snippet(name='Faulty Snippet', html='{% n0w %}', slug='faulty-snippet')
         self.faulty_snippet.save()  
 
-    def context_from_plugin_context(self, context):
+    def test_plugin_context(self):
         placeholder = Placeholder.objects.create(slot='test')
         model_instance = add_plugin(
             placeholder,
@@ -37,16 +37,7 @@ class SnippetTestCase(TestCase):
             snippet=self.snippet,            
         )
         plugin_instance = model_instance.get_plugin_class_instance()
-        context = plugin_instance.render(context, model_instance, None)
-        return context
-
-    def test_plugin_context(self):
-        context = self.context_from_plugin_context(Context({}))
-        self.assertIn('content', context)
-        self.assertEqual(context['content'], self.CONTENT)
-        
-    def test_plugin_dict(self):
-        context = self.context_from_plugin_context({})
+        context = plugin_instance.render({}, model_instance, None)
         self.assertIn('content', context)
         self.assertEqual(context['content'], self.CONTENT)
 

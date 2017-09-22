@@ -20,8 +20,6 @@ class SnippetPlugin(CMSPluginBase):
     text_editor_preview = False
 
     def render(self, context, instance, placeholder):
-        if not isinstance(context, Context):
-            context = Context(context)
         context.update({
             'placeholder': placeholder,
             'object': instance,
@@ -32,10 +30,10 @@ class SnippetPlugin(CMSPluginBase):
                 context.update({
                     'html': mark_safe(instance.snippet.html)
                 })
-                content = t.render(context)
+                content = t.render(Context(context))
             else:
                 t = template.Template(instance.snippet.html)
-                content = t.render(context)
+                content = t.render(Context(context))
         except template.TemplateDoesNotExist:
             content = _('Template %(template)s does not exist.') % {
                 'template': instance.snippet.template}
