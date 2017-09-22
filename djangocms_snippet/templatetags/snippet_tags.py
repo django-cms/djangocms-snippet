@@ -2,10 +2,10 @@
 """
 Snippet template tags
 """
-from django.utils import six
 from contextlib import contextmanager
 
 from django import template
+from django.utils import six
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
