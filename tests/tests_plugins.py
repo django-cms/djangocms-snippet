@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from distutils.version import LooseVersion
+
 from django.template.context import Context
 from django.test import TestCase
 from django.test.client import RequestFactory
 
+import cms
+HAS_CONTENT_RENDERER = LooseVersion(cms.__version__) >= LooseVersion('3.4')
 from cms.api import add_plugin
 from cms.models import Placeholder
-from cms.plugin_rendering import ContentRenderer
+if HAS_CONTENT_RENDERER:
+    from cms.plugin_rendering import ContentRenderer
 
 from djangocms_snippet.cms_plugins import SnippetPlugin
 from djangocms_snippet.models import Snippet, SnippetPtr
@@ -45,8 +50,11 @@ class SnippetTestCase(TestCase):
             position='last-child',
             snippet=self.snippet,            
         )
-        renderer = ContentRenderer(request=RequestFactory())
-        html = renderer.render_plugin(model_instance, {})
+        if HAS_CONTENT_RENDERER:
+            renderer = ContentRenderer(request=RequestFactory())
+            html = renderer.render_plugin(model_instance, {})
+        else:
+            html = model_instance.render_plugin({})
         self.assertEqual(html, self.CONTENT + '\n')
 
     def test_faulty_plugin_context(self):
