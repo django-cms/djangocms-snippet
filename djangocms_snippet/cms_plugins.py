@@ -42,9 +42,10 @@ class SnippetPlugin(CMSPluginBase):
                 'template': instance.snippet.template}
         except Exception:
             typ, val, tb = sys.exc_info()
-            content = '\n<pre>\n' + escape(str(val)) + '\n</pre>\n'
+            content = '\n<pre>\n// ' + escape(str(val)).replace('\n', '\n// ') + '\n</pre>\n'
             if settings.DEBUG:
-                esctbf = map(lambda x: escape(str(x)),traceback.format_tb(tb))
+                esctbf = map(lambda x: '// ' + escape(str(x).rstrip('\n')).replace('\n', '\n// ') + '\n',
+                             traceback.format_tb(tb))
                 content += ('\n<pre>\n' + ''.join(esctbf) + '</pre>\n')
         context.update({
             'content': mark_safe(content),
