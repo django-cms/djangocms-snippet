@@ -79,6 +79,8 @@ class SnippetFragment(template.Node):
         return self.nodelist.render(context)
 
     def get_content_render(self, context, instance):
+        if not isinstance(context, template.Context):
+            context = template.Context(context)
         """
         Render the snippet HTML, using a template if defined in its instance
         """
@@ -91,10 +93,10 @@ class SnippetFragment(template.Node):
                 context.update({
                     'html': mark_safe(instance.html)
                 })
-                content = t.render(template.Context(context))
+                content = t.render(context)
             else:
                 t = template.Template(instance.html)
-                content = t.render(template.Context(context))
+                content = t.render(context)
         except template.TemplateDoesNotExist:
             content = _('Template %(template)s does not exist.') % {
                 'template': instance.template}
