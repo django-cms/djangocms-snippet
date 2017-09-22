@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-import sys
-import traceback
-
 from django import template
 from django.conf import settings
 from django.template.context import Context
@@ -40,13 +37,8 @@ class SnippetPlugin(CMSPluginBase):
         except template.TemplateDoesNotExist:
             content = _('Template %(template)s does not exist.') % {
                 'template': instance.snippet.template}
-        except Exception:
-            typ, val, tb = sys.exc_info()
-            content = '\n<pre>\n// ' + escape(str(val)).replace('\n', '\n// ') + '\n</pre>\n'
-            if settings.DEBUG:
-                esctbf = map(lambda x: '// ' + escape(str(x).rstrip('\n')).replace('\n', '\n// ') + '\n',
-                             traceback.format_tb(tb))
-                content += ('\n<pre>\n' + ''.join(esctbf) + '</pre>\n')
+        except Exception as e:
+            content = escape(str(e))
         context.update({
             'content': mark_safe(content),
         })
