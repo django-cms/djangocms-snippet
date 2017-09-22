@@ -2,7 +2,7 @@
 """
 Snippet template tags
 """
-import six
+from django.utils import six
 from contextlib import contextmanager
 
 from django import template
