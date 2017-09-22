@@ -60,6 +60,4 @@ class SnippetTestCase(TestCase):
         )
         plugin_instance = model_instance.get_plugin_class_instance()
         context = plugin_instance.render({}, model_instance, None)
-        self.assertEqual(context['content'],
-            ('\n<pre>\nInvalid block tag on line 1: &#39;n0w&#39;.'
-             ' Did you forget to register or load this tag?\n</pre>\n'))
+        self.assertIn('Invalid block tag', context['content'])
