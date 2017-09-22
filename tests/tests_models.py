@@ -15,3 +15,4 @@ class SnippetTestCase(TestCase):
         """Snippet instance has been created"""
         snippet = Snippet.objects.get(name='snippet')
         self.assertEqual(snippet.name, 'snippet')
+        
