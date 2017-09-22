@@ -1,0 +1,80 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+from distutils.version import LooseVersion
+
+from django.template.context import Context
+from django.test import TestCase
+from django.test.client import RequestFactory
+
+import cms
+HAS_CONTENT_RENDERER = LooseVersion(cms.__version__) >= LooseVersion('3.4')
+from cms.api import add_plugin
+from cms.models import Placeholder
+if HAS_CONTENT_RENDERER:
+    from cms.plugin_rendering import ContentRenderer
+
+from djangocms_snippet.cms_plugins import SnippetPlugin
+from djangocms_snippet.models import Snippet, SnippetPtr
+
+
+class SnippetTestCase(TestCase):
+
+    def setUp(self):
+        self.CONTENT = '<p>Hello World!</p>'
+        self.snippet = Snippet(name='My Snippet', html=self.CONTENT, slug='my-snippet')
+        self.snippet.save()
+        self.faulty_snippet = Snippet(name='Faulty Snippet', html='{% n0w %}', slug='faulty-snippet')
+        self.faulty_snippet.save()  
+
+    def context_from_plugin_context(self, context):
+        placeholder = Placeholder.objects.create(slot='test')
+        model_instance = add_plugin(
+            placeholder,
+            SnippetPlugin,
+            'en',
+            position='last-child',
+            snippet=self.snippet,            
+        )
+        plugin_instance = model_instance.get_plugin_class_instance()
+        context = plugin_instance.render(context, model_instance, None)
+        return context
+
+    def test_plugin_context(self):
+        context = self.context_from_plugin_context(Context({}))
+        self.assertIn('content', context)
+        self.assertEqual(context['content'], self.CONTENT)
+        
+    def test_plugin_dict(self):
+        context = self.context_from_plugin_context({})
+        self.assertIn('content', context)
+        self.assertEqual(context['content'], self.CONTENT)
+
+    def test_plugin_html(self):
+        placeholder = Placeholder.objects.create(slot='test')
+        model_instance = add_plugin(
+            placeholder,
+            SnippetPlugin,
+            'en',
+            position='last-child',
+            snippet=self.snippet,            
+        )
+        if HAS_CONTENT_RENDERER:
+            renderer = ContentRenderer(request=RequestFactory())
+            html = renderer.render_plugin(model_instance, {})
+        else:
+            html = model_instance.render_plugin({})
+        self.assertEqual(html, self.CONTENT + '\n')
+
+    def test_faulty_plugin_context(self):
+        placeholder = Placeholder.objects.create(slot='test')
+        model_instance = add_plugin(
+            placeholder,
+            SnippetPlugin,
+            'en',
+            position='last-child',
+            snippet=self.faulty_snippet,            
+        )
+        plugin_instance = model_instance.get_plugin_class_instance()
+        context = plugin_instance.render({}, model_instance, None)
+        self.assertIn('Invalid block tag', context['content'])
