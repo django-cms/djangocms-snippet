@@ -6,6 +6,7 @@ from contextlib import contextmanager
 
 from django import template
 from django.utils import six
+from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
@@ -98,7 +99,7 @@ class SnippetFragment(template.Node):
             content = _('Template %(template)s does not exist.') % {
                 'template': instance.template}
         except Exception as e:
-            content = str(e)
+            content = escape(str(e))
             if self.parse_until:
                 # In case we are running 'exceptionless'
                 # Re-raise exception in order not to get the
