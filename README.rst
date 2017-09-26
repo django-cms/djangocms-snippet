@@ -73,7 +73,7 @@ to edit the snippet content. You can customize the
     DJANGOCMS_SNIPPET_THEME = 'github'
     DJANGOCMS_SNIPPET_MODE = 'html'
 
-If dynamic content is inserted (for example ``{% show_menu ... %}``), the plugin cache nust be disabled,
+If dynamic content is inserted (for example ``{% show_menu ... %}``), the plugin cache must be disabled,
 please set ``DJANGOCMS_SNIPPET_CACHE`` to ``False`` in your settings::
 
     DJANGOCMS_SNIPPET_CACHE = False # default value is True
