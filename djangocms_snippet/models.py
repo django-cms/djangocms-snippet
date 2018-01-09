@@ -5,7 +5,6 @@ from django.utils.translation import ugettext_lazy as _
 
 from cms.models import CMSPlugin
 from cms.utils.compat.dj import python_2_unicode_compatible
-from cms.utils.helpers import reversion_register
 
 
 # Search is enabled by default to keep backwards compatibility.
@@ -78,7 +77,3 @@ class SnippetPtr(CMSPlugin):
     def __str__(self):
         # Return the referenced snippet's name rather than the default (ID #)
         return self.snippet.name
-
-
-# We don't both with SnippetPtr, since all the data is actually in Snippet
-reversion_register(Snippet)
