@@ -2,6 +2,11 @@
 Changelog
 =========
 
+2.0.0 (unreleased)
+==================
+
+* Removed reversion references (since they are removed in CMS 3.5)
+
 
 1.9.2 (2016-11-22)
 ==================
