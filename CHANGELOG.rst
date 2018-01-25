@@ -2,7 +2,7 @@
 Changelog
 =========
 
-2.0.0 (2018-01-10)
+2.0.0 (2018-01-25)
 ==================
 
 * Removed reversion references (since they are removed in CMS 3.5)
