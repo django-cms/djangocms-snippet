@@ -29,8 +29,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='SnippetPtr',
             fields=[
-                ('cmsplugin_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='cms.CMSPlugin')),
-                ('snippet', models.ForeignKey(to='djangocms_snippet.Snippet')),
+                ('cmsplugin_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='cms.CMSPlugin', on_delete=models.CASCADE)),
+                ('snippet', models.ForeignKey(to='djangocms_snippet.Snippet', on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': 'Snippet',
