@@ -2,8 +2,6 @@
 import sys
 
 from django import template
-from django.conf import settings
-from django.template.context import Context
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
@@ -21,30 +19,36 @@ class SnippetPlugin(CMSPluginBase):
     text_editor_preview = False
 
     def render(self, context, instance, placeholder):
-        context.update({
+        render_context = {}
+        for dict_ in context.dicts:
+            render_context.update(dict_)
+
+        render_context.update({
             'placeholder': placeholder,
             'object': instance,
         })
+
         try:
             if instance.snippet.template:
                 t = template.loader.get_template(instance.snippet.template)
-                context.update({
+                render_context.update({
                     'html': mark_safe(instance.snippet.html)
                 })
-                content = t.render(Context(context))
+                content = t.render(render_context)
             else:
                 t = template.Template(instance.snippet.html)
-                content = t.render(Context(context))
+
+                content = t.render(render_context)
         except template.TemplateDoesNotExist:
             content = _('Template %(template)s does not exist.') % {
                 'template': instance.snippet.template}
         except Exception:
             exc = sys.exc_info()[0]
             content = str(exc)
-        context.update({
+        render_context.update({
             'content': mark_safe(content),
         })
-        return context
+        return render_context
 
 
 plugin_pool.register_plugin(SnippetPlugin)
