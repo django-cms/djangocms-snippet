@@ -71,8 +71,8 @@ class SnippetPtr(CMSPlugin):
     search_fields = ['snippet__html'] if SEARCH_ENABLED else []
 
     class Meta:
-        verbose_name = _('Snippet')
-        verbose_name_plural = _('Snippets')
+        verbose_name = _('Snippet Ptr')
+        verbose_name_plural = _('Snippet Ptrs')
 
     def __str__(self):
         # Return the referenced snippet's name rather than the default (ID #)
