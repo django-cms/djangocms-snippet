@@ -6,7 +6,7 @@ from djangocms_snippet import __version__
 
 
 REQUIREMENTS = [
-    'django-cms>=3.2.0',
+    'django-cms>=3.4.5',
 ]
 
 
@@ -33,7 +33,7 @@ CLASSIFIERS = [
 setup(
     name='djangocms-snippet',
     version=__version__,
-    description=('Adds snippet plugin to django CMS.'),
+    description='Adds snippet plugin to django CMS.',
     author='Divio AG',
     author_email='info@divio.ch',
     url='https://github.com/divio/djangocms-snippet',
