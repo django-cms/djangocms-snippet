@@ -64,9 +64,10 @@ class SnippetPtr(CMSPlugin):
         CMSPlugin,
         related_name='%(app_label)s_%(class)s',
         parent_link=True,
+        on_delete=models.CASCADE,
     )
 
-    snippet = models.ForeignKey(Snippet)
+    snippet = models.ForeignKey(Snippet, on_delete=models.CASCADE,)
 
     search_fields = ['snippet__html'] if SEARCH_ENABLED else []
 

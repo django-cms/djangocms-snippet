@@ -43,8 +43,8 @@ Documentation
 See ``REQUIREMENTS`` in the `setup.py <https://github.com/divio/djangocms-snippet/blob/master/setup.py>`_
 file for additional dependencies:
 
-* Python 2.7, 3.3 or higher
-* Django 1.8 or higher
+* Python 2.7, 3.4 or higher
+* Django 1.11 or higher
 
 
 Installation

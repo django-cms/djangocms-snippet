@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import django.db.models.deletion
 from django.db import models, migrations
 
 
@@ -29,8 +30,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='SnippetPtr',
             fields=[
-                ('cmsplugin_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='cms.CMSPlugin')),
-                ('snippet', models.ForeignKey(to='djangocms_snippet.Snippet')),
+                ('cmsplugin_ptr', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, parent_link=True, auto_created=True, primary_key=True, serialize=False, to='cms.CMSPlugin')),
+                ('snippet', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='djangocms_snippet.Snippet')),
             ],
             options={
                 'verbose_name': 'Snippet',
