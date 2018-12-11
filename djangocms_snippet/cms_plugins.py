@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-import sys
-
 from django import template
 from django.template.context import Context
+from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
@@ -37,9 +36,8 @@ class SnippetPlugin(CMSPluginBase):
         except template.TemplateDoesNotExist:
             content = _('Template %(template)s does not exist.') % {
                 'template': instance.snippet.template}
-        except Exception:
-            exc = sys.exc_info()[0]
-            content = str(exc)
+        except Exception as e:
+            content = escape(str(e))
         context.update({
             'content': mark_safe(content),
         })
