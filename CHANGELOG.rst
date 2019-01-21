@@ -2,10 +2,13 @@
 Changelog
 =========
 
+
 2.1.1 (unreleased)
 ==================
 
-* Fixed test matrix
+* Extended test matrix
+* Added isort and adapted imports
+* Adapted code base to align with other supported addons
 * Exclude ``tests`` folder from release build
 
 
