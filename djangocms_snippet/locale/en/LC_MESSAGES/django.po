@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-08 10:18+0200\n"
+"POT-Creation-Date: 2018-10-12 13:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,32 +17,32 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: apps.py:8 models.py:54 models.py:76
+#: apps.py:8 models.py:53
 msgid "Snippets"
 msgstr ""
 
-#: cms_plugins.py:18 models.py:53 models.py:75
+#: cms_plugins.py:18 models.py:52
 msgid "Snippet"
 msgstr ""
 
-#: cms_plugins.py:39 templatetags/snippet_tags.py:98
+#: cms_plugins.py:39 templatetags/snippet_tags.py:99
 #, python-format
 msgid "Template %(template)s does not exist."
 msgstr ""
 
-#: models.py:22
+#: models.py:21
 msgid "Name"
 msgstr ""
 
-#: models.py:27
+#: models.py:26
 msgid "HTML"
 msgstr ""
 
-#: models.py:31
+#: models.py:30
 msgid "Template"
 msgstr ""
 
-#: models.py:34
+#: models.py:33
 msgid ""
 "Enter a template (e.g. \"snippets/plugin_xy.html\") to be rendered. If "
 "\"template\" is given, the contents of field \"HTML\" will be passed as "
@@ -50,6 +50,14 @@ msgid ""
 "\"HTML\" is rendered."
 msgstr ""
 
-#: models.py:41
+#: models.py:40
 msgid "Slug"
+msgstr ""
+
+#: models.py:74
+msgid "Snippet Ptr"
+msgstr ""
+
+#: models.py:75
+msgid "Snippet Ptrs"
 msgstr ""
