@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from django.contrib import admin
 from django.conf import settings
+from django.contrib import admin
 from django.db import models
 from django.forms import Textarea
 

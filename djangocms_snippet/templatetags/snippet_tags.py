@@ -12,6 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from djangocms_snippet.models import Snippet
 
+
 register = template.Library()
 
 
