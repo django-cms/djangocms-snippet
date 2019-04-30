@@ -10,6 +10,7 @@ Changelog
 * Added isort and adapted imports
 * Adapted code base to align with other supported addons
 * Exclude ``tests`` folder from release build
+* Updated translations
 
 
 2.1.0 (2018-11-15)
