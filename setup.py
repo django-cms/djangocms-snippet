@@ -32,7 +32,7 @@ CLASSIFIERS = [
     'Framework :: Django CMS :: 3.4',
     'Framework :: Django CMS :: 3.5',
     'Framework :: Django CMS :: 3.6',
-    # 'Framework :: Django CMS :: 3.7',
+    'Framework :: Django CMS :: 3.7',
     'Topic :: Internet :: WWW/HTTP',
     'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     'Topic :: Software Development',
