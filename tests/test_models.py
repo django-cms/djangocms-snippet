@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from distutils.version import LooseVersion
+
+from cms import __version__
 from cms.api import add_plugin, create_page
 from cms.test_utils.testcases import CMSTestCase
 
