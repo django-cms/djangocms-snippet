@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from distutils.version import LooseVersion
+from unittest import skipUnless
 
 from cms import __version__
 from cms.api import add_plugin, create_page
