@@ -5,6 +5,9 @@ from cms.test_utils.testcases import CMSTestCase
 from djangocms_snippet.models import Snippet
 
 
+CMS_35 = LooseVersion(__version__) >= LooseVersion('3.5')
+
+
 class SnippetTestCase(CMSTestCase):
 
     def setUp(self):
@@ -26,6 +29,7 @@ class SnippetTestCase(CMSTestCase):
         snippet = Snippet.objects.get(name="snippet")
         self.assertEqual(snippet.name, "snippet")
 
+    @skipUnless(CMS_35, "Test relevant only for CMS>=3.5")
     def test_html_rendering(self):
         snippet = Snippet.objects.create(
             name="plugin_snippet",
@@ -47,6 +51,7 @@ class SnippetTestCase(CMSTestCase):
 
         self.assertIn(b"<p>Hello World</p>", response.content)
 
+    @skipUnless(CMS_35, "Test relevant only for CMS>=3.5")
     def test_file_rendering(self):
         template = "snippet.html"
         snippet = Snippet.objects.create(
