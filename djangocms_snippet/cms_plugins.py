@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import template
-from django.template.context import Context
+from django.conf import settings
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
@@ -11,13 +11,16 @@ from cms.plugin_pool import plugin_pool
 from .models import SnippetPtr
 
 
+CACHE_ENABLED = getattr(settings, 'DJANGOCMS_SNIPPET_CACHE', False)
+
+
 class SnippetPlugin(CMSPluginBase):
     model = SnippetPtr
     name = _('Snippet')
     render_template = 'djangocms_snippet/snippet.html'
     text_enabled = True
     text_editor_preview = False
-    cache = getattr(settings, 'DJANGOCMS_SNIPPET_CACHE', True)
+    cache = CACHE_ENABLED
 
     def render(self, context, instance, placeholder):
         context=context.flatten()
