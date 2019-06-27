@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import template
 from django.conf import settings
+from django.template.context import Context
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
@@ -23,30 +24,30 @@ class SnippetPlugin(CMSPluginBase):
     cache = CACHE_ENABLED
 
     def render(self, context, instance, placeholder):
-        context=context.flatten()
-        context.update({
+        render_context = Context(context.flatten())
+        render_context.update({
             'placeholder': placeholder,
             'object': instance,
         })
         try:
             if instance.snippet.template:
                 t = template.loader.get_template(instance.snippet.template)
-                context.update({
+                render_context.update({
                     'html': mark_safe(instance.snippet.html)
                 })
-                content = t.render(context)
+                content = t.render(render_context)
             else:
                 t = template.Template(instance.snippet.html)
-                content = t.render(context)
+                content = t.render(render_context)
         except template.TemplateDoesNotExist:
             content = _('Template %(template)s does not exist.') % {
                 'template': instance.snippet.template}
         except Exception as e:
             content = escape(str(e))
-        context.update({
+        render_context.update({
             'content': mark_safe(content),
         })
-        return context
+        return render_context
 
 
 plugin_pool.register_plugin(SnippetPlugin)
