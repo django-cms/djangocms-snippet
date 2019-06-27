@@ -6,7 +6,7 @@ Changelog
 2.3.0 (unreleased)
 ==================
 
-* Fixed an issue where render requires a dict instad of a context
+* Fixed an issue where render requires a dict instead of a context
 * Added ``DJANGOCMS_SNIPPET_CACHE`` cache settings for snippets
 
 
