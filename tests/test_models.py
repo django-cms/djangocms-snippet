@@ -71,13 +71,4 @@ class SnippetTestCase(CMSTestCase):
         self.assertNotIn("Template {} does not exist".format(template).encode(), response.content)
         self.assertNotIn(b"context must be a dict rather than Context", response.content)
         self.assertNotIn(b"context must be a dict rather than PluginContext", response.content)
-
-        # print(dir(response))
-        # print(response.content)
-        # does not contain Template tests/utils/templates/snippet.html does not exist.
-        # does not contain context must be a dict rather than Context.
-        # self.assertContains(response, "<p>Hello World Template</p>")
-
-        # print(response.content)
-
-        #self.assertContains(response, "<p>Hello World</p>")
+        self.assertContains(response, "<p>Hello World Template</p>")
