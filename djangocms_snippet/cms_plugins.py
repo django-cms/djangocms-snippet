@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import template
 from django.conf import settings
-from django.template.context import Context
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _

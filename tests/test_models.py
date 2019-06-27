@@ -4,8 +4,6 @@ from cms.test_utils.testcases import CMSTestCase
 
 from djangocms_snippet.models import Snippet
 
-from django import template
-
 
 class SnippetTestCase(CMSTestCase):
 
