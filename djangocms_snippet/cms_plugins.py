@@ -24,30 +24,30 @@ class SnippetPlugin(CMSPluginBase):
     cache = CACHE_ENABLED
 
     def render(self, context, instance, placeholder):
-        render_context = Context(context.flatten())
-        render_context.update({
-            'placeholder': placeholder,
-            'object': instance,
-        })
         try:
             if instance.snippet.template:
+                context = context.flatten()
                 t = template.loader.get_template(instance.snippet.template)
-                render_context.update({
-                    'html': mark_safe(instance.snippet.html)
-                })
-                content = t.render(render_context)
+                content = t.render(context)
             else:
+                # only html provided
                 t = template.Template(instance.snippet.html)
-                content = t.render(render_context)
+                content = t.render(context)
         except template.TemplateDoesNotExist:
             content = _('Template %(template)s does not exist.') % {
-                'template': instance.snippet.template}
+                'template': instance.snippet.template
+            }
         except Exception as e:
             content = escape(str(e))
-        render_context.update({
-            'content': mark_safe(content),
+
+        context.update({
+            'placeholder': placeholder,
+            'object': instance,
+            'html': mark_safe(instance.snippet.html),
+            'content': content,
         })
-        return render_context
+
+        return context
 
 
 plugin_pool.register_plugin(SnippetPlugin)
