@@ -1,21 +1,20 @@
 # -*- coding: utf-8 -*-
-from distutils.version import LooseVersion
-from unittest import skipUnless
-
-from cms import __version__
 from cms.api import add_plugin, create_page
 from cms.test_utils.testcases import CMSTestCase
 
 from djangocms_snippet.models import Snippet
 
 
-CMS_35 = LooseVersion(__version__) >= LooseVersion('3.5')
-
-
 class SnippetTestCase(CMSTestCase):
 
     def setUp(self):
         self.superuser = self.get_superuser()
+        self.home = create_page(
+            title="home",
+            template="page.html",
+            language="en",
+        )
+        self.home.publish("en")
         self.page = create_page(
             title="help",
             template="page.html",
@@ -33,7 +32,6 @@ class SnippetTestCase(CMSTestCase):
         snippet = Snippet.objects.get(name="snippet")
         self.assertEqual(snippet.name, "snippet")
 
-    @skipUnless(CMS_35, "Test relevant only for CMS>=3.5")
     def test_html_rendering(self):
         snippet = Snippet.objects.create(
             name="plugin_snippet",
@@ -46,6 +44,7 @@ class SnippetTestCase(CMSTestCase):
             "en",
             snippet=snippet,
         )
+        self.page.publish("en")
         self.assertEqual(plugin.snippet.name, "plugin_snippet")
         self.assertEqual(plugin.snippet.html, "<p>Hello World</p>")
         self.assertEqual(plugin.snippet.slug, "plugin_snippet")
@@ -55,7 +54,6 @@ class SnippetTestCase(CMSTestCase):
 
         self.assertIn(b"<p>Hello World</p>", response.content)
 
-    @skipUnless(CMS_35, "Test relevant only for CMS>=3.5")
     def test_file_rendering(self):
         template = "snippet.html"
         snippet = Snippet.objects.create(
@@ -69,6 +67,7 @@ class SnippetTestCase(CMSTestCase):
             "en",
             snippet=snippet,
         )
+        self.page.publish("en")
         self.assertEqual(plugin.snippet.name, "plugin_snippet")
         self.assertEqual(plugin.snippet.slug, "plugin_snippet")
 
