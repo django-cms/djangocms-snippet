@@ -23,6 +23,7 @@ class SnippetTestCase(CMSTestCase):
 
     def tearDown(self):
         self.page.delete()
+        self.home.delete()
 
     def test_snippet_instance(self):
         """Snippet instance has been created"""
