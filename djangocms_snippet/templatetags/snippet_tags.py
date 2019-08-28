@@ -69,7 +69,7 @@ class SnippetFragment(template.Node):
             if isinstance(snippet_instance, six.string_types):
                 snippet_instance = Snippet.objects.get(slug=snippet_instance)
             # Assume this is an id
-            elif isinstance(snippet_instance, int):
+            elif isinstance(snippet_instance, int):  # pragma: no cover
                 snippet_instance = Snippet.objects.get(pk=snippet_instance)
 
             return mark_safe(self.get_content_render(context,
@@ -88,18 +88,20 @@ class SnippetFragment(template.Node):
         })
         try:
             if instance.template:
-                t = template.loader.get_template(instance.template)
                 context.update({
                     'html': mark_safe(instance.html)
                 })
-                content = t.render(template.Context(context))
+                content = template.loader.render_to_string(
+                    instance.template,
+                    context.flatten(),
+                )
             else:
                 t = template.Template(instance.html)
                 content = t.render(template.Context(context))
         except template.TemplateDoesNotExist:
             content = _('Template %(template)s does not exist.') % {
                 'template': instance.template}
-        except Exception as e:
+        except Exception as e:  # pragma: no cover
             content = escape(str(e))
             if self.parse_until:
                 # In case we are running 'exceptionless'

@@ -13,7 +13,7 @@ def auto_fill_slugs(apps, schema_editor):
     """
     Snippet = apps.get_model("djangocms_snippet", "Snippet")
     SlugCounter = Counter()
-    for snippet_item in Snippet.objects.all():
+    for snippet_item in Snippet.objects.all():  # pragma: no cover
         if not snippet_item.slug:
             snippet_item.slug = slugify(snippet_item.name)
             # Avoid duplicate slug, adding slug occurence count to the slug
