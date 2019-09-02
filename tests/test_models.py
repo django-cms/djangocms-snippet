@@ -1,81 +1,46 @@
 # -*- coding: utf-8 -*-
-from cms.api import add_plugin, create_page
-from cms.test_utils.testcases import CMSTestCase
+from django.test import TestCase
 
-from djangocms_snippet.models import Snippet
+from djangocms_snippet.models import Snippet, SnippetPtr, SEARCH_ENABLED
 
 
-class SnippetTestCase(CMSTestCase):
+class SnippetModelTestCase(TestCase):
 
     def setUp(self):
-        self.superuser = self.get_superuser()
-        self.home = create_page(
-            title="home",
-            template="page.html",
-            language="en",
-        )
-        self.home.publish("en")
-        self.page = create_page(
-            title="help",
-            template="page.html",
-            language="en",
-        )
+        pass
 
     def tearDown(self):
-        self.page.delete()
-        self.home.delete()
+        pass
+
+    def test_settings(self):
+        self.assertEqual(SEARCH_ENABLED, False)
 
     def test_snippet_instance(self):
-        """Snippet instance has been created"""
         Snippet.objects.create(
-            name="snippet",
+            name="test snippet",
+            html="<p>hello world</p>",
+            slug="test_snippet",
         )
-        snippet = Snippet.objects.get(name="snippet")
-        self.assertEqual(snippet.name, "snippet")
+        instance = Snippet.objects.all()
+        self.assertEqual(instance.count(), 1)
+        instance = Snippet.objects.first()
+        self.assertEqual(instance.name, "test snippet")
+        self.assertEqual(instance.html, "<p>hello world</p>")
+        self.assertEqual(instance.slug, "test_snippet")
+        # test strings
+        self.assertEqual(str(instance), "test snippet")
 
-    def test_html_rendering(self):
+    def test_snippet_ptr_instance(self):
         snippet = Snippet.objects.create(
-            name="plugin_snippet",
-            html="<p>Hello World</p>",
-            slug="plugin_snippet",
+            name="test snippet",
+            html="<p>hello world</p>",
+            slug="test_snippet",
         )
-        plugin = add_plugin(
-            self.page.placeholders.get(slot="content"),
-            "SnippetPlugin",
-            "en",
+        SnippetPtr.objects.create(
             snippet=snippet,
         )
-        self.page.publish("en")
-        self.assertEqual(plugin.snippet.name, "plugin_snippet")
-        self.assertEqual(plugin.snippet.html, "<p>Hello World</p>")
-        self.assertEqual(plugin.snippet.slug, "plugin_snippet")
-
-        with self.login_user_context(self.superuser):
-            response = self.client.get(self.page.get_absolute_url('en'))
-
-        self.assertIn(b"<p>Hello World</p>", response.content)
-
-    def test_file_rendering(self):
-        template = "snippet.html"
-        snippet = Snippet.objects.create(
-            name="plugin_snippet",
-            template=template,
-            slug="plugin_snippet",
-        )
-        plugin = add_plugin(
-            self.page.placeholders.get(slot="content"),
-            "SnippetPlugin",
-            "en",
-            snippet=snippet,
-        )
-        self.page.publish("en")
-        self.assertEqual(plugin.snippet.name, "plugin_snippet")
-        self.assertEqual(plugin.snippet.slug, "plugin_snippet")
-
-        with self.login_user_context(self.superuser):
-            response = self.client.get(self.page.get_absolute_url('en'))
-
-        self.assertNotIn("Template {} does not exist".format(template).encode(), response.content)
-        self.assertNotIn(b"context must be a dict rather than Context", response.content)
-        self.assertNotIn(b"context must be a dict rather than PluginContext", response.content)
-        self.assertContains(response, "<p>Hello World Template</p>")
+        instance = SnippetPtr.objects.all()
+        self.assertEqual(instance.count(), 1)
+        instance = SnippetPtr.objects.first()
+        # test strings
+        self.assertEqual(str(instance), "test snippet")

@@ -8,6 +8,9 @@ Changelog
 
 * Fixed an issue where render requires a dict instead of a context
 * Added ``DJANGOCMS_SNIPPET_CACHE`` cache settings for snippets
+* Added further tests to raise coverage
+* Fixed smaller issues found during testing
+* Fixed alt attribute not rendering correctly
 
 
 2.2.0 (2019-05-06)
