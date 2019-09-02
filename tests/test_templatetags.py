@@ -75,17 +75,7 @@ class SnippetTemplateTagTestCase(TestCase):
         rendered_template = template_to_render.render(context)
         self.assertInHTML('<p>hello world</p>', rendered_template)
 
-        # failure when context is set incorrectly
-        context = ""
-        template_to_render = Template(
-            '{% load snippet_tags %}'
-            '{% snippet_fragment "test_snippet_1" or %}<p>hello world</p>{% endsnippet_fragment %}'
-        )
-        with self.assertRaises(AttributeError):
-            # AttributeError: 'str' object has no attribute 'render_context'
-            rendered_template = template_to_render.render(context)
-
-    def test_tempalte_errors(self):
+    def test_template_errors(self):
         template = "does_not_exist.html"
         snippet = Snippet.objects.create(
             name="test snippet",
