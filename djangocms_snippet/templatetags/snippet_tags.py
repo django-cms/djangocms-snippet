@@ -56,7 +56,7 @@ class SnippetFragment(template.Node):
 
     def render(self, context):
         """
-        :type context: object ``django.template.Context``
+        :type context: dict
         :param context: Context tag object
 
         :rtype: string
@@ -97,7 +97,7 @@ class SnippetFragment(template.Node):
                 )
             else:
                 t = template.Template(instance.html)
-                content = t.render(template.Context(context))
+                content = t.render(context)
         except template.TemplateDoesNotExist:
             content = _('Template %(template)s does not exist.') % {
                 'template': instance.template}
