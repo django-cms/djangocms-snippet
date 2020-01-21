@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from django.test import TestCase
-from django.template import Context, Template
 from django.core.exceptions import ObjectDoesNotExist
+from django.template import Context, Template
 from django.template.exceptions import TemplateSyntaxError
+from django.test import TestCase
 
 from djangocms_snippet.models import Snippet, SnippetPtr
 

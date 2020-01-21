@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.test import TestCase
 
-from djangocms_snippet.models import Snippet, SnippetPtr, SEARCH_ENABLED
+from djangocms_snippet.models import SEARCH_ENABLED, Snippet, SnippetPtr
 
 
 class SnippetModelTestCase(TestCase):

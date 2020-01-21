@@ -6,6 +6,7 @@ Changelog
 2.3.0 (unreleased)
 ==================
 
+* Added support for Django 3.0
 * Fixed an issue where render requires a dict instead of a context
 * Added ``DJANGOCMS_SNIPPET_CACHE`` cache settings for snippets
 * Added further tests to raise coverage
