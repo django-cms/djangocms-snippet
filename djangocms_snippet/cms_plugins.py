@@ -26,7 +26,7 @@ class SnippetPlugin(CMSPluginBase):
         try:
             if instance.snippet.template:
                 context = context.flatten()
-                context.update({"html": mark_safe(instance.snippet.html})
+                context.update({"html": mark_safe(instance.snippet.html)})
                 t = template.loader.get_template(instance.snippet.template)
                 content = t.render(context)
             else:
