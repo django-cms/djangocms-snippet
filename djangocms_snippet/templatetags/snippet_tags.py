@@ -5,10 +5,11 @@ Snippet template tags
 from contextlib import contextmanager
 
 from django import template
-from django.utils import six
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
+
+from six import string_types
 
 from djangocms_snippet.models import Snippet
 
@@ -66,7 +67,7 @@ class SnippetFragment(template.Node):
         snippet_instance = self.snippet_id_varname.resolve(context)
         # Assume this is slug
         with exceptionless(self.parse_until):
-            if isinstance(snippet_instance, six.string_types):
+            if isinstance(snippet_instance, string_types):
                 snippet_instance = Snippet.objects.get(slug=snippet_instance)
             # Assume this is an id
             elif isinstance(snippet_instance, int):  # pragma: no cover
