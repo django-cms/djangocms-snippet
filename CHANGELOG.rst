@@ -3,7 +3,7 @@ Changelog
 =========
 
 
-2.3.0 (unreleased)
+2.3.0 (2020-01-29)
 ==================
 
 * Added support for Django 3.0
@@ -12,6 +12,7 @@ Changelog
 * Added further tests to raise coverage
 * Fixed smaller issues found during testing
 * Fixed alt attribute not rendering correctly
+* Fixed missing html variable not present in context
 
 
 2.2.0 (2019-05-06)
