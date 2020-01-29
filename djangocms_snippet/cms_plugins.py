@@ -11,13 +11,13 @@ from cms.plugin_pool import plugin_pool
 from .models import SnippetPtr
 
 
-CACHE_ENABLED = getattr(settings, 'DJANGOCMS_SNIPPET_CACHE', False)
+CACHE_ENABLED = getattr(settings, "DJANGOCMS_SNIPPET_CACHE", False)
 
 
 class SnippetPlugin(CMSPluginBase):
     model = SnippetPtr
-    name = _('Snippet')
-    render_template = 'djangocms_snippet/snippet.html'
+    name = _("Snippet")
+    render_template = "djangocms_snippet/snippet.html"
     text_enabled = True
     text_editor_preview = False
     cache = CACHE_ENABLED
@@ -26,6 +26,7 @@ class SnippetPlugin(CMSPluginBase):
         try:
             if instance.snippet.template:
                 context = context.flatten()
+                context.update({"html": mark_safe(instance.snippet.html)})
                 t = template.loader.get_template(instance.snippet.template)
                 content = t.render(context)
             else:
@@ -33,18 +34,20 @@ class SnippetPlugin(CMSPluginBase):
                 t = template.Template(instance.snippet.html)
                 content = t.render(context)
         except template.TemplateDoesNotExist:
-            content = _('Template %(template)s does not exist.') % {
-                'template': instance.snippet.template
+            content = _("Template %(template)s does not exist.") % {
+                "template": instance.snippet.template
             }
         except Exception as e:
             content = escape(str(e))
 
-        context.update({
-            'placeholder': placeholder,
-            'object': instance,
-            'html': mark_safe(instance.snippet.html),
-            'content': content,
-        })
+        context.update(
+            {
+                "placeholder": placeholder,
+                "object": instance,
+                "html": mark_safe(instance.snippet.html),
+                "content": content,
+            }
+        )
 
         return context
 
