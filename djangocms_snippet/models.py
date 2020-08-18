@@ -1,13 +1,8 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.conf import settings
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from cms.models import CMSPlugin
-
-from six import python_2_unicode_compatible
 
 
 # Search is enabled by default to keep backwards compatibility.
@@ -15,7 +10,6 @@ SEARCH_ENABLED = getattr(settings, 'DJANGOCMS_SNIPPET_SEARCH', False)
 
 
 # Stores the actual data
-@python_2_unicode_compatible
 class Snippet(models.Model):
     """
     A snippet of HTML or a Django template
@@ -57,7 +51,6 @@ class Snippet(models.Model):
 
 
 # Plugin model - just a pointer to Snippet
-@python_2_unicode_compatible
 class SnippetPtr(CMSPlugin):
     # Add an app namespace to related_name to avoid field name clashes
     # with any other plugins that have a field with the same name as the
