@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from django.core.exceptions import ObjectDoesNotExist
 from django.template import Context, Template
 from django.template.exceptions import TemplateSyntaxError
