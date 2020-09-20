@@ -4,7 +4,7 @@
 {% block object-tools %}
 {{ block.super }}
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/ace.js"></script>
+<script src="{% static 'js/ace.js' %}"></script>
 <script>
 django.jQuery(function () {
     // ace editor cannot be attached directly to a textarea
