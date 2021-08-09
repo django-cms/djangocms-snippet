@@ -9,6 +9,10 @@ from cms.models import CMSPlugin
 SEARCH_ENABLED = getattr(settings, 'DJANGOCMS_SNIPPET_SEARCH', False)
 
 
+class SnippetGrouper(models.Model):
+    pass
+
+
 # Stores the actual data
 class Snippet(models.Model):
     """
@@ -18,6 +22,10 @@ class Snippet(models.Model):
         verbose_name=_('Name'),
         unique=True,
         max_length=255,
+    )
+    snippet_grouper = models.ForeignKey(
+        SnippetGrouper,
+        on_delete=models.PROTECT,
     )
     html = models.TextField(
         verbose_name=_('HTML'),
