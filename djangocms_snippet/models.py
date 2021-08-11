@@ -26,6 +26,7 @@ class Snippet(models.Model):
     snippet_grouper = models.ForeignKey(
         SnippetGrouper,
         on_delete=models.PROTECT,
+        null=True,
     )
     html = models.TextField(
         verbose_name=_('HTML'),

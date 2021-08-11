@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.db import models
 from django.forms import Textarea
 
-from .models import Snippet, SnippetGrouper
+from .models import Snippet
 
 
 class SnippetAdmin(admin.ModelAdmin):
@@ -23,9 +23,4 @@ class SnippetAdmin(admin.ModelAdmin):
     }
 
 
-class SnippetGrouperAdmin(admin.ModelAdmin):
-    pass
-
-
-admin.site.register(SnippetGrouper, SnippetGrouperAdmin)
 admin.site.register(Snippet, SnippetAdmin)
