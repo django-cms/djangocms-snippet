@@ -7,14 +7,16 @@ from django.utils.translation import gettext_lazy as _
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 
-from .models import SnippetPtr
-
+from .models import SnippetPluginModel, SnippetPtr
+from .utils import is_versioning_enabled
 
 CACHE_ENABLED = getattr(settings, "DJANGOCMS_SNIPPET_CACHE", False)
 
 
-class SnippetPlugin(CMSPluginBase):
-    model = SnippetPtr
+class AbstractSnippetPlugin(CMSPluginBase):
+    class Meta:
+        abstract = True
+
     name = _("Snippet")
     render_template = "djangocms_snippet/snippet.html"
     text_enabled = True
@@ -51,4 +53,15 @@ class SnippetPlugin(CMSPluginBase):
         return context
 
 
-plugin_pool.register_plugin(SnippetPlugin)
+class SnippetPlugin(AbstractSnippetPlugin):
+    model = SnippetPtr
+
+
+class VersionedSnippetPlugin(AbstractSnippetPlugin):
+    model = SnippetPluginModel
+
+
+if is_versioning_enabled:
+    plugin_pool.register_plugin(VersionedSnippetPlugin)
+else:
+    plugin_pool.register_plugin(SnippetPlugin)
