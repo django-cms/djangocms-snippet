@@ -3,14 +3,10 @@ from django.contrib import admin
 from django.db import models
 from django.forms import Textarea
 
-# from djangocms_versioning.admin import ExtendedVersionAdminMixin
-
-# from .forms import SnippetForm
 from .models import Snippet
 
 
 class SnippetAdmin(admin.ModelAdmin):
-    # form = SnippetForm
     list_display = ('slug', 'name')
     search_fields = ['slug', 'name']
     prepopulated_fields = {'slug': ('name',)}

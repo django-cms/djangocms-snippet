@@ -27,6 +27,7 @@ class Snippet(models.Model):
         SnippetGrouper,
         on_delete=models.PROTECT,
         null=True,
+        blank=True,
     )
     html = models.TextField(
         verbose_name=_('HTML'),
