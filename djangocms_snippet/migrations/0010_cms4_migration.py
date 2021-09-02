@@ -4,7 +4,7 @@ from django.db import migrations
 
 from cms.api import add_plugin
 
-from djangocms_snippet.cms_plugins import SnippetPtrPlugin
+from djangocms_snippet.cms_plugins import SnippetPlugin
 
 logger = logging.getLogger(__name__)
 
@@ -12,11 +12,10 @@ logger = logging.getLogger(__name__)
 def _create_plugin(old_plugin, grouper):
     # Create the new plugin
     new_plugin = add_plugin(
-        old_plugin.placeholder,
-        plugin_type=SnippetPtrPlugin,
+        placeholder=old_plugin.placeholder,
+        plugin_type=SnippetPlugin,
         language="en",
-        snippet=old_plugin.snippet,
-        new_snippet=grouper,
+        snippet=grouper,
     )
     old_plugin_position = old_plugin.position
     old_plugin_id = old_plugin.id
@@ -33,7 +32,7 @@ def _create_plugin(old_plugin, grouper):
 
 
 def create_groupers(snippet, grouper_model):
-    grouper = grouper_model.model.objects.create()
+    grouper = grouper_model.objects.create()
     snippet.snippet_grouper = grouper
     snippet.save()
     logger.info("Created Snippet Grouper")
@@ -55,8 +54,8 @@ def cms4_migration(apps, schema_editor):
 
     logger.info(f"SnippetPlugin count pre-migration: {SnippetPtr.objects.all().count()}")
     # Iterate over the plugin queryset, and replace them each with a CMS4 plugin
-    for snippet in SnippetPtr.objects.all():
-        _create_plugin(snippet, snippet.snippet_grouper)
+    for snippet_plugin in SnippetPtr.objects.all():
+        _create_plugin(snippet_plugin, snippet_plugin.snippet)
         plugin_count += 1
 
     logger.info(f"Migration completed, created {grouper_count} Snippet Groupers and {plugin_count} Snippet plugins")
