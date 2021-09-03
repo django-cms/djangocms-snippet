@@ -24,21 +24,12 @@ def _create_plugin(old_plugin, grouper, Plugin):
         parent_id=parent_id,
     )
 
-    try:
-        plugin_model = plugin_pool.get_plugin("SnippetPlugin").model
-    except KeyError:
-        raise TypeError(
-            'plugin_type must be CMSPluginBase subclass or string'
-        )
-
-    plugin_base = old_plugin.placeholder.add_plugin(plugin_base)
-
     old_plugin_position = old_plugin.position
     old_plugin_id = old_plugin.id
 
     plugin_base.position = old_plugin_position
-    plugin = plugin_model({"snippet": old_plugin.snippet, "new_snippet": grouper})
-    plugin_base.set_base_attr(plugin)
+    plugin_base.snippet = old_plugin.snippet
+    plugin_base.new_snippet = grouper
 
     if plugin_base:
         logger.info(f"Deleting CMS3 Plugin: {old_plugin_id}")
@@ -47,7 +38,7 @@ def _create_plugin(old_plugin, grouper, Plugin):
     plugin_base.save()
 
     logger.info(
-        f"Created CMS4 Snippet plugin: {type(plugin)}-{plugin.id}, for CMS3 plugin: {old_plugin_id}"
+        f"Created CMS4 Snippet plugin: {type(plugin_base)}-{plugin_base.id}, for CMS3 plugin: {old_plugin_id}"
     )
 
 
@@ -64,8 +55,6 @@ def cms4_migration(apps, schema_editor):
     Snippet = apps.get_model("djangocms_snippet", "Snippet")
     SnippetGrouper = apps.get_model("djangocms_snippet", "SnippetGrouper")
     SnippetPtr = apps.get_model("djangocms_snippet", "SnippetPtr")
-    Plugin = apps.get_model('cms', 'CMSPlugin')
-    Placeholder = apps.get_model('cms', 'Placeholder')
 
     # Iterate over the queryset, create a grouper for each instance which doesn't have one
     # and map the content objects foreign key field to it.
@@ -77,7 +66,7 @@ def cms4_migration(apps, schema_editor):
     logger.info(f"SnippetPlugin count pre-migration: {SnippetPtr.objects.all().count()}")
     # Iterate over the plugin queryset, and replace them each with a CMS4 plugin
     for snippet_plugin in SnippetPtr.objects.all():
-        _create_plugin(snippet_plugin, snippet_plugin.snippet, SnippetPtr)
+        _create_plugin(snippet_plugin, snippet_plugin.new_snippet, SnippetPtr)
         plugin_count += 1
 
     logger.info(f"Migration completed, created {grouper_count} Snippet Groupers and {plugin_count} Snippet plugins")
