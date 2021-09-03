@@ -31,8 +31,6 @@ def _create_plugin(old_plugin, grouper, Plugin):
             'plugin_type must be CMSPluginBase subclass or string'
         )
 
-    import pdb
-    pdb.set_trace()
     plugin_base = old_plugin.placeholder.add_plugin(plugin_base)
 
     old_plugin_position = old_plugin.position
