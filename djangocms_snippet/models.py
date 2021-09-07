@@ -72,8 +72,6 @@ class SnippetPtr(CMSPlugin):
         parent_link=True,
         on_delete=models.CASCADE,
     )
-
-    snippet = models.ForeignKey(Snippet, on_delete=models.CASCADE)
     snippet_grouper = models.ForeignKey(SnippetGrouper, on_delete=models.CASCADE)
 
     search_fields = ['snippet__html'] if SEARCH_ENABLED else []
@@ -81,6 +79,10 @@ class SnippetPtr(CMSPlugin):
     class Meta:
         verbose_name = _('Snippet Ptr')
         verbose_name_plural = _('Snippet Ptrs')
+
+    @property
+    def snippet(self):
+        return self.snippet_grouper.snippet_set.first()
 
     def __str__(self):
         # Return the referenced snippet's name rather than the default (ID #)

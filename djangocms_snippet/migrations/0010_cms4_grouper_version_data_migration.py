@@ -1,10 +1,6 @@
-import logging
-import os
-
 from django.db import migrations
 
-
-logger = logging.getLogger(__name__)
+from djangocms_snippet.conf import DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID
 
 try:
     from djangocms_versioning.constants import DRAFT
@@ -14,9 +10,6 @@ except:
 
 
 def cms4_grouper_version_migration(apps, schema_editor):
-    grouper_count = 0
-    version_count = 0
-
     ContentType = apps.get_model("contenttypes", "ContentType")
     Snippet = apps.get_model("djangocms_snippet", "Snippet")
     SnippetGrouper = apps.get_model("djangocms_snippet", "SnippetGrouper")
@@ -29,31 +22,20 @@ def cms4_grouper_version_migration(apps, schema_editor):
         grouper = SnippetGrouper.objects.create()
         snippet.new_snippet = grouper
         snippet.save()
-        logger.info(f"Created Snippet Grouper ID: {snippet.snippet_grouper}")
-        grouper_count += 1
 
         # Get a migration user.
-        migration_user = os.environ.get("DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID", None)
-        if not migration_user:
-            logger.warning(
-                "Setting DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID not provided, defaulting to user id: 1"
-            )
-            migration_user = User.objects.get(id=1)
+        migration_user = User.objects.get(id=DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID)
 
         if djangocsm_versioning_enabled:
             Version = apps.get_model("djangocms_versioning", "Version")
-            version = Version.objects.create(
+            Version.objects.create(
                 created_by=migration_user,
                 state=DRAFT,
                 number=1,
                 object_id=snippet.pk,
                 content_type=snippet_contenttype,
             )
-            logger.info(f"Created Snippet Version ID: {version.pk}")
             # This will be necessary when versioning checks are implemented
-            version_count += 1
-
-    logger.info(f"Migration created {grouper_count} SnippetGrouper models and {version_count} Version models")
 
 
 class Migration(migrations.Migration):
