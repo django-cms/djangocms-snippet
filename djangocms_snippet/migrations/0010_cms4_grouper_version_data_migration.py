@@ -35,7 +35,6 @@ def cms4_grouper_version_migration(apps, schema_editor):
                 object_id=snippet.pk,
                 content_type=snippet_contenttype,
             )
-            # This will be necessary when versioning checks are implemented
 
 
 class Migration(migrations.Migration):
