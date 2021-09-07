@@ -10,7 +10,6 @@ def cms4_migration(apps, schema_editor):
         grouper = snippet.snippet_grouper
         snippet_plugin.new_snippet = grouper
         snippet_plugin.save()
-        plugin_count += 1
 
 
 class Migration(migrations.Migration):
