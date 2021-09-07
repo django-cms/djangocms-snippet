@@ -1,6 +1,6 @@
-from cms.app_base import CMSAppConfig
-
 from django.conf import settings
+
+from cms.app_base import CMSAppConfig
 
 from .models import Snippet
 
@@ -10,7 +10,9 @@ class SnippetCMSAppConfig(CMSAppConfig):
         settings, 'DJANGOCMS_SNIPPET_VERSIONING_ENABLED', True)
 
     if djangocms_versioning_enabled:
-        from djangocms_versioning.datastructures import VersionableItem, default_copy
+        from djangocms_versioning.datastructures import (
+            VersionableItem, default_copy,
+        )
 
         versioning = [
             VersionableItem(
