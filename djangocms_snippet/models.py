@@ -72,9 +72,7 @@ class SnippetPtr(CMSPlugin):
         parent_link=True,
         on_delete=models.CASCADE,
     )
-
-    snippet = models.ForeignKey(Snippet, on_delete=models.CASCADE)
-    new_snippet = models.ForeignKey(SnippetGrouper, on_delete=models.CASCADE)
+    snippet = models.ForeignKey(SnippetGrouper, on_delete=models.CASCADE)
 
     search_fields = ['snippet__html'] if SEARCH_ENABLED else []
 
