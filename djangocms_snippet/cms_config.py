@@ -1,6 +1,6 @@
-from cms.app_base import CMSAppConfig, CMSAppExtension
-
 from django.conf import settings
+
+from cms.app_base import CMSAppConfig, CMSAppExtension
 
 from djangocms_versioning.datastructures import VersionableItem, default_copy
 
