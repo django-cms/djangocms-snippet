@@ -4,9 +4,9 @@ from djangocms_snippet.conf import DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_I
 
 try:
     from djangocms_versioning.constants import DRAFT
-    djangocsm_versioning_enabled = True
+    djangocms_versioning_enabled = True
 except:
-    djangocsm_versioning_enabled = False
+    djangocms_versioning_enabled = False
 
 
 def cms4_grouper_version_migration(apps, schema_editor):
@@ -26,7 +26,7 @@ def cms4_grouper_version_migration(apps, schema_editor):
         # Get a migration user.
         migration_user = User.objects.get(id=DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID)
 
-        if djangocsm_versioning_enabled:
+        if djangocms_versioning_enabled:
             Version = apps.get_model("djangocms_versioning", "Version")
             Version.objects.create(
                 created_by=migration_user,
