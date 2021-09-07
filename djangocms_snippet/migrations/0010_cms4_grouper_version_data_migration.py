@@ -4,7 +4,7 @@ from djangocms_snippet.conf import DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_I
 
 try:
     from djangocms_versioning.constants import DRAFT
-    djangocsm_versioning_enabled = True
+    djangocms_versioning_enabled = True
 except:
     djangocsm_versioning_enabled = False
 
