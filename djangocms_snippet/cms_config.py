@@ -1,17 +1,18 @@
+from cms.app_base import CMSAppConfig
+
 from django.conf import settings
-
-from cms.app_base import CMSAppConfig, CMSAppExtension
-
-from djangocms_versioning.datastructures import VersionableItem, default_copy
 
 from .models import Snippet
 
 
 class SnippetCMSAppConfig(CMSAppConfig):
     djangocms_versioning_enabled = getattr(
-        settings, 'VERSIONING_ALIAS_MODELS_ENABLED', True)
+        settings, 'DJANGOCMS_SNIPPET_VERSIONING_ENABLED', False
+    )
 
     if djangocms_versioning_enabled:
+        from djangocms_versioning.datastructures import VersionableItem, default_copy
+
         versioning = [
             VersionableItem(
                 content_model=Snippet,
