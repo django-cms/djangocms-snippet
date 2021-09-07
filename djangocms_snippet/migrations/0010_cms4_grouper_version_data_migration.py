@@ -6,7 +6,7 @@ try:
     from djangocms_versioning.constants import DRAFT
     djangocms_versioning_enabled = True
 except:
-    djangocsm_versioning_enabled = False
+    djangocms_versioning_enabled = False
 
 
 def cms4_grouper_version_migration(apps, schema_editor):
