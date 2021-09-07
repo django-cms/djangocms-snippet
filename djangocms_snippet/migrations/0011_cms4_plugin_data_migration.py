@@ -3,7 +3,7 @@ from django.db import migrations
 
 
 def cms4_migration(apps, schema_editor):
-    SnippetPtr = apps.get_model("djangocms_snippet", "SnippetPtr")
+    SnippetPtr = apps.get_model('djangocms_snippet', 'SnippetPtr')
 
     for snippet_plugin in SnippetPtr.objects.all():
         snippet = snippet_plugin.snippet

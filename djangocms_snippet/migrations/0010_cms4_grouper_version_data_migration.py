@@ -1,16 +1,21 @@
 from django.db import migrations
 
 from djangocms_snippet.conf import DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID
-from djangocms_snippet.utils import is_versioning_enabled
 
-if is_versioning_enabled():
+try:
     from djangocms_versioning.constants import DRAFT
+    djangocms_versioning_installed = True
+except ImportError:
+    djangocms_versioning_installed = False
 
 
 def cms4_grouper_version_migration(apps, schema_editor):
-    ContentType = apps.get_model("contenttypes", "ContentType")
-    Snippet = apps.get_model("djangocms_snippet", "Snippet")
-    SnippetGrouper = apps.get_model("djangocms_snippet", "SnippetGrouper")
+    app_config = apps.get_app_config('djangocms_snippet')
+    djangocms_versioning_config_enabled = app_config.cms_config.djangocms_versioning_enabled
+
+    ContentType = apps.get_model('contenttypes', 'ContentType')
+    Snippet = apps.get_model('djangocms_snippet', 'Snippet')
+    SnippetGrouper = apps.get_model('djangocms_snippet', 'SnippetGrouper')
     User = apps.get_model('auth', 'User')
 
     snippet_contenttype = ContentType.objects.get(app_label='djangocms_snippet', model='snippet')
@@ -24,8 +29,8 @@ def cms4_grouper_version_migration(apps, schema_editor):
         # Get a migration user.
         migration_user = User.objects.get(id=DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID)
 
-        if is_versioning_enabled:
-            Version = apps.get_model("djangocms_versioning", "Version")
+        if djangocms_versioning_config_enabled and djangocms_versioning_installed:
+            Version = apps.get_model('djangocms_versioning', 'Version')
             Version.objects.create(
                 created_by=migration_user,
                 state=DRAFT,
