@@ -12,15 +12,16 @@ class SnippetPluginsTestCase(CMSTestCase):
             title="home",
             template="page.html",
             language=self.language,
+            published=True,
         )
-        self.home.publish(self.language)
         self.page = create_page(
             title="help",
             template="page.html",
             language=self.language,
+            published=True,
         )
-        self.page.publish(self.language)
-        self.placeholder = self.page.placeholders.get(slot="content")
+        self.pagecontent = self.page.pagecontent_set.first()
+        self.placeholder = self.pagecontent.placeholders.get(slot="content")
         self.superuser = self.get_superuser()
 
     def tearDown(self):
@@ -36,12 +37,12 @@ class SnippetPluginsTestCase(CMSTestCase):
             slug="plugin_snippet",
         )
         plugin = add_plugin(
-            self.page.placeholders.get(slot="content"),
+            self.pagecontent.placeholders.get(slot="content"),
             "SnippetPlugin",
             self.language,
             snippet=snippet,
         )
-        self.page.publish(self.language)
+
         self.assertEqual(plugin.snippet.name, "plugin_snippet")
         self.assertEqual(plugin.snippet.html, "<p>Hello World</p>")
         self.assertEqual(plugin.snippet.slug, "plugin_snippet")
@@ -59,12 +60,11 @@ class SnippetPluginsTestCase(CMSTestCase):
             slug="plugin_snippet",
         )
         add_plugin(
-            self.page.placeholders.get(slot="content"),
+            self.pagecontent.placeholders.get(slot="content"),
             "SnippetPlugin",
             self.language,
             snippet=snippet,
         )
-        self.page.publish(self.language)
 
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)
@@ -82,12 +82,11 @@ class SnippetPluginsTestCase(CMSTestCase):
         )
         snippet.save()
         plugin = add_plugin(
-            self.page.placeholders.get(slot="content"),
+            self.pagecontent.placeholders.get(slot="content"),
             "SnippetPlugin",
             self.language,
             snippet=snippet,
         )
-        self.page.publish(self.language)
         self.assertEqual(plugin.snippet.name, "plugin_snippet")
         self.assertEqual(plugin.snippet.slug, "plugin_snippet")
 
@@ -109,12 +108,11 @@ class SnippetPluginsTestCase(CMSTestCase):
         )
         snippet.save()
         add_plugin(
-            self.page.placeholders.get(slot="content"),
+            self.pagecontent.placeholders.get(slot="content"),
             "SnippetPlugin",
             self.language,
             snippet=snippet,
         )
-        self.page.publish(self.language)
 
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)
