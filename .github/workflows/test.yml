@@ -10,11 +10,8 @@ jobs:
       matrix:
         python-version: [ 3.6, 3.7, ]
         requirements-file: [
-          dj22_cms37.txt,
-          dj22_cms38.txt,
-          dj30_cms37.txt,
-          dj30_cms38.txt,
-          dj31_cms38.txt,
+          dj11_cms40.txt,
+          dj22_cms40.txt,
         ]
         os: [
           ubuntu-20.04,
