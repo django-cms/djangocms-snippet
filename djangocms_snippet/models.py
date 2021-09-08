@@ -60,29 +60,11 @@ class Snippet(models.Model):
 
 
 # Plugin model - just a pointer to Snippet
-class AbstractSnippetPluginModel(CMSPlugin):
+class SnippetPtr(CMSPlugin):
     # Add an app namespace to related_name to avoid field name clashes
     # with any other plugins that have a field with the same name as the
     # lowercase of the class name of this model.
     # https://github.com/divio/django-cms/issues/5030
-
-    search_fields = ['snippet__html'] if SEARCH_ENABLED else []
-
-    class Meta:
-        verbose_name = _('Snippet Ptr')
-        verbose_name_plural = _('Snippet Ptrs')
-        abstract = True
-
-    def __str__(self):
-        # Return the referenced snippet's name rather than the default (ID #)
-        return self.snippet.name
-
-
-class SnippetPluginModel(AbstractSnippetPluginModel):
-    snippet = models.ForeignKey(SnippetGrouper, on_delete=models.CASCADE, )
-
-
-class SnippetPtr(AbstractSnippetPluginModel):
     cmsplugin_ptr = models.OneToOneField(
         CMSPlugin,
         related_name='%(app_label)s_%(class)s',
@@ -90,3 +72,13 @@ class SnippetPtr(AbstractSnippetPluginModel):
         on_delete=models.CASCADE,
     )
     snippet = models.ForeignKey(Snippet, on_delete=models.CASCADE)
+
+    search_fields = ['snippet__html'] if SEARCH_ENABLED else []
+
+    class Meta:
+        verbose_name = _('Snippet Ptr')
+        verbose_name_plural = _('Snippet Ptrs')
+
+    def __str__(self):
+        # Return the referenced snippet's name rather than the default (ID #)
+        return self.snippet.name
