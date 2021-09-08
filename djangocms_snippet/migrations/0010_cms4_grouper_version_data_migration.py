@@ -3,7 +3,7 @@ from django.db import migrations
 from djangocms_snippet.conf import (
     DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID,
 )
-
+from djangocms_snippet.cms_config import SnippetCMSAppConfig
 
 try:
     from djangocms_versioning.constants import DRAFT
@@ -13,8 +13,7 @@ except ImportError:
 
 
 def cms4_grouper_version_migration(apps, schema_editor):
-    app_config = apps.get_app_config('djangocms_snippet')
-    djangocms_versioning_config_enabled = app_config.cms_config.djangocms_versioning_enabled
+    djangocms_versioning_config_enabled = SnippetCMSAppConfig.djangocms_versioning_enabled
 
     ContentType = apps.get_model('contenttypes', 'ContentType')
     Snippet = apps.get_model('djangocms_snippet', 'Snippet')
