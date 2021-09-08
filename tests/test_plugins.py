@@ -12,13 +12,11 @@ class SnippetPluginsTestCase(CMSTestCase):
             title="home",
             template="page.html",
             language=self.language,
-            published=True,
         )
         self.page = create_page(
             title="help",
             template="page.html",
             language=self.language,
-            published=True,
         )
         self.pagecontent = self.page.pagecontent_set.first()
         self.placeholder = self.pagecontent.placeholders.get(slot="content")
