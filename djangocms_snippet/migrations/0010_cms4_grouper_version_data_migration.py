@@ -20,6 +20,8 @@ def cms4_grouper_version_migration(apps, schema_editor):
     SnippetGrouper = apps.get_model('djangocms_snippet', 'SnippetGrouper')
     User = apps.get_model('auth', 'User')
 
+    import pdb
+    pdb.set_trace()
     snippet_contenttype = ContentType.objects.get(app_label='djangocms_snippet', model='snippet')
     snippet_queryset = Snippet.objects.all()
 

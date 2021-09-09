@@ -79,7 +79,6 @@ class SnippetPtr(CMSPlugin):
     class Meta:
         verbose_name = _('Snippet Ptr')
         verbose_name_plural = _('Snippet Ptrs')
-        abstract = True
 
     @property
     def snippet(self):
