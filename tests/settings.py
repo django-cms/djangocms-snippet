@@ -2,6 +2,7 @@
 HELPER_SETTINGS = {
     'INSTALLED_APPS': [
         'tests.utils',
+        'djangocms_snippet',
     ],
     'CMS_LANGUAGES': {
         1: [{
