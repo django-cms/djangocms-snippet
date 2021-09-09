@@ -29,6 +29,7 @@ class SnippetPluginsTestCase(CMSTestCase):
 
     def test_html_rendering(self):
         request_url = self.page.get_absolute_url(self.language) + "?toolbar_off=true"
+        #
         snippet = Snippet.objects.create(
             name="plugin_snippet",
             html="<p>Hello World</p>",
