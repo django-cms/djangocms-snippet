@@ -2,6 +2,7 @@
 HELPER_SETTINGS = {
     'INSTALLED_APPS': [
         'tests.utils',
+        'djangocms_versioning',
         'djangocms_snippet',
     ],
     'CMS_LANGUAGES': {
@@ -12,6 +13,7 @@ HELPER_SETTINGS = {
     },
     'LANGUAGE_CODE': 'en',
     'ALLOWED_HOSTS': ['localhost'],
+    'DJANGOCMS_SNIPPET_VERSIONING_ENABLED': True,
 }
 
 
