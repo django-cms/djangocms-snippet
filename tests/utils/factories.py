@@ -129,6 +129,8 @@ class AbstractSnippetFactory(factory.django.DjangoModelFactory):
     name = FuzzyText(length=12)
     slug = FuzzyText(length=12)
     snippet_grouper = factory.SubFactory(SnippetGrouperFactory)
+    html = ""
+    template = ""
 
     class Meta:
         abstract = True
