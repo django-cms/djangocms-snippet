@@ -1,7 +1,8 @@
 from djangocms_snippet.cms_config import SnippetCMSAppConfig
 
+
 try:
-    from djangocms_versioning import __version__
+    from djangocms_versioning import __version__  # NOQA
     versioning_installed = True
 except ImportError:
     versioning_installed = False

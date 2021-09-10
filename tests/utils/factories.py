@@ -5,18 +5,13 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
 
 from cms import constants
-from cms.models import Page, PageContent, PageUrl, Placeholder, TreeNode
+from cms.models import Page, PageContent, Placeholder, TreeNode
 
 import factory
+from djangocms_versioning.models import Version
 from factory.fuzzy import FuzzyChoice, FuzzyInteger, FuzzyText
 
-from djangocms_versioning.models import Version
-
-from djangocms_snippet.models import (
-    Snippet,
-    SnippetGrouper,
-    SnippetPtr
-)
+from djangocms_snippet.models import Snippet, SnippetGrouper, SnippetPtr
 
 
 class PlaceholderFactory(factory.django.DjangoModelFactory):

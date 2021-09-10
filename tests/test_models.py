@@ -2,10 +2,7 @@ from cms.test_utils.testcases import CMSTestCase
 
 from djangocms_snippet.models import SEARCH_ENABLED, Snippet, SnippetPtr
 
-from .utils.factories import (
-    SnippetPluginFactory,
-    SnippetWithVersionFactory,
-)
+from .utils.factories import SnippetPluginFactory, SnippetWithVersionFactory
 
 
 class SnippetModelTestCase(CMSTestCase):

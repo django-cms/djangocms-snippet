@@ -1,9 +1,8 @@
-from cms.api import add_plugin, create_page
+from cms.api import add_plugin
 from cms.test_utils.testcases import CMSTestCase
 
 from .utils.factories import (
-    PageContentWithVersionFactory,
-    SnippetWithVersionFactory,
+    PageContentWithVersionFactory, SnippetWithVersionFactory,
 )
 
 
