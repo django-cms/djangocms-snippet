@@ -28,6 +28,10 @@ class SnippetPluginsTestCase(CMSTestCase):
         title_data["page"] = self.page
         self.pagecontent = create_title(**title_data)
 
+        # Publish our page content
+        self.home_pagecontent.versions.last().publish(user=self.superuser)
+        self.pagecontent.versions.last().publish(user=self.superuser)
+
     def test_html_rendering(self):
         snippet = SnippetWithVersionFactory(
             name="plugin_snippet",
@@ -52,8 +56,6 @@ class SnippetPluginsTestCase(CMSTestCase):
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)
 
-        import pdb
-        pdb.set_trace()
         self.assertIn(b"<p>Hello World</p>", response.content)
 
     def test_failing_html_rendering(self):
