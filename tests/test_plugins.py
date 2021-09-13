@@ -1,8 +1,8 @@
-from cms.api import add_plugin
+from cms.api import add_plugin, create_page, create_title
 from cms.test_utils.testcases import CMSTestCase
 
 from .utils.factories import (
-    PageContentWithVersionFactory, SnippetWithVersionFactory,
+    SnippetWithVersionFactory,
 )
 
 
@@ -12,35 +12,38 @@ class SnippetPluginsTestCase(CMSTestCase):
         self.language = "en"
         self.superuser = self.get_superuser()
         page_data = {
-            "title": "home",
-            "template": "page.html",
-            "language": self.language,
+            "title": "home", "template": "page.html", "language": self.language,
+            "created_by": self.superuser, "published": True,
         }
-        self.home_pagecontent = PageContentWithVersionFactory(**page_data)
-        self.home = self.home_pagecontent.page
-        page_data["title"] = "help"
-        self.pagecontent = PageContentWithVersionFactory(**page_data)
-        self.page = self.pagecontent.page
-        self.pagecontent.versions.first().publish(user=self.superuser)
-        self.page.save()
+        self.home = create_page(**page_data)
 
-        self.placeholder = self.pagecontent.placeholders.create(slot="content")
+        title_data = {
+            "title": "home", "template": "page.html", "language": self.language,
+            "created_by": self.superuser, "page": self.home,
+        }
+        self.home_pagecontent = create_title(**title_data)
+
+        page_data["title"] = "help"
+        self.page = create_page(**page_data)
+        title_data["page"] = self.page
+        self.pagecontent = create_title(**title_data)
 
     def test_html_rendering(self):
-        request_url = self.page.get_absolute_url(self.language) + "?toolbar_off=true"
         snippet = SnippetWithVersionFactory(
             name="plugin_snippet",
             html="<p>Hello World</p>",
             slug="plugin_snippet",
         )
         snippet_grouper = snippet.snippet_grouper
-        snippet.versions.last().publish(user=self.get_superuser())
         plugin = add_plugin(
             self.pagecontent.placeholders.get(slot="content"),
             "SnippetPlugin",
             self.language,
             snippet_grouper=snippet_grouper,
         )
+
+        snippet.versions.last().publish(user=self.get_superuser())
+        request_url = self.page.get_absolute_url("en")
 
         self.assertEqual(plugin.snippet.name, "plugin_snippet")
         self.assertEqual(plugin.snippet.html, "<p>Hello World</p>")
@@ -49,6 +52,8 @@ class SnippetPluginsTestCase(CMSTestCase):
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)
 
+        import pdb
+        pdb.set_trace()
         self.assertIn(b"<p>Hello World</p>", response.content)
 
     def test_failing_html_rendering(self):
