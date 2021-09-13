@@ -8,7 +8,7 @@ def cms4_migration(apps, schema_editor):
     for snippet_plugin in SnippetPtr.objects.all():
         snippet = snippet_plugin.snippet
         grouper = snippet.snippet_grouper
-        snippet_plugin.snipept_grouper = grouper
+        snippet_plugin.snippet_grouper = grouper
         snippet_plugin.save()
 
 
