@@ -32,7 +32,7 @@ def cms4_grouper_version_migration(apps, schema_editor):
 
     for snippet in snippet_queryset:
         grouper = SnippetGrouper.objects.create()
-        snippet.new_snippet = grouper
+        snippet.snipept_grouper = grouper
         snippet.save()
 
         # Get a migration user.
