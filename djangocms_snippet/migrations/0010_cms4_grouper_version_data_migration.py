@@ -17,7 +17,6 @@ except ImportError:
 
 
 def cms4_grouper_version_migration(apps, schema_editor):
-    # TODO: Remove
     create_contenttypes(global_apps.get_app_config("djangocms_snippet"))
 
     djangocms_versioning_config_enabled = SnippetCMSAppConfig.djangocms_versioning_enabled
@@ -38,6 +37,7 @@ def cms4_grouper_version_migration(apps, schema_editor):
         # Get a migration user.
         migration_user = User.objects.get(id=DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID)
 
+        # Create initial Snippet Versions if versioning is enabled and installed.
         if djangocms_versioning_config_enabled and djangocms_versioning_installed:
             Version = apps.get_model('djangocms_versioning', 'Version')
             Version.objects.create(
