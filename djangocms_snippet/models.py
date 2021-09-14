@@ -20,7 +20,6 @@ class Snippet(models.Model):
     """
     name = models.CharField(
         verbose_name=_('Name'),
-        unique=True,
         max_length=255,
     )
     snippet_grouper = models.ForeignKey(
