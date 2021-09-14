@@ -4,9 +4,10 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from djangocms_snippet.models import Snippet
 from djangocms_versioning.constants import DRAFT
 from djangocms_versioning.models import Version
+
+from djangocms_snippet.models import Snippet
 
 
 def _create_version(snippet, state=DRAFT, number=1):
