@@ -45,7 +45,6 @@ class Snippet(models.Model):
     )
     slug = models.SlugField(
         verbose_name=_('Slug'),
-        unique=True,
         blank=False,
         default='',
         max_length=255,
