@@ -1,22 +1,23 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.template import Context, Template
 from django.template.exceptions import TemplateSyntaxError
-from django.test import TestCase
 
-from djangocms_snippet.models import Snippet, SnippetPtr
+from cms.test_utils.testcases import CMSTestCase
+
+from .utils.factories import SnippetPluginFactory, SnippetWithVersionFactory
 
 
-class SnippetTemplateTagTestCase(TestCase):
+class SnippetTemplateTagTestCase(CMSTestCase):
 
     def test_html_rendered(self):
-        snippet = Snippet.objects.create(
+        snippet = SnippetWithVersionFactory(
             name="test snippet",
             html="<p>hello {{ title }}</p>",
             slug="test_snippet",
         )
-        SnippetPtr.objects.create(
-            snippet=snippet,
-        )
+        snippet.versions.last().publish(user=self.get_superuser())
+        snippet_grouper = snippet.snippet_grouper
+        SnippetPluginFactory(snippet_grouper=snippet_grouper, language=["en"])
 
         context = Context({"title": "world"})
         template_to_render = Template(
@@ -24,6 +25,7 @@ class SnippetTemplateTagTestCase(TestCase):
             '{% snippet_fragment "test_snippet" %}'
         )
         rendered_template = template_to_render.render(context)
+
         self.assertInHTML('<p>hello world</p>', rendered_template)
 
         # test html errors
@@ -38,14 +40,15 @@ class SnippetTemplateTagTestCase(TestCase):
 
     def test_template_rendered(self):
         template = "snippet.html"
-        snippet = Snippet.objects.create(
+        snippet = SnippetWithVersionFactory(
             name="test snippet",
+            html="<p>hello {{ title }}</p>",
             template=template,
             slug="test_snippet",
         )
-        SnippetPtr.objects.create(
-            snippet=snippet,
-        )
+        snippet.versions.last().publish(user=self.get_superuser())
+        snippet_grouper = snippet.snippet_grouper
+        SnippetPluginFactory(snippet_grouper=snippet_grouper, language=["en"])
 
         # use a string to identify
         context = Context({})
@@ -76,14 +79,15 @@ class SnippetTemplateTagTestCase(TestCase):
 
     def test_template_errors(self):
         template = "does_not_exist.html"
-        snippet = Snippet.objects.create(
+        snippet = SnippetWithVersionFactory(
             name="test snippet",
+            html="<p>hello {{ title }}</p>",
             template=template,
             slug="test_snippet",
         )
-        SnippetPtr.objects.create(
-            snippet=snippet,
-        )
+        snippet.versions.last().publish(user=self.get_superuser())
+        snippet_grouper = snippet.snippet_grouper
+        SnippetPluginFactory(snippet_grouper=snippet_grouper, language=["en"])
 
         context = Context({})
         template_to_render = Template(

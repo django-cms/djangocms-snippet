@@ -1,47 +1,54 @@
-from cms.api import add_plugin, create_page
+from cms.api import add_plugin, create_page, create_title
 from cms.test_utils.testcases import CMSTestCase
 
-from djangocms_snippet.models import Snippet
+from .utils.factories import (
+    SnippetWithVersionFactory,
+)
 
 
 class SnippetPluginsTestCase(CMSTestCase):
 
     def setUp(self):
         self.language = "en"
-        self.home = create_page(
-            title="home",
-            template="page.html",
-            language=self.language,
-        )
-        self.home.publish(self.language)
-        self.page = create_page(
-            title="help",
-            template="page.html",
-            language=self.language,
-        )
-        self.page.publish(self.language)
-        self.placeholder = self.page.placeholders.get(slot="content")
         self.superuser = self.get_superuser()
+        page_data = {
+            "title": "home", "template": "page.html", "language": self.language,
+            "created_by": self.superuser, "published": True,
+        }
+        self.home = create_page(**page_data)
 
-    def tearDown(self):
-        self.page.delete()
-        self.home.delete()
-        self.superuser.delete()
+        title_data = {
+            "title": "home", "template": "page.html", "language": self.language,
+            "created_by": self.superuser, "page": self.home,
+        }
+        self.home_pagecontent = create_title(**title_data)
+
+        page_data["title"] = "help"
+        self.page = create_page(**page_data)
+        title_data["page"] = self.page
+        self.pagecontent = create_title(**title_data)
+
+        # Publish our page content
+        self.home_pagecontent.versions.last().publish(user=self.superuser)
+        self.pagecontent.versions.last().publish(user=self.superuser)
 
     def test_html_rendering(self):
-        request_url = self.page.get_absolute_url(self.language) + "?toolbar_off=true"
-        snippet = Snippet.objects.create(
+        snippet = SnippetWithVersionFactory(
             name="plugin_snippet",
             html="<p>Hello World</p>",
             slug="plugin_snippet",
         )
+        snippet_grouper = snippet.snippet_grouper
         plugin = add_plugin(
-            self.page.placeholders.get(slot="content"),
+            self.pagecontent.placeholders.get(slot="content"),
             "SnippetPlugin",
             self.language,
-            snippet=snippet,
+            snippet_grouper=snippet_grouper,
         )
-        self.page.publish(self.language)
+
+        snippet.versions.last().publish(user=self.get_superuser())
+        request_url = self.page.get_absolute_url("en")
+
         self.assertEqual(plugin.snippet.name, "plugin_snippet")
         self.assertEqual(plugin.snippet.html, "<p>Hello World</p>")
         self.assertEqual(plugin.snippet.slug, "plugin_snippet")
@@ -53,18 +60,20 @@ class SnippetPluginsTestCase(CMSTestCase):
 
     def test_failing_html_rendering(self):
         request_url = self.page.get_absolute_url(self.language) + "?toolbar_off=true"
-        snippet = Snippet.objects.create(
+        snippet = SnippetWithVersionFactory(
             name="plugin_snippet",
             html="{% import weirdness %}",
             slug="plugin_snippet",
         )
+        snippet_grouper = snippet.snippet_grouper
+        snippet.versions.last().publish(user=self.get_superuser())
+
         add_plugin(
-            self.page.placeholders.get(slot="content"),
+            self.pagecontent.placeholders.get(slot="content"),
             "SnippetPlugin",
             self.language,
-            snippet=snippet,
+            snippet_grouper=snippet_grouper,
         )
-        self.page.publish(self.language)
 
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)
@@ -73,21 +82,22 @@ class SnippetPluginsTestCase(CMSTestCase):
         self.assertContains(response, "Did you forget to register or load this tag?")
 
     def test_template_rendering(self):
-        request_url = self.page.get_absolute_url(self.language) + "?toolbar_off=true"
+        request_url = self.page.get_absolute_url()
         template = "snippet.html"
-        snippet = Snippet.objects.create(
+        snippet = SnippetWithVersionFactory(
             name="plugin_snippet",
             template=template,
             slug="plugin_snippet",
         )
-        snippet.save()
+        snippet_grouper = snippet.snippet_grouper
+        snippet.versions.last().publish(user=self.get_superuser())
         plugin = add_plugin(
-            self.page.placeholders.get(slot="content"),
+            self.pagecontent.placeholders.get(slot="content"),
             "SnippetPlugin",
             self.language,
-            snippet=snippet,
+            snippet_grouper=snippet_grouper,
         )
-        self.page.publish(self.language)
+
         self.assertEqual(plugin.snippet.name, "plugin_snippet")
         self.assertEqual(plugin.snippet.slug, "plugin_snippet")
 
@@ -102,19 +112,19 @@ class SnippetPluginsTestCase(CMSTestCase):
     def test_failing_template_rendering(self):
         request_url = self.page.get_absolute_url(self.language) + "?toolbar_off=true"
         template = "some_template"
-        snippet = Snippet.objects.create(
+        snippet = SnippetWithVersionFactory(
             name="plugin_snippet",
             template=template,
             slug="plugin_snippet",
         )
-        snippet.save()
+        snippet_grouper = snippet.snippet_grouper
+        snippet.versions.last().publish(user=self.get_superuser())
         add_plugin(
-            self.page.placeholders.get(slot="content"),
+            self.pagecontent.placeholders.get(slot="content"),
             "SnippetPlugin",
             self.language,
-            snippet=snippet,
+            snippet_grouper=snippet_grouper,
         )
-        self.page.publish(self.language)
 
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)
