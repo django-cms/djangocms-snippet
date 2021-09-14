@@ -19,6 +19,11 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='snippet',
+            name='name',
+            field=models.CharField(max_length=255, verbose_name='Name'),
+        ),
+        migrations.AlterField(
+            model_name='snippet',
             name='slug',
             field=models.SlugField(default='', max_length=255, verbose_name='Slug'),
         ),
