@@ -26,7 +26,7 @@ class SnippetPluginsTestCase(CMSTestCase):
         # Publish our page content
         self._publish(self.page)
         self._publish(self.home)
-        self.page_pagecontent = self.page.pagecontent_set.last()
+        self.pagecontent = self.page.pagecontent_set.last()
         self.home_pagecontent = self.page.pagecontent_set.last()
 
     def tearDown(self):
@@ -56,7 +56,7 @@ class SnippetPluginsTestCase(CMSTestCase):
         )
         snippet_grouper = snippet.snippet_grouper
         plugin = add_plugin(
-            self.page_pagecontent.placeholders.get(slot="content"),
+            self.pagecontent.placeholders.get(slot="content"),
             "SnippetPlugin",
             self.language,
             snippet_grouper=snippet_grouper,
@@ -85,7 +85,7 @@ class SnippetPluginsTestCase(CMSTestCase):
         snippet.versions.last().publish(user=self.get_superuser())
 
         add_plugin(
-            self.page_pagecontent.placeholders.get(slot="content"),
+            self.pagecontent.placeholders.get(slot="content"),
             "SnippetPlugin",
             self.language,
             snippet_grouper=snippet_grouper,
@@ -108,7 +108,7 @@ class SnippetPluginsTestCase(CMSTestCase):
         snippet_grouper = snippet.snippet_grouper
         snippet.versions.last().publish(user=self.get_superuser())
         plugin = add_plugin(
-            self.page_pagecontent.placeholders.get(slot="content"),
+            self.pagecontent.placeholders.get(slot="content"),
             "SnippetPlugin",
             self.language,
             snippet_grouper=snippet_grouper,
@@ -136,7 +136,7 @@ class SnippetPluginsTestCase(CMSTestCase):
         snippet_grouper = snippet.snippet_grouper
         snippet.versions.last().publish(user=self.get_superuser())
         add_plugin(
-            self.page_pagecontent.placeholders.get(slot="content"),
+            self.pagecontent.placeholders.get(slot="content"),
             "SnippetPlugin",
             self.language,
             snippet_grouper=snippet_grouper,
