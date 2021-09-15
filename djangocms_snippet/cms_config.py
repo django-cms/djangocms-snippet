@@ -6,7 +6,7 @@ from djangocms_snippet.models import Snippet
 
 
 try:
-    from djangocms_moderation import __version__ # NOQA
+    from djangocms_moderation import __version__  # NOQA
 
     djangocms_moderation_installed = True
 except ImportError:
