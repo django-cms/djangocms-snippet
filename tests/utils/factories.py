@@ -7,7 +7,7 @@ from cms.models import Placeholder
 
 import factory
 from djangocms_versioning.models import Version
-from factory.fuzzy import FuzzyChoice, FuzzyInteger, FuzzyText
+from factory.fuzzy import FuzzyInteger, FuzzyText
 
 from djangocms_snippet.models import Snippet, SnippetGrouper, SnippetPtr
 
