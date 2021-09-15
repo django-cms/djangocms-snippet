@@ -80,6 +80,11 @@ please set ``DJANGOCMS_SNIPPET_CACHE`` to ``False`` in your settings::
 
     DJANGOCMS_SNIPPET_CACHE = False # default value is True
 
+Migration 0010 requires the use of a user in order to create versions for existing snippets (if djangocms_versioning is installed and enabled),
+a user can be chosen with the setting ``DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID``, the default is 1.
+
+    DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID = 2 # Will use user with id: 2
+
 Template tag
 ------------
 

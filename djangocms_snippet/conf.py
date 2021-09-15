@@ -1,0 +1,6 @@
+from django.conf import settings
+
+
+DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID = getattr(
+    settings, "DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID", 1
+)
