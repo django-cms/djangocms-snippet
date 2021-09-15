@@ -6,7 +6,7 @@ from djangocms_snippet.models import Snippet
 
 
 try:
-    from djangocms_moderation import __version__
+    from djangocms_moderation import __version__ # NOQA
 
     djangocms_moderation_installed = True
 except ImportError:
@@ -51,9 +51,7 @@ class SnippetCMSAppConfig(CMSAppConfig):
         moderated_models = [Snippet]
 
     if djangocms_versioning_enabled:
-        from djangocms_versioning.datastructures import (
-            VersionableItem,
-        )
+        from djangocms_versioning.datastructures import VersionableItem
 
         versioning = [
             VersionableItem(
