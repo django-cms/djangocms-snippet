@@ -28,21 +28,18 @@ class SnippetPluginsTestCase(CMSTestCase):
             template="page.html",
             language=self.language,
             created_by=self.superuser,
-            page=self.home,
+            page=self.page,
         )
         self.home_pagecontent = create_title(
             title="home",
             template="page.html",
-            language= self.language,
-            created_by= self.superuser,
+            language=self.language,
+            created_by=self.superuser,
             page=self.home,
         )
-
-        self.placeholder = self.page.placeholders.get(slot="content")
-
         # Publish our page content
-        self.home_pagecontent.versions.last().publish(user=self.superuser)
-        self.pagecontent.versions.last().publish(user=self.superuser)
+        self.home_pagecontent.versions.first().publish(user=self.superuser)
+        self.page_pagecontent.versions.first().publish(user=self.superuser)
 
     def tearDown(self):
         self.page.delete()
@@ -57,7 +54,7 @@ class SnippetPluginsTestCase(CMSTestCase):
         )
         snippet_grouper = snippet.snippet_grouper
         plugin = add_plugin(
-            self.pagecontent.placeholders.get(slot="content"),
+            self.page_pagecontent.placeholders.get(slot="content"),
             "SnippetPlugin",
             self.language,
             snippet_grouper=snippet_grouper,
@@ -86,7 +83,7 @@ class SnippetPluginsTestCase(CMSTestCase):
         snippet.versions.last().publish(user=self.get_superuser())
 
         add_plugin(
-            self.pagecontent.placeholders.get(slot="content"),
+            self.page_pagecontent.placeholders.get(slot="content"),
             "SnippetPlugin",
             self.language,
             snippet_grouper=snippet_grouper,
@@ -109,7 +106,7 @@ class SnippetPluginsTestCase(CMSTestCase):
         snippet_grouper = snippet.snippet_grouper
         snippet.versions.last().publish(user=self.get_superuser())
         plugin = add_plugin(
-            self.pagecontent.placeholders.get(slot="content"),
+            self.page_pagecontent.placeholders.get(slot="content"),
             "SnippetPlugin",
             self.language,
             snippet_grouper=snippet_grouper,
@@ -137,7 +134,7 @@ class SnippetPluginsTestCase(CMSTestCase):
         snippet_grouper = snippet.snippet_grouper
         snippet.versions.last().publish(user=self.get_superuser())
         add_plugin(
-            self.pagecontent.placeholders.get(slot="content"),
+            self.page_pagecontent.placeholders.get(slot="content"),
             "SnippetPlugin",
             self.language,
             snippet_grouper=snippet_grouper,
