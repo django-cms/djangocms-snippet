@@ -23,28 +23,30 @@ class SnippetPluginsTestCase(CMSTestCase):
             language=self.language,
             created_by=self.superuser,
         )
-        self.page_pagecontent = create_title(
-            title="page",
-            template="page.html",
-            language=self.language,
-            created_by=self.superuser,
-            page=self.page,
-        )
-        self.home_pagecontent = create_title(
-            title="home",
-            template="page.html",
-            language=self.language,
-            created_by=self.superuser,
-            page=self.home,
-        )
         # Publish our page content
-        self.home_pagecontent.versions.first().publish(user=self.superuser)
-        self.page_pagecontent.versions.first().publish(user=self.superuser)
+        self._publish(self.page)
+        self._publish(self.home)
+        self.page_pagecontent = self.page.pagecontent_set.last()
+        self.home_pagecontent = self.page.pagecontent_set.last()
 
     def tearDown(self):
         self.page.delete()
         self.home.delete()
         self.superuser.delete()
+
+    def _publish(self, grouper, language=None):
+        from djangocms_versioning.constants import DRAFT
+        version = self._get_version(grouper, DRAFT, language)
+        version.publish(self.superuser)
+
+    def _get_version(self, grouper, version_state, language=None):
+        language = language or self.language
+
+        from djangocms_versioning.models import Version
+        versions = Version.objects.filter_by_grouper(grouper).filter(state=version_state)
+        for version in versions:
+            if hasattr(version.content, 'language') and version.content.language == language:
+                return version
 
     def test_html_rendering(self):
         snippet = SnippetWithVersionFactory(
