@@ -5,6 +5,14 @@ from cms.app_base import CMSAppConfig
 from djangocms_snippet.models import Snippet
 
 
+try:
+    from djangocms_moderation import __version__
+
+    djangocms_moderation_installed = True
+except ImportError:
+    djangocms_moderation_installed = False
+
+
 def _get_model_fields(instance, model, field_exclusion_list=[]):
     """
     Iterate over fields excluding
@@ -34,10 +42,13 @@ class SnippetCMSAppConfig(CMSAppConfig):
     djangocms_versioning_enabled = getattr(
         settings, 'DJANGOCMS_SNIPPET_VERSIONING_ENABLED', False
     )
+    djangocms_moderation_enabled = getattr(
+        settings, 'DJANGOCMS_SNIPPET_MODERATION_ENABLED', False
+    )
 
-    # TODO: Update this to check if moderation is installed and enabled
-    djangocms_moderation_enabled = True
-    moderated_models = []
+    if djangocms_moderation_enabled and djangocms_moderation_installed:
+        djangocms_moderation_enabled = True
+        moderated_models = [Snippet]
 
     if djangocms_versioning_enabled:
         from djangocms_versioning.datastructures import (
