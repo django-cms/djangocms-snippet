@@ -11,26 +11,43 @@ class SnippetPluginsTestCase(CMSTestCase):
     def setUp(self):
         self.language = "en"
         self.superuser = self.get_superuser()
-
         self.home = create_page(
-            title="home", template="page.html",
-            language=self.language, created_by=self.superuser,
+            title="home",
+            template="page.html",
+            language=self.language,
+            created_by=self.superuser,
         )
-        title_data = {
-            "title": "home", "template": "page.html", "language": self.language,
-            "created_by": self.superuser, "page": self.home,
-        }
-        self.home_pagecontent = create_title(**title_data)
         self.page = create_page(
-            title="help", template="page.html",
-            language=self.language, created_by=self.superuser,
+            title="help",
+            template="page.html",
+            language=self.language,
+            created_by=self.superuser,
         )
-        title_data["page"] = self.page
-        self.pagecontent = create_title(**title_data)
+        self.page_pagecontent = create_title(
+            title="page",
+            template="page.html",
+            language=self.language,
+            created_by=self.superuser,
+            page=self.home,
+        )
+        self.home_pagecontent = create_title(
+            title="home",
+            template="page.html",
+            language= self.language,
+            created_by= self.superuser,
+            page=self.home,
+        )
+
+        self.placeholder = self.page.placeholders.get(slot="content")
 
         # Publish our page content
         self.home_pagecontent.versions.last().publish(user=self.superuser)
         self.pagecontent.versions.last().publish(user=self.superuser)
+
+    def tearDown(self):
+        self.page.delete()
+        self.home.delete()
+        self.superuser.delete()
 
     def test_html_rendering(self):
         snippet = SnippetWithVersionFactory(
