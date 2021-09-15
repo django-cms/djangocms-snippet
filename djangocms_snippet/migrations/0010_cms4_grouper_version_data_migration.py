@@ -52,7 +52,7 @@ def cms4_grouper_version_migration(apps, schema_editor):
 class Migration(migrations.Migration):
     dependencies = [
         ('cms', '0034_remove_pagecontent_placeholders'),  # Run after the CMS4 migrations
-        ('djangocms_snippet', '0009_auto_20210909_0901'),
+        ('djangocms_snippet', '0009_auto_20210915_0445'),
     ]
 
     if djangocms_versioning_installed:

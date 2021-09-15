@@ -11,20 +11,20 @@ class SnippetPluginsTestCase(CMSTestCase):
     def setUp(self):
         self.language = "en"
         self.superuser = self.get_superuser()
-        page_data = {
-            "title": "home", "template": "page.html", "language": self.language,
-            "created_by": self.superuser, "published": True,
-        }
-        self.home = create_page(**page_data)
 
+        self.home = create_page(
+            title="home", template="page.html",
+            language=self.language, created_by=self.superuser,
+        )
         title_data = {
             "title": "home", "template": "page.html", "language": self.language,
             "created_by": self.superuser, "page": self.home,
         }
         self.home_pagecontent = create_title(**title_data)
-
-        page_data["title"] = "help"
-        self.page = create_page(**page_data)
+        self.page = create_page(
+            title="help", template="page.html",
+            language=self.language, created_by=self.superuser,
+        )
         title_data["page"] = self.page
         self.pagecontent = create_title(**title_data)
 

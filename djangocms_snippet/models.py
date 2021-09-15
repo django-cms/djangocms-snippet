@@ -21,6 +21,7 @@ class Snippet(models.Model):
     name = models.CharField(
         verbose_name=_('Name'),
         max_length=255,
+        unique=True,
     )
     snippet_grouper = models.ForeignKey(
         SnippetGrouper,
@@ -47,6 +48,7 @@ class Snippet(models.Model):
         blank=False,
         default='',
         max_length=255,
+        unique=True,
     )
 
     def __str__(self):
@@ -70,7 +72,12 @@ class SnippetPtr(CMSPlugin):
         parent_link=True,
         on_delete=models.CASCADE,
     )
-    snippet_grouper = models.ForeignKey(SnippetGrouper, on_delete=models.CASCADE)
+    snippet_grouper = models.ForeignKey(
+        SnippetGrouper,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
 
     search_fields = ['snippet__html'] if SEARCH_ENABLED else []
 

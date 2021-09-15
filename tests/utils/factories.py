@@ -2,26 +2,14 @@ import string
 
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.sites.models import Site
 
-from cms import constants
-from cms.models import Page, PageContent, Placeholder, TreeNode
+from cms.models import Placeholder
 
 import factory
 from djangocms_versioning.models import Version
 from factory.fuzzy import FuzzyChoice, FuzzyInteger, FuzzyText
 
 from djangocms_snippet.models import Snippet, SnippetGrouper, SnippetPtr
-
-
-class PlaceholderFactory(factory.django.DjangoModelFactory):
-    default_width = FuzzyInteger(0, 25)
-    slot = FuzzyText(length=2, chars=string.digits)
-    # NOTE: When using this factory you will probably want to set
-    # the source field manually
-
-    class Meta:
-        model = Placeholder
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -55,63 +43,14 @@ class AbstractVersionFactory(factory.django.DjangoModelFactory):
         abstract = True
 
 
-class TreeNodeFactory(factory.django.DjangoModelFactory):
-    site = factory.fuzzy.FuzzyChoice(Site.objects.all())
-    depth = 0
-    # NOTE: Generating path this way is probably not a good way of
-    # doing it, but seems to work for our present tests which only
-    # really need a tree node to exist and not throw unique constraint
-    # errors on this field. If the data in this model starts mattering
-    # in our tests then something more will need to be done here.
-    path = FuzzyText(length=8, chars=string.digits)
+class PlaceholderFactory(factory.django.DjangoModelFactory):
+    default_width = FuzzyInteger(0, 25)
+    slot = FuzzyText(length=2, chars=string.digits)
+    # NOTE: When using this factory you will probably want to set
+    # the source field manually
 
     class Meta:
-        model = TreeNode
-
-
-class PageFactory(factory.django.DjangoModelFactory):
-    node = factory.SubFactory(TreeNodeFactory)
-
-    class Meta:
-        model = Page
-
-
-class PageContentFactory(factory.django.DjangoModelFactory):
-    page = factory.SubFactory(PageFactory)
-    language = FuzzyChoice(["en", "fr", "it"])
-    title = FuzzyText(length=12)
-    page_title = FuzzyText(length=12)
-    menu_title = FuzzyText(length=12)
-    meta_description = FuzzyText(length=12)
-    redirect = FuzzyText(length=12)
-    created_by = FuzzyText(length=12)
-    changed_by = FuzzyText(length=12)
-    in_navigation = FuzzyChoice([True, False])
-    soft_root = FuzzyChoice([True, False])
-    limit_visibility_in_menu = constants.VISIBILITY_USERS
-    template = 'page.html'
-    xframe_options = FuzzyInteger(0, 25)
-
-    class Meta:
-        model = PageContent
-
-
-class PageVersionFactory(AbstractVersionFactory):
-    content = factory.SubFactory(PageContentFactory)
-
-    class Meta:
-        model = Version
-
-
-class PageContentWithVersionFactory(PageContentFactory):
-    @factory.post_generation
-    def version(self, create, extracted, **kwargs):
-        # NOTE: Use this method as below to define version attributes:
-        # PageContentWithVersionFactory(version__label='label1')
-        if not create:
-            # Simple build, do nothing.
-            return
-        PageVersionFactory(content=self, **kwargs)
+        model = Placeholder
 
 
 class SnippetGrouperFactory(factory.django.DjangoModelFactory):
