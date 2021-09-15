@@ -26,8 +26,6 @@ class Snippet(models.Model):
     snippet_grouper = models.ForeignKey(
         SnippetGrouper,
         on_delete=models.PROTECT,
-        null=True,
-        blank=True,
     )
     html = models.TextField(
         verbose_name=_('HTML'),
@@ -75,8 +73,6 @@ class SnippetPtr(CMSPlugin):
     snippet_grouper = models.ForeignKey(
         SnippetGrouper,
         on_delete=models.CASCADE,
-        blank=True,
-        null=True,
     )
 
     search_fields = ['snippet__html'] if SEARCH_ENABLED else []
