@@ -2,7 +2,7 @@ from django.conf import settings
 
 from cms.app_base import CMSAppConfig
 
-from .models import Snippet
+from djangocms_snippet.models import Snippet
 
 
 def _get_model_fields(instance, model, field_exclusion_list=[]):
