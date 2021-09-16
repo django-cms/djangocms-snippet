@@ -21,4 +21,4 @@ class VersioningConfigTestCase(CMSTestCase):
         self.assertEqual(old_snippet.html, new_snippet.html)
         self.assertEqual(old_snippet.snippet_grouper, new_snippet.snippet_grouper)
         self.assertEqual(1, SnippetGrouper.objects.count())
-        self.assertEqual(2, Snippet.objects.count())
+        self.assertEqual(2, Snippet._base_manager.count())
