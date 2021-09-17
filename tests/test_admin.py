@@ -1,8 +1,7 @@
 from importlib import reload
 
 from django.contrib import admin
-from django.test import override_settings, RequestFactory
-
+from django.test import RequestFactory, override_settings
 
 from cms.test_utils.testcases import CMSTestCase
 
