@@ -27,8 +27,7 @@ class SnippetCMSAppConfig(CMSAppConfig):
 
     if djangocms_versioning_enabled:
         from djangocms_versioning.datastructures import (
-            VersionableItem,
-            default_copy,
+            VersionableItem, default_copy,
         )
 
         versioning = [
