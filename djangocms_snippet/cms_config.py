@@ -26,7 +26,10 @@ class SnippetCMSAppConfig(CMSAppConfig):
         moderated_models = [Snippet]
 
     if djangocms_versioning_enabled:
-        from djangocms_versioning.datastructures import VersionableItem, default_copy
+        from djangocms_versioning.datastructures import (
+            VersionableItem,
+            default_copy,
+        )
 
         versioning = [
             VersionableItem(
