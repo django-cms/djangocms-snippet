@@ -18,7 +18,10 @@ class SnippetAdminTestCase(CMSTestCase):
         self.snippet_admin_request = RequestFactory().get("/admin/djangocms_snippet")
 
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=False)
-    def test_admin_without_versioning(self):
+    def test_admin_list_display_without_versioning(self):
+        """
+        Without versioning enabled, list_display should not be extended with version related items
+        """
         admin.site.unregister(Snippet)
         reload(snippet_admin)
         self.snippet_admin = snippet_admin.SnippetAdmin(Snippet, admin)
@@ -28,7 +31,11 @@ class SnippetAdminTestCase(CMSTestCase):
         self.assertEqual(self.snippet_admin.__class__.__bases__, (snippet_admin.AbstractSnippetAdmin,))
         self.assertEqual(list_display, ('slug', 'name'))
 
-    def test_admin_with_versioning(self):
+    def test_admin_list_display_with_versioning(self):
+        """
+        With versioning enabled, list_display should be populated with both versioning related items, and the
+        list actions items
+        """
         from djangocms_versioning.admin import ExtendedVersionAdminMixin
         list_display = self.snippet_admin.get_list_display(self.snippet_admin_request)
 
@@ -39,3 +46,4 @@ class SnippetAdminTestCase(CMSTestCase):
             list_display[:-1], ('slug', 'name', 'get_author', 'get_modified_date', 'get_versioning_state')
         )
         self.assertEqual(list_display[-1].short_description, 'actions')
+        self.assertIn("function ExtendedVersionAdminMixin._list_actions", list_display[-1].__str__())
