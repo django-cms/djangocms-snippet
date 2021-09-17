@@ -22,6 +22,7 @@ class VersioningConfigTestCase(CMSTestCase):
 
         new_snippet = snippet_cms_config.versioning[0].copy_function(old_snippet)
 
+        self.assertNotEqual(old_snippet, new_snippet)
         self.assertEqual(old_snippet.name, new_snippet.name)
         self.assertEqual(old_snippet.html, new_snippet.html)
         self.assertEqual(old_snippet.snippet_grouper, new_snippet.snippet_grouper)
