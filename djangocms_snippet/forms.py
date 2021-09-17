@@ -44,11 +44,11 @@ class SnippetForm(forms.ModelForm):
         for snippet in published_snippet_queryset:
             if snippet.name == name:
                 self.add_error(
-                    "name", _("Snippet with this name already exists")
+                    "name", _("A Snippet with this name already exists")
                 )
             elif snippet.slug == slug:
                 self.add_error(
-                    "slug", _("Snippet with this slug already exists")
+                    "slug", _("A Snippet with this slug already exists")
                 )
 
         return data

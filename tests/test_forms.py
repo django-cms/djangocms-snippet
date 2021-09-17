@@ -112,4 +112,4 @@ class SnippetFormTestCase(CMSTestCase):
 
         new_form.clean()
 
-        self.assertDictEqual(new_form.errors, {'slug': ['Snippet with this slug already exists']})
+        self.assertDictEqual(new_form.errors, {'slug': ['A Snippet with this slug already exists']})
