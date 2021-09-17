@@ -57,7 +57,6 @@ class SnippetForm(forms.ModelForm):
         if not self.cleaned_data.get("snippet_grouper"):
             super().save(commit=False)
             self.instance.snippet_grouper = SnippetGrouper.objects.create()
-            # self.instance.snippet_grouper_id = self.snippet_grouper.id
         return super().save()
 
 
