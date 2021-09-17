@@ -6,7 +6,7 @@ from djangocms_snippet.models import Snippet, SnippetGrouper
 
 
 try:
-    from djangocms_versioning.models import Version
+    from djangocms_versioning import __version__ # NOQA
     is_versioning_installed = True
 except ImportError:
     is_versioning_installed = False
@@ -58,5 +58,3 @@ class SnippetForm(forms.ModelForm):
             super().save(commit=False)
             self.instance.snippet_grouper = SnippetGrouper.objects.create()
         return super().save()
-
-

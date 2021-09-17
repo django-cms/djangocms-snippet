@@ -36,6 +36,7 @@ class SnippetAdminTestCase(CMSTestCase):
         self.assertEqual(
             self.snippet_admin.__class__.__bases__, (ExtendedVersionAdminMixin, snippet_admin.AbstractSnippetAdmin)
         )
-        self.assertEqual(list_display[:-1], ('slug', 'name', 'get_author', 'get_modified_date', 'get_versioning_state'))
+        self.assertEqual(
+            list_display[:-1], ('slug', 'name', 'get_author', 'get_modified_date', 'get_versioning_state')
+        )
         self.assertEqual(list_display[-1].short_description, 'actions')
-

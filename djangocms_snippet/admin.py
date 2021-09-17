@@ -34,7 +34,6 @@ class AbstractSnippetAdmin(admin.ModelAdmin):
         abstract = True
 
 
-
 djangocms_versioning_enabled = getattr(
     settings, 'DJANGOCMS_SNIPPET_VERSIONING_ENABLED', False
 )
