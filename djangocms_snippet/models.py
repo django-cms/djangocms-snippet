@@ -21,7 +21,6 @@ class Snippet(models.Model):
     name = models.CharField(
         verbose_name=_('Name'),
         max_length=255,
-        unique=True,
     )
     snippet_grouper = models.ForeignKey(
         SnippetGrouper,
@@ -46,7 +45,6 @@ class Snippet(models.Model):
         blank=False,
         default='',
         max_length=255,
-        unique=True,
     )
 
     def __str__(self):
