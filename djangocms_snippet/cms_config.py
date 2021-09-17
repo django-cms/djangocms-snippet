@@ -22,7 +22,6 @@ class SnippetCMSAppConfig(CMSAppConfig):
     )
 
     if djangocms_moderation_enabled and djangocms_moderation_installed:
-        djangocms_moderation_enabled = True
         moderated_models = [Snippet]
 
     if djangocms_versioning_enabled:
