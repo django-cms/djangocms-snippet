@@ -1,9 +1,10 @@
 from django.conf import settings
 
 from cms.app_base import CMSAppConfig
+from cms.views import render_object_preview
 
 from djangocms_snippet.models import Snippet
-
+from djangocms_snippet.rendering import render_snippet
 
 try:
     from djangocms_moderation import __version__  # NOQA
@@ -20,6 +21,9 @@ class SnippetCMSAppConfig(CMSAppConfig):
     djangocms_moderation_enabled = getattr(
         settings, 'DJANGOCMS_SNIPPET_MODERATION_ENABLED', False
     )
+
+    cms_enabled = True
+    cms_toolbar_enabled_models = [(Snippet, render_snippet),]
 
     if djangocms_moderation_enabled and djangocms_moderation_installed:
         moderated_models = [Snippet]

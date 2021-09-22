@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
 
 from cms.models import CMSPlugin
@@ -49,6 +50,14 @@ class Snippet(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_preview_url(self):
+        return reverse(
+            "admin:{app}_{model}_preview".format(
+                app=self._meta.app_label, model=self._meta.model_name,
+            ),
+            args=[self.id],
+        )
 
     class Meta:
         ordering = ['name']
