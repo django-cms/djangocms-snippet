@@ -7,6 +7,7 @@ from django.forms import Textarea
 from .models import Snippet
 from .views import SnippetPreviewView
 
+
 try:
     from djangocms_versioning.admin import ExtendedVersionAdminMixin
 

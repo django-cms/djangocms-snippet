@@ -6,6 +6,7 @@ from cms.views import render_object_preview
 from djangocms_snippet.models import Snippet
 from djangocms_snippet.rendering import render_snippet
 
+
 try:
     from djangocms_moderation import __version__  # NOQA
 
