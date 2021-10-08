@@ -1,5 +1,6 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_urls static cms_tags %}
+{% load static  %}
+{{ snippet.html|safe|escape }}
 
 {% block extrastyle %}
   {{ block.super }}
@@ -10,4 +11,8 @@
 
 {% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} change-list{% endblock %}
 
-<h1> Hello </h1>
+{% block content %}
+    {% autoescape off %}
+        {{ snippet.html }}
+    {% endautoescape %}
+{% endblock %}

@@ -4,8 +4,6 @@ from django.contrib import admin
 from django.db import models
 from django.forms import Textarea
 
-from cms.toolbar.utils import get_object_preview_url
-
 from .models import Snippet
 from .views import SnippetPreviewView
 
