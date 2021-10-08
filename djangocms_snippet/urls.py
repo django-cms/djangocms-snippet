@@ -1,7 +1,4 @@
 from django.conf.urls import url
-from django.urls import include, path
-
-from cms.views import render_object_preview
 
 from djangocms_snippet.models import Snippet
 from djangocms_snippet.views import SnippetPreviewView
