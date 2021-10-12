@@ -10,7 +10,7 @@ class SnippetPreviewView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         snippet_id = kwargs.get("snippet_id", None)
-        
+
         if not snippet_id:
             Http404("snippet_id must be provided.")
 

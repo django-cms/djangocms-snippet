@@ -43,6 +43,7 @@ class SnippetAdmin(*snippet_admin_classes):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs=text_area_attrs)}
     }
+
     class Meta:
         model = Snippet
 
