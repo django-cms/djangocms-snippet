@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.db import models
 from django.forms import Textarea
 
+from .cms_config import SnippetCMSAppConfig
 from .models import Snippet
 from .views import SnippetPreviewView
 
@@ -16,7 +17,18 @@ except ImportError:
     djangocms_versioning_installed = False
 
 
-class AbstractSnippetAdmin(admin.ModelAdmin):
+djangocms_versioning_enabled = SnippetCMSAppConfig.djangocms_versioning_enabled
+
+snippet_admin_classes = [
+    admin.ModelAdmin,
+]
+
+
+if djangocms_versioning_installed and djangocms_versioning_enabled:
+    snippet_admin_classes = [ExtendedVersionAdminMixin] + snippet_admin_classes
+
+
+class SnippetAdmin(*snippet_admin_classes):
     list_display = ('slug', 'name')
     search_fields = ['slug', 'name']
     prepopulated_fields = {'slug': ('name',)}
@@ -31,25 +43,6 @@ class AbstractSnippetAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs=text_area_attrs)}
     }
-
-    class Meta:
-        abstract = True
-
-
-djangocms_versioning_enabled = getattr(
-    settings, 'DJANGOCMS_SNIPPET_VERSIONING_ENABLED', False
-)
-
-snippet_admin_classes = [
-    AbstractSnippetAdmin,
-]
-
-
-if djangocms_versioning_installed and djangocms_versioning_enabled:
-    snippet_admin_classes = [ExtendedVersionAdminMixin] + snippet_admin_classes
-
-
-class SnippetAdmin(*snippet_admin_classes):
     class Meta:
         model = Snippet
 

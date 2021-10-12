@@ -1,7 +1,8 @@
 from django import forms
-from django.conf import settings
+from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
 
+from djangocms_snippet.cms_config import SnippetCMSAppConfig
 from djangocms_snippet.models import Snippet, SnippetGrouper
 
 
@@ -11,9 +12,7 @@ try:
 except ImportError:
     is_versioning_installed = False
 
-djangocms_versioning_enabled = getattr(
-        settings, 'DJANGOCMS_SNIPPET_VERSIONING_ENABLED', False
-    )
+djangocms_versioning_enabled = SnippetCMSAppConfig.djangocms_versioning_enabled
 
 
 class SnippetForm(forms.ModelForm):
@@ -35,13 +34,13 @@ class SnippetForm(forms.ModelForm):
         name = data.get("name")
         slug = data.get("slug")
         snippet_grouper = data.get("snippet_grouper")
-        published_snippet_queryset = Snippet.objects.all()
+        snippet_queryset = Snippet.objects.all()
 
         if djangocms_versioning_enabled and is_versioning_installed:
             if snippet_grouper:
-                published_snippet_queryset.exclude(snippet_grouper=snippet_grouper)
+                snippet_queryset.exclude(snippet_grouper=snippet_grouper)
 
-        for snippet in published_snippet_queryset:
+        for snippet in snippet_queryset:
             if snippet.name == name:
                 self.add_error(
                     "name", _("A Snippet with this name already exists")
@@ -53,6 +52,7 @@ class SnippetForm(forms.ModelForm):
 
         return data
 
+    @transaction.atomic
     def save(self, **kwargs):
         if not self.cleaned_data.get("snippet_grouper"):
             super().save(commit=False)
