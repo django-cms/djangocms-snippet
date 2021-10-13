@@ -16,10 +16,10 @@ except ImportError:
 
 class SnippetCMSAppConfig(CMSAppConfig):
     djangocms_versioning_enabled = getattr(
-        settings, 'DJANGOCMS_SNIPPET_VERSIONING_ENABLED', False
+        settings, 'DJANGOCMS_SNIPPET_VERSIONING_ENABLED', True
     )
     djangocms_moderation_enabled = getattr(
-        settings, 'DJANGOCMS_SNIPPET_MODERATION_ENABLED', False
+        settings, 'DJANGOCMS_SNIPPET_MODERATION_ENABLED', True
     )
 
     cms_enabled = True

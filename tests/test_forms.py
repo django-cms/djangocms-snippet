@@ -5,6 +5,8 @@ from cms.test_utils.testcases import CMSTestCase
 from djangocms_snippet.forms import SnippetForm
 from djangocms_snippet.models import Snippet, SnippetGrouper
 
+from .utils.factories import SnippetWithVersionFactory
+
 
 class SnippetFormTestCase(CMSTestCase):
 
@@ -27,7 +29,9 @@ class SnippetFormTestCase(CMSTestCase):
         form.save()
 
         self.assertEqual(SnippetGrouper.objects.count(), 1)
+        self.assertEqual(Snippet._base_manager.count(), 1)
 
+    @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_snippet_form_creates_grouper_with_versioning(self):
         """
         With versioning enabled, groupers should also be created in the background.
@@ -45,7 +49,9 @@ class SnippetFormTestCase(CMSTestCase):
         form.save()
 
         self.assertEqual(SnippetGrouper.objects.count(), 1)
+        self.assertEqual(Snippet._base_manager.count(), 1)
 
+    @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_snippet_form_adds_to_existing_grouper_with_versioning(self):
         """
         With versioning enabled, if a grouper already exists, a new one shouldn't be created
@@ -66,6 +72,7 @@ class SnippetFormTestCase(CMSTestCase):
         form.save()
 
         self.assertEqual(SnippetGrouper.objects.count(), 1)
+        self.assertEqual(Snippet._base_manager.count(), 1)
 
         form_data["html"] = "<h2>Test Title</h2>"
 
@@ -77,7 +84,9 @@ class SnippetFormTestCase(CMSTestCase):
         form.save()
 
         self.assertEqual(SnippetGrouper.objects.count(), 1)
+        self.assertEqual(Snippet._base_manager.count(), 2)
 
+    @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_snippet_form_versioning_enabled(self):
         """
         With versioning enabled, the snippet form doesn't have to create groupers, but does have to validate
@@ -96,6 +105,7 @@ class SnippetFormTestCase(CMSTestCase):
         form.clean()
         form.save()
 
+        # Publish the old created version
         snippet = Snippet._base_manager.last()
         version = snippet.versions.create(created_by=self.get_superuser())
         version.publish(user=self.get_superuser())
@@ -113,3 +123,23 @@ class SnippetFormTestCase(CMSTestCase):
         new_form.clean()
 
         self.assertDictEqual(new_form.errors, {'slug': ['A Snippet with this slug already exists']})
+
+    def test_snippet_form_validation_multiple_version_states_in_grouper(self):
+        """
+        Snippet forms should be valid regardless of the versions, or states which already exist within its grouper.
+        """
+        snippet_to_archive = SnippetWithVersionFactory()
+        snippet_to_archive.versions.first().publish(user=self.get_superuser())
+        snippet_to_publish = SnippetWithVersionFactory(snippet_grouper=snippet_to_archive.snippet_grouper)
+        SnippetWithVersionFactory(snippet_grouper=snippet_to_publish.snippet_grouper)
+
+        form_data = {
+            "name": snippet_to_archive.name,
+            "slug": snippet_to_archive.slug,
+            "html": "<p>Hello World!</p>",
+            "snippet_grouper": snippet_to_archive.snippet_grouper.id,
+        }
+
+        form = SnippetForm(form_data)
+
+        self.assertTrue(form.is_valid())

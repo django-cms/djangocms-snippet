@@ -38,7 +38,7 @@ class SnippetForm(forms.ModelForm):
 
         if djangocms_versioning_enabled and is_versioning_installed:
             if snippet_grouper:
-                snippet_queryset.exclude(snippet_grouper=snippet_grouper)
+                snippet_queryset = snippet_queryset.exclude(snippet_grouper=snippet_grouper)
 
         for snippet in snippet_queryset:
             if snippet.name == name:

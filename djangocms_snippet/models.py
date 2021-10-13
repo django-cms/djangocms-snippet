@@ -11,7 +11,15 @@ SEARCH_ENABLED = getattr(settings, 'DJANGOCMS_SNIPPET_SEARCH', False)
 
 
 class SnippetGrouper(models.Model):
-    pass
+    @property
+    def name(self):
+        snippet_qs = Snippet._base_manager.filter(
+            snippet_grouper=self
+        )
+        return snippet_qs.last().name or super().__str__
+
+    def __str__(self):
+        return self.name
 
 
 # Stores the actual data
@@ -91,7 +99,3 @@ class SnippetPtr(CMSPlugin):
     @property
     def snippet(self):
         return self.snippet_grouper.snippet_set.first()
-
-    def __str__(self):
-        # Return the referenced snippet's name rather than the default (ID #)
-        return self.snippet.name

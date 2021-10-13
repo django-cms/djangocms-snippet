@@ -33,6 +33,7 @@ class SnippetAdminTestCase(CMSTestCase):
         self.assertEqual(self.snippet_admin.__class__.__bases__, (admin.ModelAdmin, ))
         self.assertEqual(list_display, ('slug', 'name'))
 
+    @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_admin_list_display_with_versioning(self):
         """
         With versioning enabled, list_display should be populated with both versioning related items, and the
@@ -41,6 +42,7 @@ class SnippetAdminTestCase(CMSTestCase):
         from djangocms_versioning.admin import ExtendedVersionAdminMixin
         list_display = self.snippet_admin.get_list_display(self.snippet_admin_request)
 
+        # Mixins should always come first in the class bases
         self.assertEqual(
             self.snippet_admin.__class__.__bases__, (ExtendedVersionAdminMixin, admin.ModelAdmin)
         )
