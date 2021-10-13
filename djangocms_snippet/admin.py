@@ -9,7 +9,18 @@ from .models import Snippet
 from .views import SnippetPreviewView
 
 
+
+# Use the version mixin if djangocms-versioning is installed and enabled
+snippet_admin_classes = [admin.ModelAdmin]
+
 try:
+    from djangocms_versioning.admin import ExtendedVersionAdminMixin
+
+    if  SnippetCMSAppConfig.djangocms_versioning_enabled:
+        snippet_admin_classes += [ExtendedVersionAdminMixin]
+except ImportError:
+    pass
+    
     from djangocms_versioning.admin import ExtendedVersionAdminMixin
 
     djangocms_versioning_installed = True
