@@ -1,5 +1,3 @@
-from cms.api import add_plugin, create_page
-from cms.models import PageContent
 from cms.test_utils.testcases import CMSTestCase
 from cms.utils.urlutils import admin_reverse
 
