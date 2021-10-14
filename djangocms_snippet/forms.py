@@ -28,6 +28,7 @@ class SnippetForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["snippet_grouper"].required = False
+        self.fields["snippet_grouper"].widget = forms.HiddenInput()
 
     def clean(self):
         data = super().clean()
