@@ -23,6 +23,7 @@ class SnippetForm(forms.ModelForm):
             "html",
             "slug",
             "snippet_grouper",
+            "template",
         )
 
     def __init__(self, *args, **kwargs):
