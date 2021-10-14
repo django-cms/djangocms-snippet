@@ -3,6 +3,7 @@ from django.conf import settings
 from cms.app_base import CMSAppConfig
 
 from djangocms_snippet.models import Snippet
+from djangocms_snippet.rendering import render_snippet
 
 
 try:
@@ -15,11 +16,15 @@ except ImportError:
 
 class SnippetCMSAppConfig(CMSAppConfig):
     djangocms_versioning_enabled = getattr(
-        settings, 'DJANGOCMS_SNIPPET_VERSIONING_ENABLED', False
+        settings, 'DJANGOCMS_SNIPPET_VERSIONING_ENABLED', True
     )
     djangocms_moderation_enabled = getattr(
-        settings, 'DJANGOCMS_SNIPPET_MODERATION_ENABLED', False
+        settings, 'DJANGOCMS_SNIPPET_MODERATION_ENABLED', True
     )
+
+    cms_enabled = True
+    # cms toolbar enabled to allow for versioning compare view
+    cms_toolbar_enabled_models = [(Snippet, render_snippet), ]
 
     if djangocms_moderation_enabled and djangocms_moderation_installed:
         moderated_models = [Snippet]

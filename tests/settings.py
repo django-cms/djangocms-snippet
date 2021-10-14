@@ -15,6 +15,9 @@ HELPER_SETTINGS = {
     'ALLOWED_HOSTS': ['localhost'],
     'DJANGOCMS_SNIPPET_VERSIONING_ENABLED': True,
     'DJANGOCMS_SNIPPET_MODERATION_ENABLED': True,
+    'CMS_TEMPLATES': (
+        ("page.html", "Normal page"),
+    ),
 }
 
 

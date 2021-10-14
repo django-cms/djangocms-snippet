@@ -1,9 +1,7 @@
 from cms.api import add_plugin, create_page
 from cms.test_utils.testcases import CMSTestCase
 
-from .utils.factories import (
-    SnippetWithVersionFactory,
-)
+from .utils.factories import SnippetWithVersionFactory
 
 
 class SnippetPluginsTestCase(CMSTestCase):

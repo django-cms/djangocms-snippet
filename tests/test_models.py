@@ -41,4 +41,4 @@ class SnippetModelTestCase(CMSTestCase):
         instance = SnippetPtr.objects.first()
 
         # test strings
-        self.assertEqual(str(instance), "test snippet")
+        self.assertEqual(instance.snippet_grouper.name, "test snippet")

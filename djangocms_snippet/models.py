@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
 
 from cms.models import CMSPlugin
@@ -10,7 +11,15 @@ SEARCH_ENABLED = getattr(settings, 'DJANGOCMS_SNIPPET_SEARCH', False)
 
 
 class SnippetGrouper(models.Model):
-    pass
+    @property
+    def name(self):
+        snippet_qs = Snippet._base_manager.filter(
+            snippet_grouper=self
+        )
+        return snippet_qs.first().name or super().__str__
+
+    def __str__(self):
+        return self.name
 
 
 # Stores the actual data
@@ -50,6 +59,14 @@ class Snippet(models.Model):
     def __str__(self):
         return self.name
 
+    def get_preview_url(self):
+        return reverse(
+            "admin:{app}_{model}_preview".format(
+                app=self._meta.app_label, model=self._meta.model_name,
+            ),
+            args=[self.id],
+        )
+
     class Meta:
         ordering = ['name']
         verbose_name = _('Snippet')
@@ -82,7 +99,3 @@ class SnippetPtr(CMSPlugin):
     @property
     def snippet(self):
         return self.snippet_grouper.snippet_set.first()
-
-    def __str__(self):
-        # Return the referenced snippet's name rather than the default (ID #)
-        return self.snippet.name
