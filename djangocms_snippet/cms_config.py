@@ -23,6 +23,7 @@ class SnippetCMSAppConfig(CMSAppConfig):
     )
 
     cms_enabled = True
+    # cms toolbar enabled to allow for versioning compare view
     cms_toolbar_enabled_models = [(Snippet, render_snippet), ]
 
     if djangocms_moderation_enabled and djangocms_moderation_installed:
