@@ -7,6 +7,7 @@ from cms.test_utils.testcases import CMSTestCase
 
 from djangocms_snippet import admin as snippet_admin
 from djangocms_snippet import cms_config
+from djangocms_snippet.forms import SnippetForm
 from djangocms_snippet.models import Snippet
 
 from .utils.factories import SnippetWithVersionFactory
@@ -51,3 +52,10 @@ class SnippetAdminTestCase(CMSTestCase):
         )
         self.assertEqual(list_display[-1].short_description, 'actions')
         self.assertIn("function ExtendedVersionAdminMixin._list_actions", list_display[-1].__str__())
+
+    def test_admin_uses_form(self):
+        """
+        The SnippetForm provides functionality to make SnippetGroupers irrelevant to the user,
+        ensure the admin uses this.
+        """
+        self.assertEqual(self.snippet_admin.form, SnippetForm)
