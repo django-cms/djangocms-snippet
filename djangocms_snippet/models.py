@@ -16,7 +16,7 @@ class SnippetGrouper(models.Model):
         snippet_qs = Snippet._base_manager.filter(
             snippet_grouper=self
         )
-        return snippet_qs.last().name or super().__str__
+        return snippet_qs.first().name or super().__str__
 
     def __str__(self):
         return self.name
