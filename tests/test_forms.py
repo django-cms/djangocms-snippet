@@ -128,17 +128,17 @@ class SnippetFormTestCase(CMSTestCase):
         """
         Snippet forms should be valid regardless of the versions, or states which already exist within its grouper.
         """
-        # Snippet to archive starts as draft
+        # snippet_to_archive starts as draft
         snippet_to_archive = SnippetWithVersionFactory()
         # Then it is published it
         snippet_to_archive.versions.first().publish(user=self.get_superuser())
-        # Snippet to be published starts as a draft
+        # snippet_to_publish starts as a draft
         snippet_to_publish = SnippetWithVersionFactory(
             name=snippet_to_archive.name,
             slug=snippet_to_archive.slug,
             snippet_grouper=snippet_to_archive.snippet_grouper
         )
-        # Snippet to be published is published, archiving snippet_to_archive
+        # Snippet_to_publish is published, archiving snippet_to_archive
         snippet_to_publish.versions.first().publish(user=self.get_superuser())
         # Create a new draft in the same grouper
         SnippetWithVersionFactory(
