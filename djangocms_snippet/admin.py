@@ -5,6 +5,7 @@ from django.db import models
 from django.forms import Textarea
 
 from .cms_config import SnippetCMSAppConfig
+from .forms import SnippetForm
 from .models import Snippet
 from .views import SnippetPreviewView
 
@@ -33,7 +34,7 @@ class SnippetAdmin(*snippet_admin_classes):
         'data-mode': getattr(settings, 'DJANGOCMS_SNIPPET_THEME', 'html'),
         'data-theme': getattr(settings, 'DJANGOCMS_SNIPPET_MODE', 'github'),
     }
-
+    form = SnippetForm
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs=text_area_attrs)}
     }
