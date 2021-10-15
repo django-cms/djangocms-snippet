@@ -58,6 +58,5 @@ class SnippetForm(forms.ModelForm):
     def save(self, **kwargs):
         if not self.cleaned_data.get("snippet_grouper"):
             super().save(commit=False)
-            self.save_m2m()
             self.instance.snippet_grouper = SnippetGrouper.objects.create()
         return super().save()
