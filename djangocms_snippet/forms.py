@@ -60,5 +60,4 @@ class SnippetForm(forms.ModelForm):
         if not hasattr(instance, "snippet_grouper"):
             super().save(commit=False)
             instance.snippet_grouper = SnippetGrouper.objects.create()
-            instance.save()
         return super().save()
