@@ -56,7 +56,9 @@ class SnippetForm(forms.ModelForm):
 
     @transaction.atomic
     def save(self, **kwargs):
-        if not self.cleaned_data.get("snippet_grouper"):
+        instance = kwargs.get("instance", super().save(commit=False))
+        if not instance.snippet_grouper:
             super().save(commit=False)
-            self.instance.snippet_grouper = SnippetGrouper.objects.create()
+            instance.snippet_grouper = SnippetGrouper.objects.create()
+            instance.save()
         return super().save()
