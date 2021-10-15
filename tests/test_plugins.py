@@ -1,7 +1,8 @@
-from cms.api import add_plugin, create_page
+from cms.api import add_plugin, create_page, create_title
 from cms.test_utils.testcases import CMSTestCase
+from cms.toolbar.utils import get_object_edit_url
 
-from .utils.factories import PageContentFactory, SnippetWithVersionFactory
+from .utils.factories import SnippetWithVersionFactory
 
 
 class SnippetPluginsTestCase(CMSTestCase):
@@ -156,15 +157,12 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
             language=self.language,
             created_by=self.superuser,
         )
-        # Publish our page content
-        self._publish(self.page)
-        self.pagecontent = self.page.pagecontent_set.last()
-        self.pageconent_draft = PageContentFactory(page=self.page)
-
-    def _publish(self, grouper, language=None):
-        from djangocms_versioning.constants import DRAFT
-        version = self._get_version(grouper, DRAFT, language)
-        version.publish(self.superuser)
+        # Create a draft snippet, to be published later
+        self.snippet = SnippetWithVersionFactory(
+            name="plugin_snippet",
+            html="<p>Hello World</p>",
+            slug="plugin_snippet",
+        )
 
     def _get_version(self, grouper, version_state, language=None):
         language = language or self.language
@@ -175,38 +173,51 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
             if hasattr(version.content, 'language') and version.content.language == language:
                 return version
 
+    def _publish(self, grouper, language=None):
+        from djangocms_versioning.constants import DRAFT
+        version = self._get_version(grouper, DRAFT, language)
+        version.publish(self.superuser)
+
     def test_correct_versioning_state_published_snippet_and_page(self):
         """
-        #If a page is published, the published snippet should be rendered, whereas if we have a draft, the draft snippet
-        #should be rendered.
+        If a page is published, the published snippet should be rendered, whereas if we have a draft, the draft snippet
+        should be rendered.
         """
-
-        # Create a draft snippet, to be published later
-        snippet_to_publish = SnippetWithVersionFactory(
-            name="plugin_snippet",
-            html="<h1>This is published content</h1>",
-            slug="plugin_snippet",
-        )
+        self._publish(self.page)
+        # Publish the snippet
+        self.snippet.versions.first().publish(user=self.superuser)
+        published_pagecontent = self.page.pagecontent_set.first()
         # Add plugin to our published page!
         add_plugin(
-            self.pagecontent.placeholders.get(slot="content"),
+            published_pagecontent.placeholders.get(slot="content"),
             "SnippetPlugin",
             self.language,
-            snippet_grouper=snippet_to_publish.snippet_grouper,
-        )
-        # Publish our snippet
-        snippet_to_publish.versions.first().publish(user=self.superuser)
-        # Create a new draft, so we can be sure we are rendering the correct version
-        snippet = SnippetWithVersionFactory(
-            name="plugin_snippet",
-            html="<p>CONTENT CONTENT CONTENT</p>",
-            slug="plugin_snippet",
-            snippet_grouper=snippet_to_publish.snippet_grouper,
+            snippet_grouper=self.snippet.snippet_grouper,
         )
         # Request for published page
         request_url = self.page.get_absolute_url(self.language)
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)
 
-        self.assertContains(response, "<h1>This is published content</h1>")
-        self.assertNotContains(response, snippet.html)
+        self.assertContains(response, "<p>Hello World</p>")
+
+    def test_correct_versioning_state_draft_snippet_and_page(self):
+        """
+        If a page is published, the published snippet should be rendered, whereas if we have a draft, the draft snippet
+        should be rendered.
+        """
+        # Create the draft page content
+        draft_pagecontent = create_title("en", "Snippet Test Page", self.page, created_by=self.superuser)
+        # Add plugin to our draft page
+        add_plugin(
+            draft_pagecontent.placeholders.get(slot="content"),
+            "SnippetPlugin",
+            self.language,
+            snippet_grouper=self.snippet.snippet_grouper,
+        )
+        # Request for published page
+        request_url = get_object_edit_url(draft_pagecontent, "en")
+        with self.login_user_context(self.superuser):
+            response = self.client.get(request_url)
+
+        self.assertContains(response, "<p>Hello World</p>")
