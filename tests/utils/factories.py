@@ -7,7 +7,6 @@ from cms.models import Placeholder
 
 import factory
 from factory.fuzzy import (
-    FuzzyChoice,
     FuzzyInteger,
     FuzzyText,
 )
