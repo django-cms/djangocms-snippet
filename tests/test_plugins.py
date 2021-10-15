@@ -206,7 +206,9 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
         If a page is published, the published snippet should be rendered, whereas if we have a draft, the draft snippet
         should be rendered.
         """
-        # Create the draft page content
+        # Create the draft page content with a different html value
+        self.snippet.html = "<h1>Hello World</h1>"
+        self.snippet.save()
         draft_pagecontent = create_title("en", "Snippet Test Page", self.page, created_by=self.superuser)
         # Add plugin to our draft page
         add_plugin(
@@ -220,4 +222,4 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)
 
-        self.assertContains(response, "<p>Hello World</p>")
+        self.assertContains(response, "<h1>Hello World</h1>")
