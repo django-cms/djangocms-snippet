@@ -18,6 +18,10 @@ class SnippetGrouper(models.Model):
         )
         return snippet_qs.first().name or super().__str__
 
+    @property
+    def snippet(self):
+        return Snippet._base_manager.filter(snippet_grouper=self).first()
+
     def __str__(self):
         return self.name
 
@@ -98,4 +102,4 @@ class SnippetPtr(CMSPlugin):
 
     @property
     def snippet(self):
-        return self.snippet_grouper.snippet_set.first()
+        return self.snippet_grouper.snippet
