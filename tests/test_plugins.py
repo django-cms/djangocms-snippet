@@ -1,4 +1,5 @@
 from cms.api import add_plugin, create_page, create_title
+from cms.models import PageContent
 from cms.test_utils.testcases import CMSTestCase
 from cms.toolbar.utils import get_object_edit_url
 
@@ -10,12 +11,6 @@ class SnippetPluginsTestCase(CMSTestCase):
     def setUp(self):
         self.language = "en"
         self.superuser = self.get_superuser()
-        self.home = create_page(
-            title="home",
-            template="page.html",
-            language=self.language,
-            created_by=self.superuser,
-        )
         self.page = create_page(
             title="help",
             template="page.html",
@@ -23,29 +18,13 @@ class SnippetPluginsTestCase(CMSTestCase):
             created_by=self.superuser,
         )
         # Publish our page content
-        self._publish(self.page)
-        self._publish(self.home)
-        self.pagecontent = self.page.pagecontent_set.last()
-        self.home_pagecontent = self.page.pagecontent_set.last()
+        self.pagecontent = PageContent._base_manager.filter(page=self.page, language=self.language).first()
+        version = self.pagecontent.versions.first()
+        version.publish(self.superuser)
 
     def tearDown(self):
         self.page.delete()
-        self.home.delete()
         self.superuser.delete()
-
-    def _publish(self, grouper, language=None):
-        from djangocms_versioning.constants import DRAFT
-        version = self._get_version(grouper, DRAFT, language)
-        version.publish(self.superuser)
-
-    def _get_version(self, grouper, version_state, language=None):
-        language = language or self.language
-
-        from djangocms_versioning.models import Version
-        versions = Version.objects.filter_by_grouper(grouper).filter(state=version_state)
-        for version in versions:
-            if hasattr(version.content, 'language') and version.content.language == language:
-                return version
 
     def test_html_rendering(self):
         snippet = SnippetWithVersionFactory(
