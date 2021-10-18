@@ -143,26 +143,15 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
             slug="plugin_snippet",
         )
 
-    def _get_version(self, grouper, version_state, language=None):
-        language = language or self.language
-
-        from djangocms_versioning.models import Version
-        versions = Version.objects.filter_by_grouper(grouper).filter(state=version_state)
-        for version in versions:
-            if hasattr(version.content, 'language') and version.content.language == language:
-                return version
-
-    def _publish(self, grouper, language=None):
-        from djangocms_versioning.constants import DRAFT
-        version = self._get_version(grouper, DRAFT, language)
-        version.publish(self.superuser)
-
     def test_correct_versioning_state_published_snippet_and_page(self):
         """
         If a page is published, the published snippet should be rendered, whereas if we have a draft, the draft snippet
         should be rendered.
         """
-        self._publish(self.page)
+        # Publish our page content
+        self.pagecontent = PageContent._base_manager.filter(page=self.page, language=self.language).first()
+        version = self.pagecontent.versions.first()
+        version.publish(self.superuser)
         # Publish the snippet
         self.snippet.versions.first().publish(user=self.superuser)
         published_pagecontent = self.page.pagecontent_set.first()
