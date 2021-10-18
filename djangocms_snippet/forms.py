@@ -56,9 +56,10 @@ class SnippetForm(forms.ModelForm):
 
     @transaction.atomic
     def save(self, **kwargs):
+        commit = kwargs.get("commit", True)
         snippet = super().save(commit=False)
-        if not hasattr(snippet, "snippet_grouper"):
-            snippet.snippet_grouper = SnippetGrouper.objects.create()
-        if kwargs.get("commit"):
+        if commit:
+            if not hasattr(snippet, "snippet_grouper"):
+                snippet.snippet_grouper = SnippetGrouper.objects.create()
             snippet.save()
         return snippet
