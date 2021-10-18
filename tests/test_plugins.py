@@ -170,8 +170,6 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
             self.language,
             snippet_grouper=snippet_grouper,
         )
-        import pdb
-        pdb.set_trace()
 
     def test_correct_versioning_state_published_snippet_and_page(self):
         """
