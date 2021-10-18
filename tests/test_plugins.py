@@ -130,40 +130,46 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
     def setUp(self):
         self.language = "en"
         self.superuser = self.get_superuser()
+        # Create a draft snippet, to be published later
+        self.snippet = SnippetWithVersionFactory(
+            name="plugin_snippet",
+            html="<p>Hello World!</p>",
+            slug="plugin_snippet",
+        )
+        snippet_grouper = self.snippet.snippet_grouper
+        # Publish the snippet
+        snippet_version = self.snippet.versions.first()
+        snippet_version.publish(user=self.superuser)
+        # Copy the snippet to create a draft
+        draft_snippet_version = snippet_version.copy(self.superuser)
+        self.draft_snippet = draft_snippet_version.content
+        self.draft_snippet.html = "<h1>Hello World!</h1>"
+        self.draft_snippet.save()
+
+        # Create a page
         self.page = create_page(
             title="help",
             template="page.html",
             language=self.language,
             created_by=self.superuser,
         )
-        # Create a draft snippet, to be published later
-        self.snippet = SnippetWithVersionFactory(
-            name="plugin_snippet",
-            html="<p>Hello World</p>",
-            slug="plugin_snippet",
-        )
-        # Publish our page content
+        # Publish its page content
         self.pagecontent = PageContent._base_manager.filter(page=self.page, language=self.language).first()
-        self.version = self.pagecontent.versions.first()
-        self.version.publish(self.superuser)
-        # Publish the snippet
-        self.snippet.versions.first().publish(user=self.superuser)
-        self.published_pagecontent = self.page.pagecontent_set.first()
-        snippet_grouper = self.snippet.snippet_grouper
+        self.pagecontent_version = self.pagecontent.versions.first()
+        self.pagecontent_version.publish(self.superuser)
+
+        # Copy our published pagecontent to make a draft
+        draft_pagecontent_version = self.pagecontent_version.copy(self.superuser)
+        self.draft_pagecontent = draft_pagecontent_version.content
+
         # Add plugin to our published page!
         add_plugin(
-            self.published_pagecontent.placeholders.get(slot="content"),
+            self.pagecontent.placeholders.get(slot="content"),
             "SnippetPlugin",
             self.language,
             snippet_grouper=snippet_grouper,
         )
-        self.draft_snippet = SnippetWithVersionFactory(
-            name="plugin_snippet",
-            html="<p>Hello World 2!</p>",
-            slug="plugin_snippet",
-            snippet_grouper=snippet_grouper,
-        )
-        self.draft_pagecontent = create_title("en", "Snippet Test Page", self.page, created_by=self.superuser)
+        # Add plugin to our draft page
         add_plugin(
             self.draft_pagecontent.placeholders.get(slot="content"),
             "SnippetPlugin",
@@ -181,7 +187,7 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)
 
-        self.assertContains(response, "<p>Hello World</p>")
+        self.assertContains(response, "<p>Hello World!</p>")
 
     def test_correct_versioning_state_draft_snippet_and_page(self):
         """
@@ -193,4 +199,4 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)
 
-        self.assertContains(response, "<p>Hello World 2!</p>")
+        self.assertContains(response, "<h1>Hello World!</h1>")
