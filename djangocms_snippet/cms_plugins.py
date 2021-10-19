@@ -21,14 +21,6 @@ class SnippetPlugin(CMSPluginBase):
     text_editor_preview = False
     cache = CACHE_ENABLED
 
-    @property
-    def request(self):
-        return self._request
-
-    @request.setter
-    def request(self, value):
-        self._request = value
-
     def render(self, context, instance, placeholder):
         instance.request = context["request"]
         try:
