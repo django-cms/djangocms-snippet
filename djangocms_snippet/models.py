@@ -5,16 +5,13 @@ from django.utils.translation import gettext_lazy as _
 
 from cms.models import CMSPlugin
 
-from djangocms_versioning.helpers import is_content_editable
-
 
 # Search is enabled by default to keep backwards compatibility.
 SEARCH_ENABLED = getattr(settings, 'DJANGOCMS_SNIPPET_SEARCH', False)
 
-PUBLISHED = False
-
 
 class SnippetGrouper(models.Model):
+
     @property
     def name(self):
         snippet_qs = Snippet._base_manager.filter(
@@ -22,14 +19,11 @@ class SnippetGrouper(models.Model):
         )
         return snippet_qs.first().name or super().__str__
 
-    @property
-    def snippet(self):
-        if globals()['PUBLISHED']:
-            qs = Snippet.objects.filter(snippet_grouper=self)
-            return qs.first()
+    def snippet(self, request=None):
+        if request:
+            return Snippet.objects.filter(snippet_grouper=self).first()
         else:
-            qs = Snippet._base_manager.filter(snippet_grouper=self)
-            return qs.last()
+            return Snippet._base_manager.filter(snippet_grouper=self).last()
 
     def __str__(self):
         return self.name
@@ -110,8 +104,5 @@ class SnippetPtr(CMSPlugin):
 
     @property
     def snippet(self):
-        if is_content_editable(self.placeholder, self.page.created_by):
-            globals()['PUBLISHED'] = False
-        else:
-            globals()['PUBLISHED'] = True
-        return self.snippet_grouper.snippet
+        self.snippet_grouper.request = getattr(self, "request", None)
+        return self.snippet_grouper.snippet(self.snippet_grouper.request)
