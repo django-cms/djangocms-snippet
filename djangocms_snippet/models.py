@@ -4,6 +4,7 @@ from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
 
 from cms.models import CMSPlugin
+from cms.toolbar.utils import get_toolbar_from_request
 
 
 # Search is enabled by default to keep backwards compatibility.
@@ -20,10 +21,11 @@ class SnippetGrouper(models.Model):
         return snippet_qs.first().name or super().__str__
 
     def snippet(self, request=None):
-        if request:
-            return Snippet.objects.filter(snippet_grouper=self).first()
-        else:
+        request_toolbar = get_toolbar_from_request(request)
+        if request_toolbar.edit_mode_active:
             return Snippet._base_manager.filter(snippet_grouper=self).last()
+        else:
+            return Snippet.objects.filter(snippet_grouper=self).first()
 
     def __str__(self):
         return self.name
