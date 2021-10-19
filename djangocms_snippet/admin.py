@@ -38,6 +38,8 @@ class SnippetAdmin(*snippet_admin_classes):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs=text_area_attrs)}
     }
+    # This was changed to add pk as an additonal factor, otherwise both first() and last() return the same value.
+    ordering = ('name',)
 
     class Meta:
         model = Snippet

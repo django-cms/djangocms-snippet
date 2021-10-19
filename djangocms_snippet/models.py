@@ -3,11 +3,14 @@ from django.db import models
 from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
 
-from cms.models import CMSPlugin
+from cms.models import CMSPlugin, PageContent
 
+from djangocms_versioning.helpers import is_content_editable
 
 # Search is enabled by default to keep backwards compatibility.
 SEARCH_ENABLED = getattr(settings, 'DJANGOCMS_SNIPPET_SEARCH', False)
+
+PUBLISHED = False
 
 
 class SnippetGrouper(models.Model):
@@ -20,7 +23,12 @@ class SnippetGrouper(models.Model):
 
     @property
     def snippet(self):
-        return Snippet._base_manager.filter(snippet_grouper=self).first()
+        if globals()['PUBLISHED']:
+            qs = Snippet.objects.filter(snippet_grouper=self)
+            return qs.first()
+        else:
+            qs = Snippet._base_manager.filter(snippet_grouper=self)
+            return qs.last()
 
     def __str__(self):
         return self.name
@@ -72,7 +80,6 @@ class Snippet(models.Model):
         )
 
     class Meta:
-        ordering = ['name']
         verbose_name = _('Snippet')
         verbose_name_plural = _('Snippets')
 
@@ -102,4 +109,8 @@ class SnippetPtr(CMSPlugin):
 
     @property
     def snippet(self):
+        if is_content_editable(self.placeholder, self.page.created_by):
+            globals()['PUBLISHED'] = False
+        else:
+            globals()['PUBLISHED'] = True
         return self.snippet_grouper.snippet

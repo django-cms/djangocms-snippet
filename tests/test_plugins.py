@@ -1,7 +1,12 @@
+import datetime
+
 from cms.api import add_plugin, create_page, create_title
 from cms.models import PageContent
 from cms.test_utils.testcases import CMSTestCase
 from cms.toolbar.utils import get_object_edit_url
+
+from djangocms_snippet.models import Snippet, SnippetGrouper
+from djangocms_versioning.models import Version
 
 from .utils.factories import SnippetWithVersionFactory
 
@@ -21,10 +26,6 @@ class SnippetPluginsTestCase(CMSTestCase):
         self.pagecontent = PageContent._base_manager.filter(page=self.page, language=self.language).first()
         version = self.pagecontent.versions.first()
         version.publish(self.superuser)
-
-    def tearDown(self):
-        self.page.delete()
-        self.superuser.delete()
 
     def test_html_rendering(self):
         snippet = SnippetWithVersionFactory(
@@ -130,18 +131,25 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
     def setUp(self):
         self.language = "en"
         self.superuser = self.get_superuser()
+        snippet_grouper = SnippetGrouper.objects.create()
         # Create a draft snippet, to be published later
-        self.snippet = SnippetWithVersionFactory(
+        self.snippet = Snippet.objects.create(
             name="plugin_snippet",
             html="<p>Hello World!</p>",
             slug="plugin_snippet",
+            snippet_grouper=snippet_grouper,
         )
-        snippet_grouper = self.snippet.snippet_grouper
+
         # Publish the snippet
-        snippet_version = self.snippet.versions.first()
+        snippet_version = Version.objects.create(
+            content=self.snippet,
+            created_by=self.superuser,
+            created=datetime.datetime.now()
+        )
         snippet_version.publish(user=self.superuser)
         # Copy the snippet to create a draft
-        draft_snippet_version = snippet_version.copy(self.superuser)
+        draft_user = self.get_staff_page_user()
+        draft_snippet_version = snippet_version.copy(draft_user)
         self.draft_snippet = draft_snippet_version.content
         self.draft_snippet.html = "<h1>Hello World!</h1>"
         self.draft_snippet.save()
@@ -167,14 +175,14 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
             self.pagecontent.placeholders.get(slot="content"),
             "SnippetPlugin",
             self.language,
-            snippet_grouper=snippet_grouper,
+            snippet_grouper=self.snippet.snippet_grouper,
         )
         # Add plugin to our draft page
         add_plugin(
             self.draft_pagecontent.placeholders.get(slot="content"),
             "SnippetPlugin",
             self.language,
-            snippet_grouper=snippet_grouper,
+            snippet_grouper=self.draft_snippet.snippet_grouper,
         )
 
     def test_correct_versioning_state_published_snippet_and_page(self):
