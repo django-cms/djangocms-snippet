@@ -12,7 +12,9 @@ SEARCH_ENABLED = getattr(settings, 'DJANGOCMS_SNIPPET_SEARCH', False)
 
 
 class SnippetGrouper(models.Model):
-
+    """
+    The Grouper model for snippet, this is required for versioning
+    """
     @property
     def name(self):
         snippet_qs = Snippet._base_manager.filter(
