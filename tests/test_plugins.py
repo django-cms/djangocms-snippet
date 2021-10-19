@@ -1,6 +1,6 @@
 import datetime
 
-from cms.api import add_plugin, create_page, create_title
+from cms.api import add_plugin, create_page
 from cms.models import PageContent
 from cms.test_utils.testcases import CMSTestCase
 from cms.toolbar.utils import get_object_edit_url

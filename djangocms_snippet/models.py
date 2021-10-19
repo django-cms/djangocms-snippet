@@ -3,9 +3,10 @@ from django.db import models
 from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
 
-from cms.models import CMSPlugin, PageContent
+from cms.models import CMSPlugin
 
 from djangocms_versioning.helpers import is_content_editable
+
 
 # Search is enabled by default to keep backwards compatibility.
 SEARCH_ENABLED = getattr(settings, 'DJANGOCMS_SNIPPET_SEARCH', False)
