@@ -22,7 +22,7 @@ class SnippetGrouper(models.Model):
 
     def snippet(self, request=None):
         request_toolbar = get_toolbar_from_request(request)
-        if request_toolbar.edit_mode_active:
+        if request_toolbar.edit_mode_active or request_toolbar.preview_mode_active:
             return Snippet._base_manager.filter(snippet_grouper=self).last()
         else:
             return Snippet.objects.filter(snippet_grouper=self).first()
