@@ -135,7 +135,7 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
         # Create a draft snippet, to be published later
         self.snippet = Snippet.objects.create(
             name="plugin_snippet",
-            html="<p>Hello World!</p>",
+            html="<p>live content</p>",
             slug="plugin_snippet",
             snippet_grouper=snippet_grouper,
         )
@@ -151,7 +151,7 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
         draft_user = self.get_staff_page_user()
         draft_snippet_version = snippet_version.copy(draft_user)
         self.draft_snippet = draft_snippet_version.content
-        self.draft_snippet.html = "<h1>Hello World!</h1>"
+        self.draft_snippet.html = "<p>draft content</p>"
         self.draft_snippet.save()
 
         # Create a page
@@ -187,24 +187,22 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
 
     def test_correct_versioning_state_published_snippet_and_page(self):
         """
-        If a page is published, the published snippet should be rendered, whereas if we have a draft, the draft snippet
-        should be rendered.
+        If a page is published, the published snippet should be rendered
         """
         # Request for published page
         request_url = self.page.get_absolute_url(self.language)
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)
 
-        self.assertContains(response, "<p>Hello World!</p>")
+        self.assertContains(response, "<p>live content</p>")
 
     def test_correct_versioning_state_draft_snippet_and_page(self):
         """
         If we have a draft, the draft snippet should be rendered.
-        should be rendered.
         """
         # Request for draft page
         request_url = get_object_edit_url(self.draft_pagecontent, "en")
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)
 
-        self.assertContains(response, "<h1>Hello World!</h1>")
+        self.assertContains(response, "<p>draft content</p>")
