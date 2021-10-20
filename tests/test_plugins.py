@@ -199,7 +199,7 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
 
     def test_correct_versioning_state_draft_snippet_and_page(self):
         """
-        If a page is published, the published snippet should be rendered, whereas if we have a draft, the draft snippet
+        If we have a draft, the draft snippet should be rendered.
         should be rendered.
         """
         # Request for draft page
