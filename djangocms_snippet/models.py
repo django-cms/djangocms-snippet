@@ -30,7 +30,7 @@ class SnippetGrouper(models.Model):
                 snippet_grouper=self,
                 version__state__in([PUBLISHED, DRAFT]),
             ).order_by("-pk").first()
-        # The overriden manager orders querysets as -pk already, so just return the first value.
+        # When in "live" mode we should only be able to see the default published version
         return Snippet.objects.filter(snippet_grouper=self).first()
 
     def __str__(self):
