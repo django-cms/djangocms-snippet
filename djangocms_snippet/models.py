@@ -25,7 +25,7 @@ class SnippetGrouper(models.Model):
     def snippet(self, request=None):
         request_toolbar = get_toolbar_from_request(request)
         if request_toolbar.edit_mode_active or request_toolbar.preview_mode_active:
-            # Given we are using the base manager, reverse order it as the overriden one would do!
+            # When in "edit" or "preview" mode we should be able to see the latest content
             return Snippet._base_manager.filter(
                 snippet_grouper=self,
                 version__state__in([PUBLISHED, DRAFT]),
