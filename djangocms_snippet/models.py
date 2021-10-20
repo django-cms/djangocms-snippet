@@ -4,7 +4,6 @@ from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
 
 from cms.models import CMSPlugin
-from cms.toolbar.utils import get_toolbar_from_request
 
 from djangocms_versioning.constants import DRAFT, PUBLISHED
 
@@ -24,8 +23,8 @@ class SnippetGrouper(models.Model):
         )
         return snippet_qs.first().name or super().__str__
 
-    def snippet(self, use_unfiltered=False):
-        if use_unfiltered:
+    def snippet(self, show_editable=False):
+        if show_editable:
             # When in "edit" or "preview" mode we should be able to see the latest content
             return Snippet._base_manager.filter(
                 versions__state__in=[DRAFT, PUBLISHED],
@@ -110,8 +109,4 @@ class SnippetPtr(CMSPlugin):
 
     @property
     def snippet(self):
-        request = getattr(self, "request", None)
-        request_toolbar = get_toolbar_from_request(request)
-        if request_toolbar.edit_mode_active or request_toolbar.preview_mode_active:
-            return self.snippet_grouper.snippet(True)
-        return self.snippet_grouper.snippet(False)
+        return self.snippet_grouper.snippet()
