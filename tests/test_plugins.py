@@ -43,10 +43,11 @@ class SnippetPluginsTestCase(CMSTestCase):
 
         snippet.versions.last().publish(user=self.get_superuser())
         request_url = self.page.get_absolute_url("en")
+        result_snippet = plugin.snippet_grouper.snippet(True)
 
-        self.assertEqual(plugin.snippet.snippet_grouper.name, "plugin_snippet")
-        self.assertEqual(plugin.snippet.snippet_grouper.html, "<p>Hello World</p>")
-        self.assertEqual(plugin.snippet.snippet_grouper.slug, "plugin_snippet")
+        self.assertEqual(result_snippet.name, "plugin_snippet")
+        self.assertEqual(result_snippet.html, "<p>Hello World</p>")
+        self.assertEqual(result_snippet.slug, "plugin_snippet")
 
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)
@@ -92,9 +93,9 @@ class SnippetPluginsTestCase(CMSTestCase):
             self.language,
             snippet_grouper=snippet_grouper,
         )
-
-        self.assertEqual(plugin.snippet.snippet_grouper.name, "plugin_snippet")
-        self.assertEqual(plugin.snippet.snippet_grouper.slug, "plugin_snippet")
+        result_snippet = plugin.snippet_grouper.snippet(True)
+        self.assertEqual(result_snippet.name, "plugin_snippet")
+        self.assertEqual(result_snippet.slug, "plugin_snippet")
 
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)
