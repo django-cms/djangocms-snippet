@@ -24,9 +24,8 @@ class SnippetGrouper(models.Model):
         )
         return snippet_qs.first().name or super().__str__
 
-    def snippet(self, request=None):
-        request_toolbar = get_toolbar_from_request(request)
-        if request_toolbar.edit_mode_active or request_toolbar.preview_mode_active:
+    def snippet(self, use_unfiltered=False):
+        if use_unfiltered:
             # When in "edit" or "preview" mode we should be able to see the latest content
             return Snippet._base_manager.filter(
                 versions__state__in=[DRAFT, PUBLISHED],
@@ -111,5 +110,8 @@ class SnippetPtr(CMSPlugin):
 
     @property
     def snippet(self):
-        self.snippet_grouper.request = getattr(self, "request", None)
-        return self.snippet_grouper.snippet(self.snippet_grouper.request)
+        request = getattr(self, "request", None)
+        request_toolbar = get_toolbar_from_request(request)
+        if request_toolbar.edit_mode_active or request_toolbar.preview_mode_active:
+            return self.snippet_grouper.snippet(True)
+        return self.snippet_grouper.snippet(False)
