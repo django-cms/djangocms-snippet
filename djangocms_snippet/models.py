@@ -6,6 +6,8 @@ from django.utils.translation import gettext_lazy as _
 from cms.models import CMSPlugin
 from cms.toolbar.utils import get_toolbar_from_request
 
+from djangocms_versioning.constants import DRAFT, PUBLISHED
+
 
 # Search is enabled by default to keep backwards compatibility.
 SEARCH_ENABLED = getattr(settings, 'DJANGOCMS_SNIPPET_SEARCH', False)
@@ -25,13 +27,13 @@ class SnippetGrouper(models.Model):
     def snippet(self, request=None):
         request_toolbar = get_toolbar_from_request(request)
         if request_toolbar.edit_mode_active or request_toolbar.preview_mode_active:
-            # Given we are using the base manager, reverse order it as the overridden one would do!
-            return Snippet._base_manager.filter(snippet_grouper=self).order_by("-pk").first()
-        # The overridden manager orders querysets as -pk already, so just return the first value.
+            # When in "edit" or "preview" mode we should be able to see the latest content
+            return Snippet._base_manager.filter(
+                versions__state__in=[DRAFT, PUBLISHED],
+                snippet_grouper=self,
+            ).order_by("-pk").first()
+        # When in "live" mode we should only be able to see the default published version
         return Snippet.objects.filter(snippet_grouper=self).first()
-
-    def __str__(self):
-        return self.name
 
 
 # Stores the actual data
