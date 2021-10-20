@@ -33,6 +33,9 @@ class SnippetGrouper(models.Model):
         # When in "live" mode we should only be able to see the default published version
         return Snippet.objects.filter(snippet_grouper=self).first()
 
+    def __str__(self):
+        return self.name
+
 
 # Stores the actual data
 class Snippet(models.Model):
@@ -106,7 +109,3 @@ class SnippetPtr(CMSPlugin):
     class Meta:
         verbose_name = _('Snippet Ptr')
         verbose_name_plural = _('Snippet Ptrs')
-
-    @property
-    def snippet(self):
-        return self.snippet_grouper.snippet()
