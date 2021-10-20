@@ -26,7 +26,10 @@ class SnippetGrouper(models.Model):
         request_toolbar = get_toolbar_from_request(request)
         if request_toolbar.edit_mode_active or request_toolbar.preview_mode_active:
             # Given we are using the base manager, reverse order it as the overriden one would do!
-            return Snippet._base_manager.filter(snippet_grouper=self).order_by("-pk").first()
+            return Snippet._base_manager.filter(
+                snippet_grouper=self,
+                version__state__in([PUBLISHED, DRAFT]),
+            ).order_by("-pk").first()
         # The overriden manager orders querysets as -pk already, so just return the first value.
         return Snippet.objects.filter(snippet_grouper=self).first()
 
