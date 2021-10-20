@@ -8,14 +8,17 @@ from cms.test_utils.testcases import CMSTestCase
 from djangocms_snippet import admin as snippet_admin
 from djangocms_snippet import cms_config
 from djangocms_snippet.forms import SnippetForm
-from djangocms_snippet.models import Snippet
-
-from .utils.factories import SnippetWithVersionFactory
+from djangocms_snippet.models import Snippet, SnippetGrouper
 
 
 class SnippetAdminTestCase(CMSTestCase):
     def setUp(self):
-        self.snippet = SnippetWithVersionFactory()
+        self.snippet = Snippet.objects.create(
+            name="Test Snippet",
+            slug="test-snippet",
+            html="<h1>This is a test</h1>",
+            snippet_grouper=SnippetGrouper.objects.create(),
+        )
         self.snippet_admin = snippet_admin.SnippetAdmin(Snippet, admin)
         self.snippet_admin_request = RequestFactory().get("/admin/djangocms_snippet")
 

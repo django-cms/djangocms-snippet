@@ -1,5 +1,12 @@
+import datetime
+
 from cms.api import add_plugin, create_page
+from cms.models import PageContent
 from cms.test_utils.testcases import CMSTestCase
+from cms.toolbar.utils import get_object_edit_url
+
+from djangocms_snippet.models import Snippet, SnippetGrouper
+from djangocms_versioning.models import Version
 
 from .utils.factories import SnippetWithVersionFactory
 
@@ -9,12 +16,6 @@ class SnippetPluginsTestCase(CMSTestCase):
     def setUp(self):
         self.language = "en"
         self.superuser = self.get_superuser()
-        self.home = create_page(
-            title="home",
-            template="page.html",
-            language=self.language,
-            created_by=self.superuser,
-        )
         self.page = create_page(
             title="help",
             template="page.html",
@@ -22,29 +23,9 @@ class SnippetPluginsTestCase(CMSTestCase):
             created_by=self.superuser,
         )
         # Publish our page content
-        self._publish(self.page)
-        self._publish(self.home)
-        self.pagecontent = self.page.pagecontent_set.last()
-        self.home_pagecontent = self.page.pagecontent_set.last()
-
-    def tearDown(self):
-        self.page.delete()
-        self.home.delete()
-        self.superuser.delete()
-
-    def _publish(self, grouper, language=None):
-        from djangocms_versioning.constants import DRAFT
-        version = self._get_version(grouper, DRAFT, language)
+        self.pagecontent = PageContent._base_manager.filter(page=self.page, language=self.language).first()
+        version = self.pagecontent.versions.first()
         version.publish(self.superuser)
-
-    def _get_version(self, grouper, version_state, language=None):
-        language = language or self.language
-
-        from djangocms_versioning.models import Version
-        versions = Version.objects.filter_by_grouper(grouper).filter(state=version_state)
-        for version in versions:
-            if hasattr(version.content, 'language') and version.content.language == language:
-                return version
 
     def test_html_rendering(self):
         snippet = SnippetWithVersionFactory(
@@ -62,10 +43,11 @@ class SnippetPluginsTestCase(CMSTestCase):
 
         snippet.versions.last().publish(user=self.get_superuser())
         request_url = self.page.get_absolute_url("en")
+        result_snippet = plugin.snippet_grouper.snippet(True)
 
-        self.assertEqual(plugin.snippet.name, "plugin_snippet")
-        self.assertEqual(plugin.snippet.html, "<p>Hello World</p>")
-        self.assertEqual(plugin.snippet.slug, "plugin_snippet")
+        self.assertEqual(result_snippet.name, "plugin_snippet")
+        self.assertEqual(result_snippet.html, "<p>Hello World</p>")
+        self.assertEqual(result_snippet.slug, "plugin_snippet")
 
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)
@@ -111,9 +93,9 @@ class SnippetPluginsTestCase(CMSTestCase):
             self.language,
             snippet_grouper=snippet_grouper,
         )
-
-        self.assertEqual(plugin.snippet.name, "plugin_snippet")
-        self.assertEqual(plugin.snippet.slug, "plugin_snippet")
+        result_snippet = plugin.snippet_grouper.snippet(True)
+        self.assertEqual(result_snippet.name, "plugin_snippet")
+        self.assertEqual(result_snippet.slug, "plugin_snippet")
 
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)
@@ -144,3 +126,84 @@ class SnippetPluginsTestCase(CMSTestCase):
             response = self.client.get(request_url)
 
         self.assertContains(response, "Template some_template does not exist")
+
+
+class SnippetPluginVersioningRenderTestCase(CMSTestCase):
+    def setUp(self):
+        self.language = "en"
+        self.superuser = self.get_superuser()
+        snippet_grouper = SnippetGrouper.objects.create()
+        # Create a draft snippet, to be published later
+        self.snippet = Snippet.objects.create(
+            name="plugin_snippet",
+            html="<p>live content</p>",
+            slug="plugin_snippet",
+            snippet_grouper=snippet_grouper,
+        )
+
+        # Publish the snippet
+        snippet_version = Version.objects.create(
+            content=self.snippet,
+            created_by=self.superuser,
+            created=datetime.datetime.now()
+        )
+        snippet_version.publish(user=self.superuser)
+        # Copy the snippet to create a draft
+        draft_user = self.get_staff_page_user()
+        draft_snippet_version = snippet_version.copy(draft_user)
+        self.draft_snippet = draft_snippet_version.content
+        self.draft_snippet.html = "<p>draft content</p>"
+        self.draft_snippet.save()
+
+        # Create a page
+        self.page = create_page(
+            title="help",
+            template="page.html",
+            language=self.language,
+            created_by=self.superuser,
+        )
+        # Publish its page content
+        self.pagecontent = PageContent._base_manager.filter(page=self.page, language=self.language).first()
+        self.pagecontent_version = self.pagecontent.versions.first()
+        self.pagecontent_version.publish(self.superuser)
+
+        # Copy our published pagecontent to make a draft
+        draft_pagecontent_version = self.pagecontent_version.copy(self.superuser)
+        self.draft_pagecontent = draft_pagecontent_version.content
+
+        # Add plugin to our published page!
+        add_plugin(
+            self.pagecontent.placeholders.get(slot="content"),
+            "SnippetPlugin",
+            self.language,
+            snippet_grouper=self.snippet.snippet_grouper,
+        )
+        # Add plugin to our draft page
+        add_plugin(
+            self.draft_pagecontent.placeholders.get(slot="content"),
+            "SnippetPlugin",
+            self.language,
+            snippet_grouper=self.draft_snippet.snippet_grouper,
+        )
+
+    def test_correct_versioning_state_published_snippet_and_page(self):
+        """
+        If a page is published, the published snippet should be rendered
+        """
+        # Request for published page
+        request_url = self.page.get_absolute_url(self.language)
+        with self.login_user_context(self.superuser):
+            response = self.client.get(request_url)
+
+        self.assertContains(response, "<p>live content</p>")
+
+    def test_correct_versioning_state_draft_snippet_and_page(self):
+        """
+        If we have a draft, the draft snippet should be rendered.
+        """
+        # Request for draft page
+        request_url = get_object_edit_url(self.draft_pagecontent, "en")
+        with self.login_user_context(self.superuser):
+            response = self.client.get(request_url)
+
+        self.assertContains(response, "<p>draft content</p>")

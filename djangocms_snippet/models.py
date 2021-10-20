@@ -5,18 +5,33 @@ from django.utils.translation import gettext_lazy as _
 
 from cms.models import CMSPlugin
 
+from djangocms_versioning.constants import DRAFT, PUBLISHED
+
 
 # Search is enabled by default to keep backwards compatibility.
 SEARCH_ENABLED = getattr(settings, 'DJANGOCMS_SNIPPET_SEARCH', False)
 
 
 class SnippetGrouper(models.Model):
+    """
+    The Grouper model for snippet, this is required for versioning
+    """
     @property
     def name(self):
         snippet_qs = Snippet._base_manager.filter(
             snippet_grouper=self
         )
         return snippet_qs.first().name or super().__str__
+
+    def snippet(self, show_editable=False):
+        if show_editable:
+            # When in "edit" or "preview" mode we should be able to see the latest content
+            return Snippet._base_manager.filter(
+                versions__state__in=[DRAFT, PUBLISHED],
+                snippet_grouper=self,
+            ).order_by("-pk").first()
+        # When in "live" mode we should only be able to see the default published version
+        return Snippet.objects.filter(snippet_grouper=self).first()
 
     def __str__(self):
         return self.name
@@ -68,7 +83,6 @@ class Snippet(models.Model):
         )
 
     class Meta:
-        ordering = ['name']
         verbose_name = _('Snippet')
         verbose_name_plural = _('Snippets')
 
@@ -95,7 +109,3 @@ class SnippetPtr(CMSPlugin):
     class Meta:
         verbose_name = _('Snippet Ptr')
         verbose_name_plural = _('Snippet Ptrs')
-
-    @property
-    def snippet(self):
-        return self.snippet_grouper.snippet_set.first()

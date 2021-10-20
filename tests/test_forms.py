@@ -1,8 +1,10 @@
+from importlib import reload
+
 from django.test import override_settings
 
 from cms.test_utils.testcases import CMSTestCase
 
-from djangocms_snippet.forms import SnippetForm
+from djangocms_snippet import cms_config, forms
 from djangocms_snippet.models import Snippet, SnippetGrouper
 
 from .utils.factories import SnippetWithVersionFactory
@@ -16,17 +18,19 @@ class SnippetFormTestCase(CMSTestCase):
         Without versioning enabled, the application still has the grouper implemented, therefore the form
         should be creating one for each new snippet created.
         """
+        reload(cms_config)
+        reload(forms)
         form_data = {
             "name": "test_snippet",
             "slug": "test_snippet",
             "html": "<h1>Test Title</h1>"
         }
-        form = SnippetForm(form_data)
+        form = forms.SnippetForm(form_data)
 
         self.assertTrue(form.is_valid())
 
         form.clean()
-        form.save()
+        form.save(commit=True)
 
         self.assertEqual(SnippetGrouper.objects.count(), 1)
         self.assertEqual(Snippet._base_manager.count(), 1)
@@ -36,27 +40,52 @@ class SnippetFormTestCase(CMSTestCase):
         """
         With versioning enabled, groupers should also be created in the background.
         """
+        reload(cms_config)
+        reload(forms)
         form_data = {
             "name": "test_snippet",
             "slug": "test_snippet",
             "html": "<h1>Test Title</h1>"
         }
-        form = SnippetForm(form_data)
+        form = forms.SnippetForm(form_data)
 
         self.assertTrue(form.is_valid())
 
         form.clean()
-        form.save()
+        form.save(commit=True)
 
         self.assertEqual(SnippetGrouper.objects.count(), 1)
         self.assertEqual(Snippet._base_manager.count(), 1)
+
+    @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
+    def test_snippet_form_doesnt_create_grouper_or_snippet_with_no_commit(self):
+        """
+        With versioning enabled, but commit=False, models should not be created
+        """
+        reload(cms_config)
+        reload(forms)
+        form_data = {
+            "name": "test_snippet",
+            "slug": "test_snippet",
+            "html": "<h1>Test Title</h1>"
+        }
+        form = forms.SnippetForm(form_data)
+
+        self.assertTrue(form.is_valid())
+
+        form.clean()
+        form.save(commit=False)
+
+        self.assertEqual(SnippetGrouper.objects.count(), 0)
+        self.assertEqual(Snippet._base_manager.count(), 0)
 
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_snippet_form_adds_to_existing_grouper_with_versioning(self):
         """
         With versioning enabled, if a grouper already exists, a new one shouldn't be created
         """
-
+        reload(cms_config)
+        reload(forms)
         grouper = SnippetGrouper.objects.create()
         form_data = {
             "name": "test_snippet",
@@ -64,24 +93,24 @@ class SnippetFormTestCase(CMSTestCase):
             "html": "<h1>Test Title</h1>",
             "snippet_grouper": grouper.id,
         }
-        form = SnippetForm(form_data)
+        form = forms.SnippetForm(form_data)
 
         self.assertTrue(form.is_valid())
 
         form.clean()
-        form.save()
+        form.save(commit=True)
 
         self.assertEqual(SnippetGrouper.objects.count(), 1)
         self.assertEqual(Snippet._base_manager.count(), 1)
 
         form_data["html"] = "<h2>Test Title</h2>"
 
-        form = SnippetForm(form_data)
+        form = forms.SnippetForm(form_data)
 
         self.assertTrue(form.is_valid())
 
         form.clean()
-        form.save()
+        form.save(commit=True)
 
         self.assertEqual(SnippetGrouper.objects.count(), 1)
         self.assertEqual(Snippet._base_manager.count(), 2)
@@ -92,21 +121,21 @@ class SnippetFormTestCase(CMSTestCase):
         With versioning enabled, the snippet form doesn't have to create groupers, but does have to validate
         that no other active (i.e. the latest published snippet from a given grouper) shares the same name or slug.
         """
+        reload(cms_config)
+        reload(forms)
         form_data = {
             "name": "test_snippet",
             "slug": "test_snippet",
             "html": "<h1>Test Title</h1>",
         }
-        form = SnippetForm(form_data)
+        form = forms.SnippetForm(form_data)
 
         self.assertTrue(form.is_valid())
 
         # Clean and save the form
         form.clean()
-        form.save()
+        snippet = form.save(commit=True)
 
-        # Publish the old created version
-        snippet = Snippet._base_manager.last()
         version = snippet.versions.create(created_by=self.get_superuser())
         version.publish(user=self.get_superuser())
 
@@ -116,7 +145,7 @@ class SnippetFormTestCase(CMSTestCase):
             "html": "<h1>Another Test Title</h1>",
         }
 
-        new_form = SnippetForm(new_form_data)
+        new_form = forms.SnippetForm(new_form_data)
 
         self.assertFalse(new_form.is_valid())
 
@@ -128,6 +157,8 @@ class SnippetFormTestCase(CMSTestCase):
         """
         Snippet forms should be valid regardless of the versions, or states which already exist within its grouper.
         """
+        reload(cms_config)
+        reload(forms)
         # snippet_to_archive starts as draft
         snippet_to_archive = SnippetWithVersionFactory()
         # Then it is published it
@@ -154,6 +185,6 @@ class SnippetFormTestCase(CMSTestCase):
             "snippet_grouper": snippet_to_archive.snippet_grouper.id,
         }
 
-        form = SnippetForm(form_data)
+        form = forms.SnippetForm(form_data)
 
         self.assertTrue(form.is_valid())

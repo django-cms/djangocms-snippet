@@ -23,6 +23,7 @@ class SnippetForm(forms.ModelForm):
             "html",
             "slug",
             "snippet_grouper",
+            "template",
         )
 
     def __init__(self, *args, **kwargs):
@@ -55,8 +56,10 @@ class SnippetForm(forms.ModelForm):
 
     @transaction.atomic
     def save(self, **kwargs):
-        if not self.cleaned_data.get("snippet_grouper"):
-            super().save(commit=False)
-            self.save_m2m()
-            self.instance.snippet_grouper = SnippetGrouper.objects.create()
-        return super().save()
+        commit = kwargs.get("commit", True)
+        snippet = super().save(commit=False)
+        if commit:
+            if not hasattr(snippet, "snippet_grouper"):
+                snippet.snippet_grouper = SnippetGrouper.objects.create()
+            snippet.save()
+        return snippet

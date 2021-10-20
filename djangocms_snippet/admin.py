@@ -38,6 +38,8 @@ class SnippetAdmin(*snippet_admin_classes):
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs=text_area_attrs)}
     }
+    # This was move here from model, otherwise first() and last() return the same when handling grouper queries
+    ordering = ('name',)
 
     class Meta:
         model = Snippet
