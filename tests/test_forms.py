@@ -60,7 +60,7 @@ class SnippetFormTestCase(CMSTestCase):
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_snippet_form_doesnt_create_grouper_or_snippet_with_no_commit(self):
         """
-        With versioning enabled, but commit=False, models should not be created
+        With versioning enabled, but no commit flag, models should still be created
         """
         reload(cms_config)
         reload(forms)
@@ -74,10 +74,10 @@ class SnippetFormTestCase(CMSTestCase):
         self.assertTrue(form.is_valid())
 
         form.clean()
-        form.save(commit=False)
+        form.save()
 
-        self.assertEqual(SnippetGrouper.objects.count(), 0)
-        self.assertEqual(Snippet._base_manager.count(), 0)
+        self.assertEqual(SnippetGrouper.objects.count(), 1)
+        self.assertEqual(Snippet._base_manager.count(), 1)
 
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_snippet_form_adds_to_existing_grouper_with_versioning(self):

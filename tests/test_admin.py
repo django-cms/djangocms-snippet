@@ -1,9 +1,12 @@
 from importlib import reload
 
 from django.contrib import admin
+from django.shortcuts import reverse
 from django.test import RequestFactory, override_settings
 
 from cms.test_utils.testcases import CMSTestCase
+
+from djangocms_versioning.models import Version
 
 from djangocms_snippet import admin as snippet_admin
 from djangocms_snippet import cms_config
@@ -30,6 +33,7 @@ class SnippetAdminTestCase(CMSTestCase):
         admin.site.unregister(Snippet)
         reload(cms_config)
         reload(snippet_admin)
+        # This has to be declared again, since it will now be constructed without the versioning extension
         self.snippet_admin = snippet_admin.SnippetAdmin(Snippet, admin)
 
         list_display = self.snippet_admin.get_list_display(self.snippet_admin_request)
@@ -62,3 +66,34 @@ class SnippetAdminTestCase(CMSTestCase):
         ensure the admin uses this.
         """
         self.assertEqual(self.snippet_admin.form, SnippetForm)
+
+
+class SnippetAdminFormTestCase(CMSTestCase):
+    def setUp(self):
+        self.add_url = reverse("admin:djangocms_snippet_snippet_add")
+        self.changelist_url = reverse("admin:djangocms_snippet_snippet_changelist")
+        self.superuser = self.get_superuser()
+        self.snippet_grouper = SnippetGrouper.objects.create()
+        self.snippet = Snippet.objects.create(
+            name="Test Snippet",
+            slug="test-snippet",
+            html="<h1>This is a test</h1>",
+            snippet_grouper=self.snippet_grouper,
+        )
+        self.snippet_version = Version.objects.create(content=self.snippet, created_by=self.superuser)
+
+    @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
+    def test_admin_form_save_method(self):
+        with self.login_user_context(self.superuser):
+            response = self.client.post(
+                self.add_url,
+                {
+                    "name": "Test Snippet 2",
+                    "html": "<p>Test Save Snippet</p>",
+                    "slug": "test-snippet-2",
+                })
+            self.assertRedirects(response, self.changelist_url)
+
+        # We should have 2 groupers and snippets, due to the creation of the others in setUp
+        self.assertEqual(Snippet._base_manager.count(), 2)
+        self.assertEqual(SnippetGrouper._base_manager.count(), 2)
