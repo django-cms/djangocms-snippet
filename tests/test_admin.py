@@ -73,11 +73,12 @@ class SnippetAdminFormTestCase(CMSTestCase):
         self.add_url = reverse("admin:djangocms_snippet_snippet_add")
         self.changelist_url = reverse("admin:djangocms_snippet_snippet_changelist")
         self.superuser = self.get_superuser()
+        self.snippet_grouper = SnippetGrouper.objects.create()
         self.snippet = Snippet.objects.create(
             name="Test Snippet",
             slug="test-snippet",
             html="<h1>This is a test</h1>",
-            snippet_grouper=SnippetGrouper.objects.create(),
+            snippet_grouper=self.snippet_grouper,
         )
         self.snippet_version = Version.objects.create(content=self.snippet, created_by=self.superuser)
 
@@ -87,31 +88,12 @@ class SnippetAdminFormTestCase(CMSTestCase):
             response = self.client.post(
                 self.add_url,
                 {
-                    "name": "Test Snippet",
+                    "name": "Test Snippet 2",
                     "html": "<p>Test Save Snippet</p>",
-                    "slug": "test-snippet",
+                    "slug": "test-snippet-2",
                 })
             self.assertRedirects(response, self.changelist_url)
 
         # We should have 2 groupers and snippets, due to the creation of the others in setUp
         self.assertEqual(Snippet._base_manager.count(), 2)
         self.assertEqual(SnippetGrouper._base_manager.count(), 2)
-
-    @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
-    def test_admin_form_save_method_published_exists(self):
-        self.snippet.versions.first().publish(user=self.superuser)
-        with self.login_user_context(self.superuser):
-            response = self.client.post(
-                self.add_url,
-                {
-                    "name": "Test Snippet",
-                    "html": "<p>Test Save Snippet</p>",
-                    "slug": "test-snippet",
-                    "snippet_grouper": self.snippet.snippet_grouper,
-                }
-            )
-
-        self.assertEqual(response.status_code, 200)
-        # We should have 1 groupers and 2 snippets, due to the creation of the others in setUp
-        self.assertEqual(Snippet.objects.count(), 1)
-        self.assertEqual(SnippetGrouper.objects.count(), 1)
