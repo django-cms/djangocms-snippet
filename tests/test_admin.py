@@ -100,6 +100,10 @@ class SnippetAdminFormTestCase(CMSTestCase):
 
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_admin_form_edit_when_locked(self):
+        """
+        When a form is initialised in read-only mode, it should not require self.fields to be populated, and
+        should return a read-only form.
+        """
         self.snippet_version.publish(user=self.superuser)
         with self.login_user_context(self.superuser):
             edit_url = reverse("admin:djangocms_snippet_snippet_change", args=(self.snippet.id,),)
