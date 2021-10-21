@@ -57,7 +57,6 @@ class SnippetFormTestCase(CMSTestCase):
         self.assertEqual(SnippetGrouper.objects.count(), 1)
         self.assertEqual(Snippet._base_manager.count(), 1)
 
-
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_snippet_form_doesnt_create_grouper_or_snippet_with_no_commit(self):
         """
