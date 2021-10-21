@@ -58,8 +58,8 @@ class SnippetForm(forms.ModelForm):
     def save(self, **kwargs):
         commit = kwargs.get("commit", True)
         snippet = super().save(commit=False)
+        if not hasattr(snippet, "snippet_grouper"):
+            snippet.snippet_grouper = SnippetGrouper.objects.create()
         if commit:
-            if not hasattr(snippet, "snippet_grouper"):
-                snippet.snippet_grouper = SnippetGrouper.objects.create()
             snippet.save()
         return snippet
