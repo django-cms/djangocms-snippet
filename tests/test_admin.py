@@ -16,14 +16,17 @@ from djangocms_snippet.models import Snippet, SnippetGrouper
 
 class SnippetAdminTestCase(CMSTestCase):
     def setUp(self):
+        self.superuser = self.get_superuser()
         self.snippet = Snippet.objects.create(
             name="Test Snippet",
             slug="test-snippet",
             html="<h1>This is a test</h1>",
             snippet_grouper=SnippetGrouper.objects.create(),
         )
+        self.snippet_version = Version.objects.create(content=self.snippet, created_by=self.superuser)
         self.snippet_admin = snippet_admin.SnippetAdmin(Snippet, admin)
         self.snippet_admin_request = RequestFactory().get("/admin/djangocms_snippet")
+        self.edit_url = reverse("admin:djangocms_snippet_snippet_change", args=(self.snippet.id,),)
 
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=False)
     def test_admin_list_display_without_versioning(self):
@@ -66,6 +69,38 @@ class SnippetAdminTestCase(CMSTestCase):
         ensure the admin uses this.
         """
         self.assertEqual(self.snippet_admin.form, SnippetForm)
+
+    @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
+    def test_admin_delete_button_disabled_versioning_enabled(self):
+        """
+        If versioning is enabled, the delete button should not be rendered on the change form
+        """
+        admin.site.unregister(Snippet)
+        reload(cms_config)
+        reload(snippet_admin)
+
+        with self.login_user_context(self.superuser):
+            response = self.client.get(self.edit_url)
+
+        self.assertNotContains(
+            response, '<a href="/en/admin/djangocms_snippet/snippet/1/delete/" class="deletelink">Delete</a>'
+        )
+
+    @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=False)
+    def test_admin_delete_button_available_versioning_disabled(self):
+        """
+        If versioning is disabled, the delete button should be rendered on the change form
+        """
+        admin.site.unregister(Snippet)
+        reload(cms_config)
+        reload(snippet_admin)
+
+        with self.login_user_context(self.superuser):
+            response = self.client.get(self.edit_url)
+
+        self.assertContains(
+            response, '<a href="/en/admin/djangocms_snippet/snippet/1/delete/" class="deletelink">Delete</a>'
+        )
 
 
 class SnippetAdminFormTestCase(CMSTestCase):
