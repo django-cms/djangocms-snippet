@@ -4,6 +4,8 @@ from django.contrib import admin
 from django.db import models
 from django.forms import Textarea
 
+from cms.utils.permissions import get_model_permission_codename
+
 from .cms_config import SnippetCMSAppConfig
 from .forms import SnippetForm
 from .models import Snippet
@@ -53,6 +55,18 @@ class SnippetAdmin(*snippet_admin_classes):
                 name="{}_{}_preview".format(*info),
             ),
         ] + super().get_urls()
+
+    def has_delete_permission(self, request, obj=None):
+        """
+        When versioning is enabled, delete option is not available.
+        If versioning is disabled, it may be possible to delete, as long as a user also has add permissions, and they
+        are not in use.
+        """
+        if obj and not djangocms_versioning_enabled:
+            return request.user.has_perm(
+                get_model_permission_codename(self.model, 'add'),
+            )
+        return False
 
 
 admin.site.register(Snippet, SnippetAdmin)
