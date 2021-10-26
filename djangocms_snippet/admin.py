@@ -4,6 +4,8 @@ from django.contrib import admin
 from django.db import models
 from django.forms import Textarea
 
+from cms.utils.permissions import get_model_permission_codename
+
 from .cms_config import SnippetCMSAppConfig
 from .forms import SnippetForm
 from .models import Snippet
@@ -48,31 +50,23 @@ class SnippetAdmin(*snippet_admin_classes):
         info = self.model._meta.app_label, self.model._meta.model_name
         return [
             url(
-                r"^$",
-                self.admin_site.admin_view(self.changelist_view),
-                name="{}_{}_changelist".format(*info),
-            ),
-            url(
-                r"^(?P<snippet_id>\d+)/$",
-                self.admin_site.admin_view(self.changelist_view),
-                name="{}_{}_list".format(*info),
-            ),
-            url(
-                r"^add/$",
-                self.admin_site.admin_view(self.add_view),
-                name="{}_{}_add".format(*info),
-            ),
-            url(
-                r"^(?P<object_id>\d+)/change/$",
-                self.admin_site.admin_view(self.change_view),
-                name="{}_{}_change".format(*info),
-            ),
-            url(
                 r"^(?P<snippet_id>\d+)/preview/$",
                 self.admin_site.admin_view(SnippetPreviewView.as_view()),
                 name="{}_{}_preview".format(*info),
             ),
-        ]
+        ] + super().get_urls()
+
+    def has_delete_permission(self, request, obj=None):
+        """
+        When versioning is enabled, delete option is not available.
+        If versioning is disabled, it may be possible to delete, as long as a user also has add permissions, and they
+        are not in use.
+        """
+        if obj and not djangocms_versioning_enabled:
+            return request.user.has_perm(
+                get_model_permission_codename(self.model, 'add'),
+            )
+        return False
 
 
 admin.site.register(Snippet, SnippetAdmin)
