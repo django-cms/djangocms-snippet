@@ -9,7 +9,7 @@ from djangocms_snippet.conf import (
 
 
 try:
-    from djangocms_versioning.constants import DRAFT
+    from djangocms_versioning.constants import DRAFT, PUBLISHED
 
     djangocms_versioning_installed = True
 except ImportError:
@@ -41,16 +41,15 @@ def cms4_grouper_version_migration(apps, schema_editor):
         snippet.save()
 
         # Create initial Snippet Versions if versioning is enabled and installed.
+        # Publish the snippet because all snippets were assumed published before
         if djangocms_versioning_config_enabled and djangocms_versioning_installed:
-            snippet_version = Version.objects.create(
+            Version.objects.create(
                 created_by=migration_user,
-                state=DRAFT,
+                state=PUBLISHED,
                 number=1,
                 object_id=snippet.pk,
                 content_type=snippet_contenttype,
             )
-            # Publish the snippet because all snippets were assumed published before
-            snippet_version.publish(migration_user)
 
 
 class Migration(migrations.Migration):
