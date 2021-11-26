@@ -29,24 +29,28 @@ def cms4_grouper_version_migration(apps, schema_editor):
     snippet_contenttype = ContentType.objects.get(app_label='djangocms_snippet', model='snippet')
     snippet_queryset = Snippet.objects.all()
 
+    # Get a migration user to create a version.
+    if djangocms_versioning_config_enabled and djangocms_versioning_installed:
+        Version = apps.get_model('djangocms_versioning', 'Version')
+
+        migration_user = User.objects.get(id=DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID)
+
     for snippet in snippet_queryset:
         grouper = SnippetGrouper.objects.create()
         snippet.snippet_grouper = grouper
         snippet.save()
 
-        # Get a migration user.
-        migration_user = User.objects.get(id=DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID)
-
         # Create initial Snippet Versions if versioning is enabled and installed.
         if djangocms_versioning_config_enabled and djangocms_versioning_installed:
-            Version = apps.get_model('djangocms_versioning', 'Version')
-            Version.objects.create(
+            snippet_version = Version.objects.create(
                 created_by=migration_user,
                 state=DRAFT,
                 number=1,
                 object_id=snippet.pk,
                 content_type=snippet_contenttype,
             )
+            # Publish the snippet because all snippets were assumed published before
+            snippet_version.publish(migration_user)
 
 
 class Migration(migrations.Migration):
