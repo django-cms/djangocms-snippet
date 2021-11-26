@@ -5,8 +5,7 @@ Changelog
 Unreleased
 ==================
 * fix: Error when rendering a Draft Snippet plugin on a Published page
-* fix: Cleanup unnecessary migration files
-* fix: Publish snippets by default as they were already in that state pre-versioning!
+* fix: Publish snippets by default as they were already in that state pre-versioning and cleanup unnecessary migration files before release!
 * feat: djangocms-versioning support added, including model restructure and configuration
 * feat: django-cms v4.0.x support added
 
