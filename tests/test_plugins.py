@@ -171,6 +171,10 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
         draft_pagecontent_version = self.pagecontent_version.copy(self.superuser)
         self.draft_pagecontent = draft_pagecontent_version.content
 
+    def test_correct_versioning_state_published_snippet_and_page(self):
+        """
+        If a page is published, the published snippet should be rendered
+        """
         # Add plugin to our published page!
         add_plugin(
             self.pagecontent.placeholders.get(slot="content"),
@@ -186,10 +190,6 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
             snippet_grouper=self.draft_snippet.snippet_grouper,
         )
 
-    def test_correct_versioning_state_published_snippet_and_page(self):
-        """
-        If a page is published, the published snippet should be rendered
-        """
         # Request for published page
         request_url = self.page.get_absolute_url(self.language)
         with self.login_user_context(self.superuser):
@@ -201,9 +201,87 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
         """
         If we have a draft, the draft snippet should be rendered.
         """
+        # Add plugin to our published page!
+        add_plugin(
+            self.pagecontent.placeholders.get(slot="content"),
+            "SnippetPlugin",
+            self.language,
+            snippet_grouper=self.snippet.snippet_grouper,
+        )
+        # Add plugin to our draft page
+        add_plugin(
+            self.draft_pagecontent.placeholders.get(slot="content"),
+            "SnippetPlugin",
+            self.language,
+            snippet_grouper=self.draft_snippet.snippet_grouper,
+        )
+
         # Request for draft page
         request_url = get_object_edit_url(self.draft_pagecontent, "en")
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)
 
         self.assertContains(response, "<p>draft content</p>")
+
+    def test_draft_snippet_and_page_live_url_rendering(self):
+        """
+        If a page is published with a draft snippet is created
+        nothing should be rendered!
+        """
+        snippet_grouper = SnippetGrouper.objects.create()
+        snippet = Snippet.objects.create(
+            name="plugin_snippet",
+            html="<p>Draft snippet</p>",
+            slug="plugin_snippet",
+            snippet_grouper=snippet_grouper,
+        )
+        Version.objects.create(
+            content=snippet,
+            created_by=self.superuser,
+            created=datetime.datetime.now()
+        )
+
+        add_plugin(
+            self.pagecontent.placeholders.get(slot="content"),
+            "SnippetPlugin",
+            self.language,
+            snippet_grouper=snippet_grouper,
+        )
+
+        request_url = self.page.get_absolute_url(self.language)
+        with self.login_user_context(self.superuser):
+            response = self.client.get(request_url)
+
+        self.assertContains(response, "<p>Draft snippet</p>")
+
+    def test_published_snippet_and_page_live_url_rendering(self):
+        """
+        If a page is published with a published snippet is
+        created the snippet should be rendered!
+        """
+        snippet_grouper = SnippetGrouper.objects.create()
+        snippet = Snippet.objects.create(
+            name="plugin_snippet",
+            html="<p>Published snippet</p>",
+            slug="plugin_snippet",
+            snippet_grouper=snippet_grouper,
+        )
+        snippet_version = Version.objects.create(
+            content=snippet,
+            created_by=self.superuser,
+            created=datetime.datetime.now()
+        )
+        snippet_version.publish(user=self.superuser)
+
+        add_plugin(
+            self.pagecontent.placeholders.get(slot="content"),
+            "SnippetPlugin",
+            self.language,
+            snippet_grouper=snippet_grouper,
+        )
+
+        request_url = self.page.get_absolute_url(self.language)
+        with self.login_user_context(self.superuser):
+            response = self.client.get(request_url)
+
+        self.assertContains(response, "<p>Published snippet</p>")
