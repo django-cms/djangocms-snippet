@@ -24,6 +24,11 @@ class SnippetPlugin(CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         snippet = instance.snippet_grouper.snippet(show_editable=show_draft_content(context["request"]))
+
+        # Handle the potential for no snippet to be found i.e. Draft
+        if not snippet:
+            return context
+
         try:
             if snippet.template:
                 context = context.flatten()

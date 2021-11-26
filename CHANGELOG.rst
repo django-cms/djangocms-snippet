@@ -2,6 +2,12 @@
 Changelog
 =========
 
+Unreleased
+==================
+* fix: Error when rendering a Draft Snippet plugin on a Published page
+* feat: djangocms-versioning support added, including model restructure and configuration
+* feat: django-cms v4.0.x support added
+
 
 3.0.0 (2020-09-02)
 ==================

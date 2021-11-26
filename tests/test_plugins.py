@@ -196,6 +196,7 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
             response = self.client.get(request_url)
 
         self.assertContains(response, "<p>live content</p>")
+        self.assertNotIn("draft content", str(response.content))
 
     def test_correct_versioning_state_draft_snippet_and_page(self):
         """
@@ -222,6 +223,7 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
             response = self.client.get(request_url)
 
         self.assertContains(response, "<p>draft content</p>")
+        self.assertNotIn("live content", str(response.content))
 
     def test_draft_snippet_and_page_live_url_rendering(self):
         """
@@ -252,7 +254,9 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)
 
-        self.assertContains(response, "<p>Draft snippet</p>")
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn("Draft snippet", str(response.content))
+        self.assertNotIn("Published snippet", str(response.content))
 
     def test_published_snippet_and_page_live_url_rendering(self):
         """
@@ -285,3 +289,4 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
             response = self.client.get(request_url)
 
         self.assertContains(response, "<p>Published snippet</p>")
+        self.assertNotIn("Draft snippet", str(response.content))
