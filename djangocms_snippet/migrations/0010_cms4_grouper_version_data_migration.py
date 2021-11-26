@@ -1,4 +1,5 @@
 from django.apps import apps as global_apps
+from django.conf import settings
 from django.contrib.contenttypes.management import create_contenttypes
 from django.db import migrations
 
@@ -24,13 +25,13 @@ def cms4_grouper_version_migration(apps, schema_editor):
     ContentType = apps.get_model('contenttypes', 'ContentType')
     Snippet = apps.get_model('djangocms_snippet', 'Snippet')
     SnippetGrouper = apps.get_model('djangocms_snippet', 'SnippetGrouper')
-    User = apps.get_model('auth', 'User')
+    User = apps.get_model(*settings.AUTH_USER_MODEL.split('.'))
 
     snippet_contenttype = ContentType.objects.get(app_label='djangocms_snippet', model='snippet')
     snippet_queryset = Snippet.objects.all()
 
     # Get a migration user to create a version.
-    if djangocms_versioning_config_enabled and djangocms_versioning_installed:
+    if djangocms_versioning_config_enabled and djangocms_versioning_installed and len(snippet_queryset):
         Version = apps.get_model('djangocms_versioning', 'Version')
 
         migration_user = User.objects.get(id=DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID)
