@@ -260,7 +260,7 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
 
     def test_published_snippet_and_page_live_url_rendering(self):
         """
-        If a page is published with a published snippet is
+        If a page is published with a published snippet
         created the snippet should be rendered!
         """
         snippet_grouper = SnippetGrouper.objects.create()
