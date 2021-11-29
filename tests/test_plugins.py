@@ -227,7 +227,7 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
 
     def test_draft_snippet_and_page_live_url_rendering(self):
         """
-        If a page is published with a draft snippet is created
+        If a page is published with a draft snippet created
         nothing should be rendered!
         """
         snippet_grouper = SnippetGrouper.objects.create()
