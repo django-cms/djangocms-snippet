@@ -1,4 +1,5 @@
 from django.apps import apps as global_apps
+from django.conf import settings
 from django.contrib.contenttypes.management import create_contenttypes
 from django.db import migrations
 
@@ -9,7 +10,7 @@ from djangocms_snippet.conf import (
 
 
 try:
-    from djangocms_versioning.constants import DRAFT
+    from djangocms_versioning.constants import DRAFT, PUBLISHED
 
     djangocms_versioning_installed = True
 except ImportError:
@@ -24,25 +25,28 @@ def cms4_grouper_version_migration(apps, schema_editor):
     ContentType = apps.get_model('contenttypes', 'ContentType')
     Snippet = apps.get_model('djangocms_snippet', 'Snippet')
     SnippetGrouper = apps.get_model('djangocms_snippet', 'SnippetGrouper')
-    User = apps.get_model('auth', 'User')
+    User = apps.get_model(*settings.AUTH_USER_MODEL.split('.'))
 
     snippet_contenttype = ContentType.objects.get(app_label='djangocms_snippet', model='snippet')
     snippet_queryset = Snippet.objects.all()
+
+    # Get a migration user to create a version.
+    if djangocms_versioning_config_enabled and djangocms_versioning_installed and len(snippet_queryset):
+        Version = apps.get_model('djangocms_versioning', 'Version')
+
+        migration_user = User.objects.get(id=DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID)
 
     for snippet in snippet_queryset:
         grouper = SnippetGrouper.objects.create()
         snippet.snippet_grouper = grouper
         snippet.save()
 
-        # Get a migration user.
-        migration_user = User.objects.get(id=DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID)
-
         # Create initial Snippet Versions if versioning is enabled and installed.
+        # Publish the snippet because all snippets were assumed published before
         if djangocms_versioning_config_enabled and djangocms_versioning_installed:
-            Version = apps.get_model('djangocms_versioning', 'Version')
             Version.objects.create(
                 created_by=migration_user,
-                state=DRAFT,
+                state=PUBLISHED,
                 number=1,
                 object_id=snippet.pk,
                 content_type=snippet_contenttype,
