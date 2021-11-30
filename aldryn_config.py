@@ -1,3 +1,5 @@
+from functools import partial
+
 from aldryn_client import forms
 
 
@@ -17,6 +19,15 @@ class Form(forms.BaseForm):
     )
 
     def to_settings(self, data, settings):
+        from aldryn_addons.utils import djsenv
+
+        env = partial(djsenv, settings=settings)
+
+        settings['DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID'] = env(
+            'DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID',
+            default=settings['DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID']
+        )
+
         if data['editor_theme']:
             settings['DJANGOCMS_SNIPPET_THEME'] = data['editor_theme']
         if data['editor_mode']:
