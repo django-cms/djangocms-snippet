@@ -4,6 +4,7 @@ Changelog
 
 Unreleased
 ==================
+* feat: Exposed the setting DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID as an environment variable for the Divio addon
 * fix: Error when rendering a Draft Snippet plugin on a Published page
 * fix: Publish snippets by default as they were already in that state pre-versioning and cleanup unnecessary migration files before release!
 * feat: djangocms-versioning support added, including model restructure and configuration
