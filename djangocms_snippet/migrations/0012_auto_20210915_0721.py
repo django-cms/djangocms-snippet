@@ -17,12 +17,26 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='snippet',
-            name='snippet_grouper',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='djangocms_snippet.SnippetGrouper'),
+            name='name',
+            field=models.CharField(max_length=255, verbose_name='Name'),
+        ),
+        migrations.AlterField(
+            model_name='snippet',
+            name='slug',
+            field=models.SlugField(default='', max_length=255, verbose_name='Slug'),
+        ),
+        migrations.AlterModelOptions(
+            name='snippet',
+            options={'verbose_name': 'Snippet', 'verbose_name_plural': 'Snippets'},
         ),
         migrations.AlterField(
             model_name='snippetptr',
             name='snippet_grouper',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='djangocms_snippet.SnippetGrouper'),
+        ),
+        migrations.AlterField(
+            model_name='snippet',
+            name='snippet_grouper',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='djangocms_snippet.SnippetGrouper'),
         ),
     ]
