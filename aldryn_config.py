@@ -25,7 +25,7 @@ class Form(forms.BaseForm):
 
         settings['DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID'] = env(
             'DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID',
-            default=settings['DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID']
+            default=None
         )
 
         if data['editor_theme']:
