@@ -8,11 +8,11 @@ django CMS Snippet
 **django CMS Snippet** provides a plugin for `django CMS <http://django-cms.org>`_
 to inject HTML, CSS or JavaScript snippets into your website.
 
-This addon is compatible with `Divio Cloud <http://divio.com>`_ and is also available on the
-`django CMS Marketplace <https://marketplace.django-cms.org/en/addons/browse/djangocms-snippet/>`_
-for easy installation.
+This project is endorsed by the `django CMS Association <https://www.django-cms.org/en/about-us/>`_. Join us on `Slack <https://www.django-cms.org/slack/>`_.
 
-We recommend using this plugin only during development::
+
+
+Warning: We recommend using this plugin only during development::
 
     This plugin is a potential security hazard, since it allows authorized-
     users to place custom markup or Javascript on pages bypassing all of
@@ -24,16 +24,22 @@ We recommend using this plugin only during development::
 .. image:: preview.gif
 
 
-Contributing
-============
+*******************************************
+Contribute to this project and win rewards
+*******************************************
 
-This is a an open-source project. We'll be delighted to receive your
+Because this is a an open-source project, we welcome everyone to
+`get involved in the project <https://www.django-cms.org/en/contribute/>`_ and
+`receive a reward <https://www.django-cms.org/en/bounty-program/>`_ for their contribution. 
+Become part of a fantastic community and help us make django CMS the best CMS in the world.   
+
+We'll be delighted to receive your
 feedback in the form of issues and pull requests. Before submitting your
 pull request, please review our `contribution guidelines
 <http://docs.django-cms.org/en/latest/contributing/index.html>`_.
 
 We're grateful to all contributors who have helped create and maintain this package.
-Contributors are listed at the `contributors <https://github.com/divio/djangocms-snippet/graphs/contributors>`_
+Contributors are listed at the `contributors <https://github.com/django-cms/djangocms-snippet/graphs/contributors>`_
 section.
 
 One of the easiest contributions you can make is helping to translate this addon on
