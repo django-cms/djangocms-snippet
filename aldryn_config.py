@@ -29,7 +29,7 @@ class Form(forms.BaseForm):
             default=False
         )
         if migration_user_id:
-            settings['DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID'] = migration_user_id
+            settings['DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID'] = int(migration_user_id)
 
         if data['editor_theme']:
             settings['DJANGOCMS_SNIPPET_THEME'] = data['editor_theme']
