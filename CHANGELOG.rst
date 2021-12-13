@@ -6,7 +6,7 @@ Unreleased
 ==========
 
 
-5.0.0.dev1 (2021-12-14)
+4.0.0.dev1 (2021-12-14)
 ==================
 
 * feat: Exposed the setting DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID as an environment variable for the Divio addon
