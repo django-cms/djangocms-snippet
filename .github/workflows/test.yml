@@ -8,10 +8,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ 3.6, 3.7, ]
+        python-version: [ 3.7, 3.8, 3.9 ]
         requirements-file: [
-          dj11_cms40.txt,
           dj22_cms40.txt,
+          dj32_cms40.txt,
         ]
         os: [
           ubuntu-20.04,

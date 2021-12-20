@@ -1,6 +1,12 @@
-django-app-helper
-tox
 coverage
-isort
-flake8
+django-app-helper
 factory-boy
+flake8
+isort
+tox
+
+# Unreleased django-cms 4.0 compatible packages
+# FIXME: Unreleased 3.2 changes - https://github.com/django-cms/django-cms/tarball/release/4.0.x#egg=django-cms
+https://github.com/Aiky30/django-cms/archive/feature/cms-4-django-32-support.zip
+# FIXME: Unreleased 3.2 changes - https://github.com/django-cms/djangocms-versioning/tarball/master#egg=djangocms-versioning
+https://github.com/Aiky30/djangocms-versioning/tarball/feature/django-32-compat#egg=djangocms-versioning

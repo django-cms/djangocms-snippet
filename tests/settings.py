@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 HELPER_SETTINGS = {
+    'SECRET_KEY': "djangocmssnippetstestsuitekey",
     'INSTALLED_APPS': [
         'tests.utils',
         'djangocms_versioning',
