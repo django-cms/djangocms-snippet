@@ -4,10 +4,11 @@ Changelog
 
 Unreleased
 ==========
+* fix: Removed tight django-treebeard restriction added when 4.5.0 contained breaking changes. The core CMS and django-treebeard have since been patched to resolve the issue.
 
 
 4.0.0.dev1 (2021-12-14)
-==================
+=======================
 
 * feat: Exposed the setting DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID as an environment variable for the Divio addon
 * fix: Error when rendering a Draft Snippet plugin on a Published page
