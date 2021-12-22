@@ -4,6 +4,11 @@ Changelog
 
 Unreleased
 ==========
+
+
+4.0.0.dev2 (2021-12-22)
+=======================
+
 * fix: Removed tight django-treebeard restriction added when 4.5.0 contained breaking changes. The core CMS and django-treebeard have since been patched to resolve the issue.
 
 
