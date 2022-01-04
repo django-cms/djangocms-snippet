@@ -12,7 +12,5 @@
 {% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} change-list{% endblock %}
 
 {% block content %}
-    {% autoescape off %}
-        {{ snippet.html }}
-    {% endautoescape %}
+    {{ snippet.html }}
 {% endblock %}
