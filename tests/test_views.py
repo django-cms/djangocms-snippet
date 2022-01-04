@@ -22,8 +22,8 @@ class PreviewViewTestCase(CMSTestCase):
 
         self.assertEqual(self.snippet.html, "<h1>Test Title</h1><br><p>Test paragraph</p>")
         self.assertEqual(response.status_code, 200)
-        # Removing html escaping, means the content  is rendered including the tags on the page, but also means that the
-        # response will contain character entity references.
+        # Removing html escaping, means the content  is rendered including the tags on the page, but also means that
+        # the response will contain character entity references.
         self.assertContains(response, "&lt;h1&gt;Test Title&lt;/h1&gt;&lt;br&gt;&lt;p&gt;Test paragraph&lt;/p&gt;")
 
     def test_preview_raises_404_no_snippet(self):
