@@ -18,11 +18,10 @@ djangocms_versioning_enabled = SnippetCMSAppConfig.djangocms_versioning_enabled
 
 try:
     from djangocms_versioning.admin import ExtendedVersionAdminMixin
-
     if djangocms_versioning_enabled:
         snippet_admin_classes.insert(0, ExtendedVersionAdminMixin)
 except ImportError:
-    pass
+    djangocms_versioning_enabled = False
 
 
 class SnippetAdmin(*snippet_admin_classes):
@@ -51,7 +50,8 @@ class SnippetAdmin(*snippet_admin_classes):
 
         if not djangocms_versioning_enabled:
             list_display.insert(0, 'slug')
-            list_display = tuple(list_display)
+
+        list_display = tuple(list_display)
         return list_display
 
     def get_search_fields(self, request):

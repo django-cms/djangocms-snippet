@@ -59,7 +59,7 @@ class SnippetAdminTestCase(CMSTestCase):
             self.snippet_admin.__class__.__bases__, (ExtendedVersionAdminMixin, admin.ModelAdmin)
         )
         self.assertEqual(
-            list_display[:-1], ('slug', 'name', 'get_author', 'get_modified_date', 'get_versioning_state')
+            list_display[:-1], ('name', 'get_author', 'get_modified_date', 'get_versioning_state')
         )
         self.assertEqual(list_display[-1].short_description, 'actions')
         self.assertIn("function ExtendedVersionAdminMixin._list_actions", list_display[-1].__str__())
