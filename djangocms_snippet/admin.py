@@ -26,9 +26,8 @@ except ImportError:
 
 
 class SnippetAdmin(*snippet_admin_classes):
-    list_display = ('slug', 'name')
-    search_fields = ['slug', 'name']
-    prepopulated_fields = {'slug': ('name',)}
+    list_display = ('name',)
+    search_fields = ['name']
     change_form_template = 'djangocms_snippet/admin/change_form.html'
     text_area_attrs = {
         'rows': 20,
@@ -45,6 +44,24 @@ class SnippetAdmin(*snippet_admin_classes):
 
     class Meta:
         model = Snippet
+
+    def get_list_display(self, request):
+        list_display = super().get_list_display(request)
+        if not djangocms_versioning_enabled:
+            list_display.append('slug')
+        return list_display
+
+    def get_search_fields(self, request):
+        search_fields = super().get_search_fields(request)
+        if not djangocms_versioning_enabled:
+            search_fields.append('slug')
+        return search_fields
+
+    def get_prepopulated_fields(self, request):
+        prepopulated_fields = super().get_prepopulated_fields(request)
+        if not djangocms_versioning_enabled:
+            prepopulated_fields = {'slug': ('name',)}
+        return prepopulated_fields
 
     def get_urls(self):
         info = self.model._meta.app_label, self.model._meta.model_name
