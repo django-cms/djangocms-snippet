@@ -47,8 +47,11 @@ class SnippetAdmin(*snippet_admin_classes):
 
     def get_list_display(self, request):
         list_display = super().get_list_display(request)
+        list_display = list(list_display)
+
         if not djangocms_versioning_enabled:
-            list_display.append('slug')
+            list_display.insert(0, 'slug')
+            list_display = tuple(list_display)
         return list_display
 
     def get_search_fields(self, request):
