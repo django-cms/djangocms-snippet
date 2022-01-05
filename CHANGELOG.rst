@@ -5,6 +5,7 @@ Changelog
 Unreleased
 ==========
 
+* fix: Slug field on list display for admin should only be displayed when versioning is not available
 
 4.0.0.dev2 (2021-12-22)
 =======================

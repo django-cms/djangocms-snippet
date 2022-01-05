@@ -57,7 +57,7 @@ class SnippetAdmin(*snippet_admin_classes):
             search_fields.append('slug')
         return search_fields
 
-    def get_prepopulated_fields(self, request):
+    def get_prepopulated_fields(self, obj, request):
         prepopulated_fields = super().get_prepopulated_fields(request)
         if not djangocms_versioning_enabled:
             prepopulated_fields = {'slug': ('name',)}
