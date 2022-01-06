@@ -66,6 +66,13 @@ class SnippetAdmin(*snippet_admin_classes):
             prepopulated_fields = {'slug': ('name',)}
         return prepopulated_fields
 
+    def get_list_display_links(self, request, list_display):
+        if not djangocms_versioning_enabled:
+            return list(list_display)[:1]
+        else:
+            self.list_display_links = (None,)
+            return self.list_display_links
+
     def get_urls(self):
         info = self.model._meta.app_label, self.model._meta.model_name
         return [
