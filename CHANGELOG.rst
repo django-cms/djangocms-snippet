@@ -4,7 +4,7 @@ Changelog
 
 Unreleased
 ==========
-
+* fix: Removed auto-escape from snippet preview template, tags will now be rendered on the page.
 
 4.0.0.dev2 (2021-12-22)
 =======================
