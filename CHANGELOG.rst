@@ -5,6 +5,7 @@ Changelog
 Unreleased
 ==========
 
+* fix: Snippet plugin added to a page now displays name instead of ID
 
 4.0.0.dev2 (2021-12-22)
 =======================

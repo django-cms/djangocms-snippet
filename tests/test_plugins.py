@@ -3,7 +3,7 @@ import datetime
 from cms.api import add_plugin, create_page
 from cms.models import PageContent
 from cms.test_utils.testcases import CMSTestCase
-from cms.toolbar.utils import get_object_edit_url
+from cms.toolbar.utils import get_object_edit_url, get_object_structure_url
 
 from djangocms_snippet.models import Snippet, SnippetGrouper
 from djangocms_versioning.models import Version
@@ -290,3 +290,21 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
 
         self.assertContains(response, "<p>Published snippet</p>")
         self.assertNotIn("Draft snippet", str(response.content))
+
+    def test_correct_name_is_displayed_for_snippet_component_on_page(self):
+        """
+        If a component is added to the page, it should show the snippet name and not ID
+        """
+        add_plugin(
+            self.draft_pagecontent.placeholders.get(slot="content"),
+            "SnippetPlugin",
+            self.language,
+            snippet_grouper=self.draft_snippet.snippet_grouper,
+        )
+
+        # Request structure endpoint on page
+        request_url = get_object_structure_url(self.draft_pagecontent, "en")
+        with self.login_user_context(self.superuser):
+            response = self.client.get(request_url)
+
+        self.assertContains(response, "<strong>Snippet</strong> plugin_snippet</span>")
