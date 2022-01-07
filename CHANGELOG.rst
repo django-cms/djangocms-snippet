@@ -4,6 +4,7 @@ Changelog
 
 Unreleased
 ==========
+* fix: Removed unused contents within templates, reducing the clutter within version compare views.
 
 
 4.0.0.dev2 (2021-12-22)
