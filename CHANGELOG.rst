@@ -5,6 +5,7 @@ Changelog
 Unreleased
 ==========
 
+* fix: Snippet plugin added to a page now displays name instead of ID
 * fix: Slug field on list display for admin should only be displayed when versioning is not available
 
 4.0.0.dev2 (2021-12-22)
