@@ -3,6 +3,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.db import models
 from django.forms import Textarea
+from django.urls import reverse
 
 from cms.utils.permissions import get_model_permission_codename
 
@@ -67,6 +68,32 @@ class SnippetAdmin(*snippet_admin_classes):
                 get_model_permission_codename(self.model, 'add'),
             )
         return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def _get_preview_url(self, obj):
+        """
+        Return the preview method if available, otherwise return None
+        :return: method or None
+        """
+        change_url = reverse(
+            "admin:{app}_{model}_change".format(
+                app=obj._meta.app_label, model=self.model._meta.model_name
+            ),
+            args=(obj.pk,),
+        )
+        return change_url
+
+    def get_list_actions(self):
+        """
+        Collect rendered actions from implemented methods and return as list
+        """
+        return [
+            self._get_preview_link,
+            self._get_edit_link,
+            self._get_manage_versions_link,
+        ]
 
 
 admin.site.register(Snippet, SnippetAdmin)
