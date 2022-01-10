@@ -179,3 +179,33 @@ class SnippetAdminFormTestCase(CMSTestCase):
         self.assertContains(response, '<div class="readonly">Test Snippet</div>')
         # We should have the same number of snippets as before
         self.assertEqual(Snippet.objects.count(), 1)
+
+    @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=False)
+    def test_slug_colomn_should_hyperlinked_with_versioning_disabled(self):
+        """
+        Slug column should be visible and hyperlinked when versioning is disabled
+        """
+        admin.site.unregister(Snippet)
+        reload(cms_config)
+        reload(snippet_admin)
+
+        with self.login_user_context(self.get_superuser()):
+            response = self.client.get(self.changelist_url)
+        self.assertContains(response, '<th class="field-slug"><a href="/en/admin/djangocms_snippet/'
+                                      'snippet/1/change/">test-snippet</a></th>')
+
+    @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
+    def test_name_colomn_should_not_be_hyperlinked_with_versioning_enabled(self):
+        """
+        Name column should be visible and not hyperlinked when versioning is enabled.
+        Slug column should not be visible when versioning is enabled.
+        """
+        admin.site.unregister(Snippet)
+        reload(cms_config)
+        reload(snippet_admin)
+
+        with self.login_user_context(self.get_superuser()):
+            response = self.client.get(self.changelist_url)
+        self.assertContains(response, '<td class="field-name">Test Snippet</td>')
+        self.assertNotContains(response, '<th class="field-slug"><a href="/en/admin/djangocms_snippet/'
+                                         'snippet/1/change/">test-snippet</a></th>')
