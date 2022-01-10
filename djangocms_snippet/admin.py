@@ -74,7 +74,7 @@ class SnippetAdmin(*snippet_admin_classes):
 
     def _get_preview_url(self, obj):
         """
-        Return the preview method if available, otherwise return None
+        Return the change url which will be rendered in read only mode
         :return: method or None
         """
         change_url = reverse(
