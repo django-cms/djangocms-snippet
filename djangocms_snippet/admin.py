@@ -70,6 +70,15 @@ class SnippetAdmin(*snippet_admin_classes):
         return False
 
     def has_change_permission(self, request, obj=None):
+        """
+        Return edit mode if current user is the author, otherwise display snippet in read only mode
+        """
+        if obj and djangocms_versioning_enabled:
+            created_by_id = self.get_version(obj).created_by_id
+            logged_in_id = request.user.id
+            version_state = self.get_version(obj).state
+            if logged_in_id == created_by_id and version_state != 'published':
+                return True
         return False
 
     def _get_preview_url(self, obj):
