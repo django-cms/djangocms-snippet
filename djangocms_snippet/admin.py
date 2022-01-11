@@ -19,17 +19,15 @@ djangocms_versioning_enabled = SnippetCMSAppConfig.djangocms_versioning_enabled
 
 try:
     from djangocms_versioning.admin import ExtendedVersionAdminMixin
-
     if djangocms_versioning_enabled:
         snippet_admin_classes.insert(0, ExtendedVersionAdminMixin)
 except ImportError:
-    pass
+    djangocms_versioning_enabled = False
 
 
 class SnippetAdmin(*snippet_admin_classes):
-    list_display = ('slug', 'name')
-    search_fields = ['slug', 'name']
-    prepopulated_fields = {'slug': ('name',)}
+    list_display = ('name',)
+    search_fields = ['name']
     change_form_template = 'djangocms_snippet/admin/change_form.html'
     text_area_attrs = {
         'rows': 20,
@@ -46,6 +44,35 @@ class SnippetAdmin(*snippet_admin_classes):
 
     class Meta:
         model = Snippet
+
+    def get_list_display(self, request):
+        list_display = super().get_list_display(request)
+        list_display = list(list_display)
+
+        if not djangocms_versioning_enabled:
+            list_display.insert(0, 'slug')
+
+        list_display = tuple(list_display)
+        return list_display
+
+    def get_search_fields(self, request):
+        search_fields = super().get_search_fields(request)
+        if not djangocms_versioning_enabled:
+            search_fields.append('slug')
+        return search_fields
+
+    def get_prepopulated_fields(self, obj, request):
+        prepopulated_fields = super().get_prepopulated_fields(request)
+        if not djangocms_versioning_enabled:
+            prepopulated_fields = {'slug': ('name',)}
+        return prepopulated_fields
+
+    def get_list_display_links(self, request, list_display):
+        if not djangocms_versioning_enabled:
+            return list(list_display)[:1]
+        else:
+            self.list_display_links = (None,)
+            return self.list_display_links
 
     def get_urls(self):
         info = self.model._meta.app_label, self.model._meta.model_name
