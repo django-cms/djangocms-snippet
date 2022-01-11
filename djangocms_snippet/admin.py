@@ -94,15 +94,5 @@ class SnippetAdmin(*snippet_admin_classes):
         )
         return change_url
 
-    def get_list_actions(self):
-        """
-        Collect rendered actions from implemented methods and return as list
-        """
-        return [
-            self._get_preview_link,
-            self._get_edit_link,
-            self._get_manage_versions_link,
-        ]
-
 
 admin.site.register(Snippet, SnippetAdmin)
