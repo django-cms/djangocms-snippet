@@ -106,6 +106,10 @@ class SnippetPtr(CMSPlugin):
 
     search_fields = ['snippet__html'] if SEARCH_ENABLED else []
 
+    def get_short_description(self):
+        snippet_label = SnippetGrouper.objects.filter(pk=self.snippet_grouper.pk).first()
+        return snippet_label
+
     class Meta:
         verbose_name = _('Snippet Ptr')
         verbose_name_plural = _('Snippet Ptrs')
