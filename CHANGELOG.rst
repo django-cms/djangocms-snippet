@@ -4,6 +4,7 @@ Changelog
 
 Unreleased
 ==========
+* fix: Removed unused contents within templates, reducing the clutter within version compare views.
 
 * fix: Snippet plugin added to a page now displays name instead of ID
 * fix: Slug field on list display for admin should only be displayed when versioning is not available
