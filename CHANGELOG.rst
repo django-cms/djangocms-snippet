@@ -4,10 +4,15 @@ Changelog
 
 Unreleased
 ==========
-* fix: Removed unused contents within templates, reducing the clutter within version compare views.
+
+
+4.0.0.dev3 (2022-01-11)
+=======================
 
 * fix: Snippet plugin added to a page now displays name instead of ID
 * fix: Slug field on list display for admin should only be displayed when versioning is not available
+* fix: Removed unused contents within templates, reducing the clutter within version compare views. Previously this was causing a lot of junk to be included in the version comparison, this will now be reduced.
+
 
 4.0.0.dev2 (2021-12-22)
 =======================
