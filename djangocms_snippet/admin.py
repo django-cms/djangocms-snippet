@@ -98,19 +98,17 @@ class SnippetAdmin(*snippet_admin_classes):
 
     def has_change_permission(self, request, obj=None):
         """
-        Return edit mode if current user is the author, otherwise display snippet in read only mode
+        Return read only mode if q parameter is in URL, otherwise return edit mode
         """
         if obj and djangocms_versioning_enabled:
-            created_by_id = self.get_version(obj).created_by_id
-            logged_in_id = request.user.id
-            version_state = self.get_version(obj).state
-            if logged_in_id == created_by_id and version_state != 'published':
-                return True
-        return False
+            param = request.GET.get("q")
+            if param == "read_only":
+                return False
+            return True
 
     def _get_preview_url(self, obj):
         """
-        Return the change url which will be rendered in read only mode
+        Return the preview url in read only mode
         :return: method or None
         """
         change_url = reverse(
@@ -119,7 +117,7 @@ class SnippetAdmin(*snippet_admin_classes):
             ),
             args=(obj.pk,),
         )
-        return change_url
+        return f"{change_url}?q=read_only"
 
 
 admin.site.register(Snippet, SnippetAdmin)

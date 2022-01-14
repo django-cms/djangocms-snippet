@@ -173,7 +173,7 @@ class SnippetAdminFormTestCase(CMSTestCase):
         self.snippet_version.publish(user=self.superuser)
         with self.login_user_context(self.superuser):
             edit_url = reverse("admin:djangocms_snippet_snippet_change", args=(self.snippet.id,),)
-            response = self.client.get(edit_url)
+            response = self.client.get(edit_url + "?q=read_only")
 
         # Check that we are loading in readonly mode
         self.assertContains(response, '<div class="readonly">Test Snippet</div>')
