@@ -5,7 +5,7 @@ from djangocms_snippet.models import Snippet
 
 
 class SnippetPreviewView(TemplateView):
-    template_name = "djangocms_snippet/admin/preview.html"
+    template_name = "djangocms_snippet/admin/snippet_preview.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

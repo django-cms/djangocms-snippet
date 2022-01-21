@@ -4,7 +4,8 @@ Changelog
 
 Unreleased
 ==========
-* fix: Test
+* fix: Previous removal of unused content in version compare also removed the toolbar from the preview endpoint. This fix adds a separate template for the preview.
+
 
 4.0.0.dev3 (2022-01-11)
 =======================
