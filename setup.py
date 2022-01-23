@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+from pathlib import Path
+
 from setuptools import find_packages, setup
 
 from djangocms_snippet import __version__
@@ -35,17 +37,23 @@ CLASSIFIERS = [
     'Topic :: Software Development :: Libraries',
 ]
 
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.rst").read_text()
 
 setup(
     name='djangocms-snippet',
     version=__version__,
     author='Divio AG',
     author_email='info@divio.ch',
-    url='https://github.com/divio/djangocms-snippet',
+    maintainer='Django CMS Association and contributors',
+    maintainer_email='info@django-cms.org',
+    url='https://github.com/django-cms/djangocms-snippet',
     license='BSD-3-Clause',
     description='Adds snippet plugin to django CMS.',
-    long_description=open('README.rst').read(),
-    packages=find_packages(),
+    long_description=long_description,
+    long_description_content_type='text/x-rst',
+    packages=find_packages(exclude=['tests']),
+    python_requires='>=3.5',
     include_package_data=True,
     zip_safe=False,
     install_requires=REQUIREMENTS,
