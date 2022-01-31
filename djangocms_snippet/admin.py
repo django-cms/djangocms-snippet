@@ -14,6 +14,7 @@ from .cms_config import SnippetCMSAppConfig
 from .forms import SnippetForm
 from .models import Snippet
 
+
 # Use the version mixin if djangocms-versioning is installed and enabled
 snippet_admin_classes = [admin.ModelAdmin]
 djangocms_versioning_enabled = SnippetCMSAppConfig.djangocms_versioning_enabled
