@@ -1,17 +1,18 @@
 from django.conf import settings
 from django.conf.urls import url
 from django.contrib import admin
+from django.contrib.admin.exceptions import DisallowedModelAdminToField
+from django.contrib.admin.utils import (quote, unquote, flatten_fieldsets)
+from django.contrib.admin import helpers
 from django.db import models
 from django.forms import Textarea
-from django.urls import reverse
+from django.utils.translation import gettext as _
 
 from cms.utils.permissions import get_model_permission_codename
 
 from .cms_config import SnippetCMSAppConfig
 from .forms import SnippetForm
 from .models import Snippet
-from .views import SnippetPreviewView
-
 
 # Use the version mixin if djangocms-versioning is installed and enabled
 snippet_admin_classes = [admin.ModelAdmin]
@@ -19,10 +20,14 @@ djangocms_versioning_enabled = SnippetCMSAppConfig.djangocms_versioning_enabled
 
 try:
     from djangocms_versioning.admin import ExtendedVersionAdminMixin
+
     if djangocms_versioning_enabled:
         snippet_admin_classes.insert(0, ExtendedVersionAdminMixin)
 except ImportError:
     djangocms_versioning_enabled = False
+
+TO_FIELD_VAR = '_to_field'
+IS_POPUP_VAR = '_popup'
 
 
 class SnippetAdmin(*snippet_admin_classes):
@@ -74,15 +79,74 @@ class SnippetAdmin(*snippet_admin_classes):
             self.list_display_links = (None,)
             return self.list_display_links
 
+    def preview_view(self, request, snippet_id=None, form_url='', extra_context=None):
+        """
+        Custom preview endpoint to display a change form in read only mode
+        """
+        to_field = request.POST.get(TO_FIELD_VAR, request.GET.get(TO_FIELD_VAR))
+
+        if to_field and not self.to_field_allowed(request, to_field):
+            raise DisallowedModelAdminToField("The field %s cannot be referenced." % to_field)
+
+        model = self.model
+        opts = model._meta
+
+        obj = self.get_object(request, unquote(snippet_id), to_field)
+
+        if obj is None:
+            return self._get_obj_does_not_exist_redirect(request, opts, snippet_id)
+
+        fieldsets = self.get_fieldsets(request, obj)
+        ModelForm = self.get_form(
+            request, obj, change=False, fields=flatten_fieldsets(fieldsets)
+        )
+        form = ModelForm(instance=obj)
+        formsets, inline_instances = self._create_formsets(request, obj, change=True)
+
+        readonly_fields = flatten_fieldsets(fieldsets)
+
+        adminForm = helpers.AdminForm(
+            form,
+            list(fieldsets),
+            # Clear prepopulated fields on a view-only form to avoid a crash.
+            {},
+            readonly_fields,
+            model_admin=self)
+        media = self.media + adminForm.media
+
+        inline_formsets = self.get_inline_formsets(request, formsets, inline_instances, obj)
+        for inline_formset in inline_formsets:
+            media = media + inline_formset.media
+
+        title = _('View %s')
+        context = {
+            **self.admin_site.each_context(request),
+            'title': title % opts.verbose_name,
+            'subtitle': str(obj) if obj else None,
+            'adminform': adminForm,
+            'object_id': snippet_id,
+            'original': obj,
+            'is_popup': IS_POPUP_VAR in request.POST or IS_POPUP_VAR in request.GET,
+            'to_field': to_field,
+            'media': media,
+            'inline_admin_formsets': inline_formsets,
+            'errors': [],
+            'preserved_filters': self.get_preserved_filters(request),
+        }
+
+        context.update(extra_context or {})
+
+        return self.render_change_form(request, context, add=False, change=False, obj=obj, form_url=form_url)
+
     def get_urls(self):
         info = self.model._meta.app_label, self.model._meta.model_name
         return [
-            url(
-                r"^(?P<snippet_id>\d+)/preview/$",
-                self.admin_site.admin_view(SnippetPreviewView.as_view()),
-                name="{}_{}_preview".format(*info),
-            ),
-        ] + super().get_urls()
+                   url(
+                       r"^(?P<snippet_id>\d+)/preview/$",
+                       self.admin_site.admin_view(self.preview_view),
+                       name="{}_{}_preview".format(*info),
+                   ),
+               ] + super().get_urls()
 
     def has_delete_permission(self, request, obj=None):
         """
@@ -95,29 +159,6 @@ class SnippetAdmin(*snippet_admin_classes):
                 get_model_permission_codename(self.model, 'add'),
             )
         return False
-
-    def has_change_permission(self, request, obj=None):
-        """
-        Return read only mode if q parameter is in URL, otherwise return edit mode
-        """
-        if obj and djangocms_versioning_enabled:
-            param = request.GET.get("q")
-            if param == "read_only":
-                return False
-            return True
-
-    def _get_preview_url(self, obj):
-        """
-        Return the preview url in read only mode
-        :return: method or None
-        """
-        change_url = reverse(
-            "admin:{app}_{model}_change".format(
-                app=obj._meta.app_label, model=self.model._meta.model_name
-            ),
-            args=(obj.pk,),
-        )
-        return f"{change_url}?q=read_only"
 
 
 admin.site.register(Snippet, SnippetAdmin)

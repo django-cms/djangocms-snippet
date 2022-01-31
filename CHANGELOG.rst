@@ -5,7 +5,7 @@ Changelog
 Unreleased
 ==========
 
-* feat: Preview icon renders form in read only mode when a user does not own snippet
+* feat: Preview icon renders form in read only mode
 
 4.0.0.dev3 (2022-01-11)
 =======================
