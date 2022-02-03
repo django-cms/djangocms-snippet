@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.shortcuts import reverse
 from django.test import RequestFactory, override_settings
 
+from cms.utils.urlutils import admin_reverse
 from cms.test_utils.testcases import CMSTestCase
 
 from djangocms_versioning.models import Version
@@ -12,6 +13,8 @@ from djangocms_snippet import admin as snippet_admin
 from djangocms_snippet import cms_config
 from djangocms_snippet.forms import SnippetForm
 from djangocms_snippet.models import Snippet, SnippetGrouper
+
+from .utils.factories import SnippetWithVersionFactory
 
 
 class SnippetAdminTestCase(CMSTestCase):
@@ -209,3 +212,23 @@ class SnippetAdminFormTestCase(CMSTestCase):
         self.assertContains(response, '<td class="field-name">Test Snippet</td>')
         self.assertNotContains(response, '<th class="field-slug"><a href="/en/admin/djangocms_snippet/'
                                          'snippet/1/change/">test-snippet</a></th>')
+
+    def test_preview_renders_read_only_fields(self):
+        """
+        Check that the preview endpoint is rendered in read only mode
+        """
+        self.snippet_version.publish(user=self.superuser)
+        with self.login_user_context(self.superuser):
+            edit_url = reverse("admin:djangocms_snippet_snippet_preview", args=(self.snippet.id,),)
+            response = self.client.get(edit_url)
+
+        # Snippet name
+        self.assertContains(response, '<div class="readonly">Test Snippet</div>')
+        # Snippet slug
+        self.assertContains(response, '<div class="readonly">test-snippet</div>')
+        # Snippet HTML
+        self.assertContains(response, '<div class="readonly">&lt;h1&gt;This is a test&lt;/h1&gt;</div>')
+        # Snippet template
+        self.assertContains(response, '<div class="readonly"></div>')
+
+
