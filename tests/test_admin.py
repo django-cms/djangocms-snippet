@@ -4,7 +4,6 @@ from django.contrib import admin
 from django.shortcuts import reverse
 from django.test import RequestFactory, override_settings
 
-from cms.utils.urlutils import admin_reverse
 from cms.test_utils.testcases import CMSTestCase
 
 from djangocms_versioning.models import Version
@@ -13,8 +12,6 @@ from djangocms_snippet import admin as snippet_admin
 from djangocms_snippet import cms_config
 from djangocms_snippet.forms import SnippetForm
 from djangocms_snippet.models import Snippet, SnippetGrouper
-
-from .utils.factories import SnippetWithVersionFactory
 
 
 class SnippetAdminTestCase(CMSTestCase):
