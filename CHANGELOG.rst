@@ -5,7 +5,12 @@ Changelog
 Unreleased
 ==========
 
+
+4.0.0.dev4 (2022-02-03)
+=======================
+
 * feat: Preview icon renders form in read only mode
+
 
 4.0.0.dev3 (2022-01-11)
 =======================
