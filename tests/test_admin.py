@@ -227,5 +227,3 @@ class SnippetAdminFormTestCase(CMSTestCase):
         self.assertContains(response, '<div class="readonly">&lt;h1&gt;This is a test&lt;/h1&gt;</div>')
         # Snippet template
         self.assertContains(response, '<div class="readonly"></div>')
-
-
