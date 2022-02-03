@@ -82,7 +82,7 @@ class SnippetAdmin(*snippet_admin_classes):
         """
         Custom preview endpoint to display a change form in read only mode
         Solution based on django changeform view implementation
-        https://github.com/django/django/blob/main/django/contrib/admin/options.py#L1553
+        https://github.com/django/django/blob/4b8e9492d9003ca357a4402f831112dd72efd2f8/django/contrib/admin/options.py#L1553
         """
         to_field = request.POST.get(TO_FIELD_VAR, request.GET.get(TO_FIELD_VAR))
 
