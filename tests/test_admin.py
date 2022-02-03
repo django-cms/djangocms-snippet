@@ -209,3 +209,21 @@ class SnippetAdminFormTestCase(CMSTestCase):
         self.assertContains(response, '<td class="field-name">Test Snippet</td>')
         self.assertNotContains(response, '<th class="field-slug"><a href="/en/admin/djangocms_snippet/'
                                          'snippet/1/change/">test-snippet</a></th>')
+
+    def test_preview_renders_read_only_fields(self):
+        """
+        Check that the preview endpoint is rendered in read only mode
+        """
+        self.snippet_version.publish(user=self.superuser)
+        with self.login_user_context(self.superuser):
+            edit_url = reverse("admin:djangocms_snippet_snippet_preview", args=(self.snippet.id,),)
+            response = self.client.get(edit_url)
+
+        # Snippet name
+        self.assertContains(response, '<div class="readonly">Test Snippet</div>')
+        # Snippet slug
+        self.assertContains(response, '<div class="readonly">test-snippet</div>')
+        # Snippet HTML
+        self.assertContains(response, '<div class="readonly">&lt;h1&gt;This is a test&lt;/h1&gt;</div>')
+        # Snippet template
+        self.assertContains(response, '<div class="readonly"></div>')
