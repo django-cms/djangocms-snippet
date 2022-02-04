@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 from setuptools import find_packages, setup
 
+from djangocms_snippet import __version__
+
 
 REQUIREMENTS = [
     'django-cms>=3.7',
@@ -36,7 +38,7 @@ CLASSIFIERS = [
 
 setup(
     name='djangocms-snippet',
-    version='3.0.0',
+    version=__version__,
     author='Divio AG',
     author_email='info@divio.ch',
     url='https://github.com/divio/djangocms-snippet',
