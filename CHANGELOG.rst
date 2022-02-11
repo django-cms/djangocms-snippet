@@ -4,7 +4,7 @@ Changelog
 
 Unreleased
 ==========
-* fix: Removed auto-escape from snippet preview template, tags will now be rendered on the page.
+* fix: Added test coverage to admnin preview button
 
 4.0.0.dev4 (2022-02-03)
 =======================
