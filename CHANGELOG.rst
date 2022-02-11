@@ -6,6 +6,20 @@ Unreleased
 ==========
 * fix: Removed auto-escape from snippet preview template, tags will now be rendered on the page.
 
+4.0.0.dev4 (2022-02-03)
+=======================
+
+* feat: Preview icon renders form in read only mode
+
+
+4.0.0.dev3 (2022-01-11)
+=======================
+
+* fix: Snippet plugin added to a page now displays name instead of ID
+* fix: Slug field on list display for admin should only be displayed when versioning is not available
+* fix: Removed unused contents within templates, reducing the clutter within version compare views. Previously this was causing a lot of junk to be included in the version comparison, this will now be reduced.
+
+
 4.0.0.dev2 (2021-12-22)
 =======================
 

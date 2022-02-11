@@ -1,16 +1,1 @@
-{% extends "admin/base_site.html" %}
-{% load static  %}
 {{ snippet.html|safe|escape }}
-
-{% block extrastyle %}
-  {{ block.super }}
-  <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}">
-{% endblock %}
-
-{% block coltype %}flex{% endblock %}
-
-{% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} change-list{% endblock %}
-
-{% block content %}
-    {{ snippet.html }}
-{% endblock %}

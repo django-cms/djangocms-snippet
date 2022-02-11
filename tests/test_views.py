@@ -26,9 +26,9 @@ class PreviewViewTestCase(CMSTestCase):
         # the response will contain character entity references.
         self.assertContains(response, "&lt;h1&gt;Test Title&lt;/h1&gt;&lt;br&gt;&lt;p&gt;Test paragraph&lt;/p&gt;")
 
-    def test_preview_raises_404_no_snippet(self):
+    def test_preview_raises_302_no_snippet(self):
         """
-        With no Snippet to preview, a 404 will be raised
+        With no Snippet to preview, a 302 will be raised and the user will be redirected to the admin
         """
         preview_url = admin_reverse(
             "djangocms_snippet_snippet_preview",
@@ -37,4 +37,4 @@ class PreviewViewTestCase(CMSTestCase):
         with self.login_user_context(self.user):
             response = self.client.get(preview_url)
 
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 302)
