@@ -4,7 +4,7 @@ Changelog
 
 Unreleased
 ==========
-* fix: Added test coverage to admnin preview button
+* fix: Added test coverage to admin preview view
 
 4.0.0.dev4 (2022-02-03)
 =======================
