@@ -19,6 +19,7 @@ HELPER_SETTINGS = {
     'CMS_TEMPLATES': (
         ("page.html", "Normal page"),
     ),
+    "DEFAULT_AUTO_FIELD": "django.db.models.AutoField",
 }
 
 
