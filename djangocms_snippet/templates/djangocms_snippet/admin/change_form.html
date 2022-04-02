@@ -24,7 +24,9 @@ django.jQuery(function () {
     editor.getSession().setMode('ace/mode/' + settings.mode);
     editor.setOptions({
         fontSize: '14px',
-        cursorStyle: 'smooth'
+        cursorStyle: 'smooth',
+        maxLines: 30,
+        minLines: 30,
     });
     editor.renderer.setScrollMargin(5, 5);
 
