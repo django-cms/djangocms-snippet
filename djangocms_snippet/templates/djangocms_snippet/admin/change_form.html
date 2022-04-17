@@ -4,7 +4,7 @@
 {% block object-tools %}
 {{ block.super }}
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/ace.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js" integrity="sha512-6ts6Fu561/yzWvD6uwQp3XVYwiWNpWnZ0hdeQrETqtnQiGjTfOS06W76aUDnq51hl1SxXtJaqy7IsZ3oP/uZEg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
 django.jQuery(function () {
     // ace editor cannot be attached directly to a textarea
@@ -19,7 +19,11 @@ django.jQuery(function () {
 
     // init editor with settings
     var editor = ace.edit(div[0]);
-    editor.setTheme('ace/theme/' + settings.theme);
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        editor.setTheme('ace/theme/tomorrow_night');
+    }  else {
+        editor.setTheme('ace/theme/github');
+    }
     editor.getSession().setValue(textarea.val());
     editor.getSession().setMode('ace/mode/' + settings.mode);
     editor.setOptions({
