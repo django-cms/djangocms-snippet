@@ -59,7 +59,7 @@ class SnippetAdminTestCase(CMSTestCase):
             self.snippet_admin.__class__.__bases__, (ExtendedVersionAdminMixin, admin.ModelAdmin)
         )
         self.assertEqual(
-            list_display[:-1], ('slug', 'name', 'get_author', 'get_modified_date', 'get_versioning_state')
+            list_display[:-1], ('name', 'get_author', 'get_modified_date', 'get_versioning_state')
         )
         self.assertEqual(list_display[-1].short_description, 'actions')
         self.assertIn("function ExtendedVersionAdminMixin._list_actions", list_display[-1].__str__())
@@ -179,3 +179,51 @@ class SnippetAdminFormTestCase(CMSTestCase):
         self.assertContains(response, '<div class="readonly">Test Snippet</div>')
         # We should have the same number of snippets as before
         self.assertEqual(Snippet.objects.count(), 1)
+
+    @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=False)
+    def test_slug_colomn_should_hyperlinked_with_versioning_disabled(self):
+        """
+        Slug column should be visible and hyperlinked when versioning is disabled
+        """
+        admin.site.unregister(Snippet)
+        reload(cms_config)
+        reload(snippet_admin)
+
+        with self.login_user_context(self.get_superuser()):
+            response = self.client.get(self.changelist_url)
+        self.assertContains(response, '<th class="field-slug"><a href="/en/admin/djangocms_snippet/'
+                                      'snippet/1/change/">test-snippet</a></th>')
+
+    @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
+    def test_name_colomn_should_not_be_hyperlinked_with_versioning_enabled(self):
+        """
+        Name column should be visible and not hyperlinked when versioning is enabled.
+        Slug column should not be visible when versioning is enabled.
+        """
+        admin.site.unregister(Snippet)
+        reload(cms_config)
+        reload(snippet_admin)
+
+        with self.login_user_context(self.get_superuser()):
+            response = self.client.get(self.changelist_url)
+        self.assertContains(response, '<td class="field-name">Test Snippet</td>')
+        self.assertNotContains(response, '<th class="field-slug"><a href="/en/admin/djangocms_snippet/'
+                                         'snippet/1/change/">test-snippet</a></th>')
+
+    def test_preview_renders_read_only_fields(self):
+        """
+        Check that the preview endpoint is rendered in read only mode
+        """
+        self.snippet_version.publish(user=self.superuser)
+        with self.login_user_context(self.superuser):
+            edit_url = reverse("admin:djangocms_snippet_snippet_preview", args=(self.snippet.id,),)
+            response = self.client.get(edit_url)
+
+        # Snippet name
+        self.assertContains(response, '<div class="readonly">Test Snippet</div>')
+        # Snippet slug
+        self.assertContains(response, '<div class="readonly">test-snippet</div>')
+        # Snippet HTML
+        self.assertContains(response, '<div class="readonly">&lt;h1&gt;This is a test&lt;/h1&gt;</div>')
+        # Snippet template
+        self.assertContains(response, '<div class="readonly"></div>')

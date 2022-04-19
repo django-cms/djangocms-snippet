@@ -8,10 +8,31 @@ Unreleased
 * Django 3.0, 3.1 and 3.2 support added
 * Python 3.5 and 3.6 support removed
 * Django 1.11 support removed
+* fix: Added test coverage to admin preview view
+
+
+4.0.0.dev4 (2022-02-03)
+=======================
+
+* feat: Preview icon renders form in read only mode
+
+
+4.0.0.dev3 (2022-01-11)
+=======================
+
+* fix: Snippet plugin added to a page now displays name instead of ID
+* fix: Slug field on list display for admin should only be displayed when versioning is not available
+* fix: Removed unused contents within templates, reducing the clutter within version compare views. Previously this was causing a lot of junk to be included in the version comparison, this will now be reduced.
+
+
+4.0.0.dev2 (2021-12-22)
+=======================
+
+* fix: Removed tight django-treebeard restriction added when 4.5.0 contained breaking changes. The core CMS and django-treebeard have since been patched to resolve the issue.
 
 
 4.0.0.dev1 (2021-12-14)
-==================
+=======================
 
 * feat: Exposed the setting DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID as an environment variable for the Divio addon
 * fix: Error when rendering a Draft Snippet plugin on a Published page
