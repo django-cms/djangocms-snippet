@@ -6,11 +6,8 @@ from django.contrib.contenttypes.models import ContentType
 from cms.models import Placeholder
 
 import factory
-from factory.fuzzy import (
-    FuzzyInteger,
-    FuzzyText,
-)
 from djangocms_versioning.models import Version
+from factory.fuzzy import FuzzyInteger, FuzzyText
 
 from djangocms_snippet.models import Snippet, SnippetGrouper, SnippetPtr
 

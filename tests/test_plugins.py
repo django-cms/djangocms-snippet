@@ -5,8 +5,9 @@ from cms.models import PageContent
 from cms.test_utils.testcases import CMSTestCase
 from cms.toolbar.utils import get_object_edit_url, get_object_structure_url
 
-from djangocms_snippet.models import Snippet, SnippetGrouper
 from djangocms_versioning.models import Version
+
+from djangocms_snippet.models import Snippet, SnippetGrouper
 
 from .utils.factories import SnippetWithVersionFactory
 
