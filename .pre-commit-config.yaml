@@ -5,12 +5,13 @@ repos:
 #    hooks:
 #      - id: pyupgrade
 #        args: ["--py37-plus"]
-
-  - repo: https://github.com/adamchainz/django-upgrade
-    rev: '1.4.0'
-    hooks:
-      - id: django-upgrade
-        args: [--target-version, "1.11"]
+#
+# FIXME: Should be enabled for codebases that are minimum django 2.2+
+#  - repo: https://github.com/adamchainz/django-upgrade
+#    rev: '1.4.0'
+#    hooks:
+#      - id: django-upgrade
+#        args: [--target-version, "2.2"]
 
   - repo: https://github.com/PyCQA/flake8
     rev: 4.0.1
