@@ -4,12 +4,14 @@ Changelog
 
 Unreleased
 ==========
+
 * Python 3.8, 3.9 support added
 * Django 3.0, 3.1 and 3.2 support added
 * Python 3.5 and 3.6 support removed
 * Django 1.11 support removed
 * port-feat: pre-commit config added from the v3 workstream
 * fix: Added test coverage to admin preview view
+
 
 4.0.0.dev4 (2022-02-03)
 =======================
@@ -29,10 +31,6 @@ Unreleased
 =======================
 
 * fix: Removed tight django-treebeard restriction added when 4.5.0 contained breaking changes. The core CMS and django-treebeard have since been patched to resolve the issue.
-<<<<<<< HEAD
->>>>>>> support/django-cms-4.0.x
-=======
->>>>>>> e6239187f76982431fc4ff50cd3150c3adcbd24a
 
 
 4.0.0.dev1 (2021-12-14)
