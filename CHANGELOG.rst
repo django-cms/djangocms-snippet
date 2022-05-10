@@ -29,7 +29,10 @@ Unreleased
 =======================
 
 * fix: Removed tight django-treebeard restriction added when 4.5.0 contained breaking changes. The core CMS and django-treebeard have since been patched to resolve the issue.
+<<<<<<< HEAD
 >>>>>>> support/django-cms-4.0.x
+=======
+>>>>>>> e6239187f76982431fc4ff50cd3150c3adcbd24a
 
 
 4.0.0.dev1 (2021-12-14)
