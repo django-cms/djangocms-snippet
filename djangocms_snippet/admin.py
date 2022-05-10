@@ -142,12 +142,12 @@ class SnippetAdmin(*snippet_admin_classes):
     def get_urls(self):
         info = self.model._meta.app_label, self.model._meta.model_name
         return [
-           url(
+            url(
                    r"^(?P<snippet_id>\d+)/preview/$",
                    self.admin_site.admin_view(self.preview_view),
                    name="{}_{}_preview".format(*info),
-               ),
-           ] + super().get_urls()
+            ),
+        ] + super().get_urls()
 
     def has_delete_permission(self, request, obj=None):
         """

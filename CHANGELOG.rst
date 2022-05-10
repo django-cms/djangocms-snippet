@@ -4,6 +4,7 @@ Changelog
 
 Unreleased
 ==========
+* port-feat: pre-commit config added from the v3 workstream
 * fix: Added test coverage to admin preview view
 
 4.0.0.dev4 (2022-02-03)
