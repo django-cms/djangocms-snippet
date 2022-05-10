@@ -1,3 +1,3 @@
-__version__ = '4.0.0.dev4'
+__version__ = '4.0.1.dev1'
 
 default_app_config = 'djangocms_snippet.apps.SnippetConfig'
