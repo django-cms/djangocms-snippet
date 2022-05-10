@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 HELPER_SETTINGS = {
+    'SECRET_KEY': "djangocmssnippetstestsuitekey",
     'INSTALLED_APPS': [
         'tests.utils',
         'djangocms_versioning',
@@ -18,6 +19,7 @@ HELPER_SETTINGS = {
     'CMS_TEMPLATES': (
         ("page.html", "Normal page"),
     ),
+    "DEFAULT_AUTO_FIELD": "django.db.models.AutoField",
 }
 
 
