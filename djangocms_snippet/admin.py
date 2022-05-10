@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.admin import helpers
 from django.contrib.admin.exceptions import DisallowedModelAdminToField
@@ -6,7 +7,6 @@ from django.contrib.admin.options import IS_POPUP_VAR, TO_FIELD_VAR
 from django.contrib.admin.utils import flatten_fieldsets, unquote
 from django.db import models
 from django.forms import Textarea
-from django.urls import path
 from django.utils.translation import gettext as _
 
 from cms.utils.permissions import get_model_permission_codename
@@ -142,12 +142,12 @@ class SnippetAdmin(*snippet_admin_classes):
     def get_urls(self):
         info = self.model._meta.app_label, self.model._meta.model_name
         return [
-           path(
-                   '<int:snippet_id>/preview/',
+            url(
+                   r"^(?P<snippet_id>\d+)/preview/$",
                    self.admin_site.admin_view(self.preview_view),
                    name="{}_{}_preview".format(*info),
-               ),
-           ] + super().get_urls()
+            ),
+        ] + super().get_urls()
 
     def has_delete_permission(self, request, obj=None):
         """
