@@ -82,7 +82,7 @@ to edit the snippet content. You can customize the
 If dynamic content is inserted (for example ``{% show_menu ... %}``), the plugin cache must be disabled,
 please set ``DJANGOCMS_SNIPPET_CACHE`` to ``False`` in your settings::
 
-    DJANGOCMS_SNIPPET_CACHE = False # default value is True
+    DJANGOCMS_SNIPPET_CACHE = False # default value is False
 
 Template tag
 ------------
