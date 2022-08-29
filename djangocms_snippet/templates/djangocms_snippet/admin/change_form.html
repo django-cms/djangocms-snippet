@@ -3,8 +3,6 @@
 
 {% block object-tools %}
 {{ block.super }}
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js" integrity="sha512-6ts6Fu561/yzWvD6uwQp3XVYwiWNpWnZ0hdeQrETqtnQiGjTfOS06W76aUDnq51hl1SxXtJaqy7IsZ3oP/uZEg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
 django.jQuery(function () {
     // ace editor cannot be attached directly to a textarea
@@ -19,10 +17,22 @@ django.jQuery(function () {
 
     // init editor with settings
     var editor = ace.edit(div[0]);
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    var darkMode;
+    if (window.CMS) {
+        if (CMS.API.Helpers.getColorScheme) {
+            darkMode = CMS.API.Helpers.getColorScheme() === 'dark';
+        } else {
+            // django CMS pre-3.11.1
+            darkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        }
+    } else if (window.localStorage) {
+        // CMS not loaded: set color scheme for admin site / popup window according to settings
+        darkMode = JSON.parse(localStorage.getItem('cms_cookie') || '{}').color_scheme === 'dark';
+    }
+    if (darkMode) {
         editor.setTheme('ace/theme/tomorrow_night');
     }  else {
-        editor.setTheme('ace/theme/github');
+        editor.setTheme(settings.theme ? 'ace/theme/' + settings.theme : 'ace/theme/github');
     }
     editor.getSession().setValue(textarea.val());
     editor.getSession().setMode('ace/mode/' + settings.mode);
@@ -32,7 +42,6 @@ django.jQuery(function () {
         maxLines: 30,
         minLines: 30,
     });
-    editor.renderer.setScrollMargin(5, 5);
 
     // send data back to textarea when submitting
     textarea.closest('form').submit(function () {
