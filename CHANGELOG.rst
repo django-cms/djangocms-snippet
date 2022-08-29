@@ -5,6 +5,8 @@ Changelog
 unreleased
 ==========
 
+* Add support for ace editor loaded from static files through djangocms-static-ace
+* Add dark mode support
 
 3.0.0 (2020-09-02)
 ==================
