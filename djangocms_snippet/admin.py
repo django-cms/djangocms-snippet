@@ -32,6 +32,13 @@ except ImportError:
 
 @admin.register(Snippet)
 class SnippetAdmin(*snippet_admin_classes):
+    class Media:
+        js = (
+            "admin/vendor/ace/ace.js"
+            if "djangocms_static_ace" in settings.INSTALLED_APPS
+            else "https://cdnjs.cloudflare.com/ajax/libs/ace/1.9.6/ace.js",
+        )
+
     list_display = ('name',)
     search_fields = ['name']
     change_form_template = 'djangocms_snippet/admin/change_form.html'

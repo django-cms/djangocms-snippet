@@ -62,6 +62,11 @@ For a manual install:
 * add ``djangocms_snippet`` to your ``INSTALLED_APPS``
 * run ``python manage.py migrate djangocms_snippet``
 
+Djangocms-snippet uses the ace code editor which normally is loaded from a CDN.
+If you prefer your application to provide the editor locally, you can change
+the requirement from `djangocms_snippet` to `djangocms_snippet[static-ace]` and
+add `djangocms_static_ace` to your project's `INSTALLED_APPS`.
+
 
 Configuration
 -------------

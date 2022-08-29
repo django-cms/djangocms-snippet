@@ -63,6 +63,8 @@ Unreleased
 * feat: djangocms-versioning support added, including model restructure and configuration
 * feat: django-cms v4.0.x support added
 
+* Add support for ace editor loaded from static files through djangocms-static-ace
+* Add dark mode support
 
 3.0.0 (2020-09-02)
 ==================
