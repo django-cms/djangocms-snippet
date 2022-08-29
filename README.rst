@@ -62,6 +62,11 @@ For a manual install:
 * add ``djangocms_snippet`` to your ``INSTALLED_APPS``
 * run ``python manage.py migrate djangocms_snippet``
 
+Djangocms-snippet uses the ace code editor which normally is loaded from a CDN.
+If you prefer your application to provide the editor locally, you can change
+the requirement from `djangocms_snippet` to `djangocms_snippet[static-ace]` and
+add `djangocms_static_ace` to your project's `INSTALLED_APPS`.
+
 
 Configuration
 -------------
@@ -82,7 +87,7 @@ to edit the snippet content. You can customize the
 If dynamic content is inserted (for example ``{% show_menu ... %}``), the plugin cache must be disabled,
 please set ``DJANGOCMS_SNIPPET_CACHE`` to ``False`` in your settings::
 
-    DJANGOCMS_SNIPPET_CACHE = False # default value is True
+    DJANGOCMS_SNIPPET_CACHE = False # default value is False
 
 Template tag
 ------------
