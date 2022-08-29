@@ -7,6 +7,13 @@ from .models import Snippet
 
 
 class SnippetAdmin(admin.ModelAdmin):
+    class Media:
+        js = (
+            "admin/vendor/ace/ace.js"
+            if "djangocms_static_ace" in settings.INSTALLED_APPS
+            else "https://cdnjs.cloudflare.com/ajax/libs/ace/1.9.6/ace.js",
+        )
+
     list_display = ('slug', 'name')
     search_fields = ['slug', 'name']
     prepopulated_fields = {'slug': ('name',)}
