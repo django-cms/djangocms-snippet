@@ -5,6 +5,9 @@ Changelog
 unreleased
 ==========
 
+3.1.0 2022-09-01
+================
+
 * Add support for ace editor loaded from static files through djangocms-static-ace
 * Add dark mode support
 
