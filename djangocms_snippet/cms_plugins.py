@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 
+from .forms import SnippetPluginForm
 from .models import SnippetPtr
 from .utils import show_draft_content
 
@@ -21,6 +22,7 @@ class SnippetPlugin(CMSPluginBase):
     text_enabled = True
     text_editor_preview = False
     cache = CACHE_ENABLED
+    form = SnippetPluginForm
 
     def render(self, context, instance, placeholder):
         snippet = instance.snippet_grouper.snippet(show_editable=show_draft_content(context["request"]))
