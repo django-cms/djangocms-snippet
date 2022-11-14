@@ -5,6 +5,7 @@ from django.test import override_settings
 from cms.test_utils.testcases import CMSTestCase
 
 from djangocms_snippet import cms_config, forms
+from djangocms_snippet.forms import SnippetPluginForm
 from djangocms_snippet.models import Snippet, SnippetGrouper
 
 from .utils.factories import SnippetWithVersionFactory
@@ -188,3 +189,23 @@ class SnippetFormTestCase(CMSTestCase):
         form = forms.SnippetForm(form_data)
 
         self.assertTrue(form.is_valid())
+
+
+class SnippetPluginFormTestCase(CMSTestCase):
+
+    def setUp(self):
+        self.form = SnippetPluginForm()
+
+    def test_get_related_url_for_snippet(self):
+        """
+        Check that the url to add a snippet in the admin is returned
+        """
+        self.assertEqual(self.form.get_related_url_for_snippet("", "add"), "/en/admin/djangocms_snippet/snippet/add/")
+
+    def test_get_related_url_for_snippet_used(self):
+        """
+        Checks that the get_related_url widget is overridden
+        """
+        snippet_grouper_widget = self.form.fields["snippet_grouper"].widget
+        self.assertEqual(snippet_grouper_widget.get_related_url, self.form.get_related_url_for_snippet)
+        self.assertTrue(snippet_grouper_widget.can_add_related)

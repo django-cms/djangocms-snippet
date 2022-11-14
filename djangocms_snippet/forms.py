@@ -79,7 +79,7 @@ class SnippetPluginForm(forms.ModelForm):
         this the get_related_url method on the widget is overridden to build a URL for the Snippet admin instead of
         the SnippetGrouper, as this is not enabled in the admin.
         """
-        super(SnippetPluginForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["snippet_grouper"].widget.can_add_related = True
         self.fields["snippet_grouper"].widget.get_related_url = self.get_related_url_for_snippet
 
