@@ -76,7 +76,7 @@ class SnippetPluginForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         """
         Initialise the form with the add button enabled to allow adding a new snippet from the plugin form. To enable
-        this the get_related_url method on the widget is monkey patched to build a URL for the Snippet admin instead of
+        this the get_related_url method on the widget is overridden to build a URL for the Snippet admin instead of
         the SnippetGrouper, as this is not enabled in the admin.
         """
         super(SnippetPluginForm, self).__init__(*args, **kwargs)
