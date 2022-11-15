@@ -1,9 +1,12 @@
 from django import forms
+from django.contrib import admin
 from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
 
+from cms.utils.urlutils import admin_reverse
+
 from djangocms_snippet.cms_config import SnippetCMSAppConfig
-from djangocms_snippet.models import Snippet, SnippetGrouper
+from djangocms_snippet.models import Snippet, SnippetGrouper, SnippetPtr
 
 
 try:
@@ -64,3 +67,26 @@ class SnippetForm(forms.ModelForm):
         if commit:
             snippet.save()
         return snippet
+
+
+class SnippetPluginForm(forms.ModelForm):
+
+    class Meta:
+        model = SnippetPtr
+        fields = ("cmsplugin_ptr", "snippet_grouper")
+
+    def __init__(self, *args, **kwargs):
+        """
+        Initialise the form with the add button enabled to allow adding a new snippet from the plugin form. To enable
+        this the get_related_url method on the widget is overridden to build a URL for the Snippet admin instead of
+        the SnippetGrouper, as this is not enabled in the admin.
+        """
+        super().__init__(*args, **kwargs)
+        self.fields["snippet_grouper"].widget.can_add_related = True
+        self.fields["snippet_grouper"].widget.get_related_url = self.get_related_url_for_snippet
+
+    def get_related_url_for_snippet(self, info, action, *args):
+        """
+        Build URL to the Snippet admin for the given action
+        """
+        return admin_reverse(f"djangocms_snippet_snippet_{action}", current_app=admin.site.name, args=args)
