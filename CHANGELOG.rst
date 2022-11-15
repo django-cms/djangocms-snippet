@@ -4,7 +4,10 @@ Changelog
 
 Unreleased
 ==========
-* feat: Enable add button to crate a snippet when adding a SnippetPlugin
+
+4.0.1.dev2 (2022-11-15)
+=======================
+* feat: Enable add button to create a snippet when adding a SnippetPlugin
 
 4.0.1.dev1 (2022-05-10)
 =======================
