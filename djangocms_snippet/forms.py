@@ -1,11 +1,13 @@
-from cms.utils.urlutils import admin_reverse
 from django import forms
 from django.contrib import admin
 from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
 
+from cms.utils.urlutils import admin_reverse
+
 from djangocms_snippet.cms_config import SnippetCMSAppConfig
 from djangocms_snippet.models import Snippet, SnippetGrouper, SnippetPtr
+
 
 try:
     from djangocms_versioning import __version__  # NOQA
