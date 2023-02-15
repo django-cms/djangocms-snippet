@@ -4,7 +4,7 @@
 #
 #    pip-compile
 #
-asgiref==3.5.0
+asgiref==3.6.0
     # via django
 bump2version==1.0.1
     # via -r requirements.in
@@ -14,7 +14,7 @@ click==8.0.3
     # via pip-tools
 distlib==0.3.4
     # via virtualenv
-django==4.0.8
+django==4.1.7
     # via
     #   django-classy-tags
     #   django-cms
