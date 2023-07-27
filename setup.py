@@ -10,7 +10,7 @@ from djangocms_snippet import __version__  # noqa:E402
 
 
 REQUIREMENTS = [
-    'django-cms',
+    'django-cms>=3.11',
     'django-treebeard>=4.3',
 ]
 
