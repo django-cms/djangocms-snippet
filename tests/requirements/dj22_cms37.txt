@@ -2,3 +2,4 @@
 
 Django>=2.2,<3.0
 django-cms>=3.7,<3.8
+django-treebeard<4.5
