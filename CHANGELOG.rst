@@ -2,15 +2,16 @@
 Changelog
 =========
 
-Unreleased
-==========
+3.1.1
+=====
+
+* fix: Removed tight django-treebeard restriction added when 4.5.0 contained breaking changes. The core CMS and django-treebeard have since been patched to resolve the issue.
 
 3.1.0 2022-09-01
 ================
 
 * Add support for ace editor loaded from static files through djangocms-static-ace
 * Add dark mode support
-* fix: Removed tight django-treebeard restriction added when 4.5.0 contained breaking changes. The core CMS and django-treebeard have since been patched to resolve the issue.
 
 3.0.0 (2020-09-02)
 ==================
