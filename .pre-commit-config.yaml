@@ -1,3 +1,12 @@
+ci:
+    autofix_commit_msg: |
+        ci: auto fixes from pre-commit hooks
+
+        for more information, see https://pre-commit.ci
+    autofix_prs: true
+    autoupdate_commit_msg: 'ci: pre-commit autoupdate'
+    autoupdate_schedule: monthly
+
 repos:
 # Need to drop python 3.5 and 3.6 before we include python upgrade
 #  - repo: https://github.com/asottile/pyupgrade
@@ -16,18 +25,25 @@ repos:
   - repo: https://github.com/PyCQA/flake8
     rev: 7.0.0
     hooks:
-      - id: flake8
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
 
   - repo: https://github.com/asottile/yesqa
     rev: v1.5.0
     hooks:
-      - id: yesqa
+      - id: ruff-format
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
     hooks:
+      - id: check-added-large-files
+      - id: check-case-conflict
+      - id: check-json
       - id: check-merge-conflict
-      - id: mixed-line-ending
+      - id: check-symlinks
+      - id: check-toml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
 
   # upgrade the isort version to fix compatiable issue withe peotry: https://stackoverflow.com/questions/75269700/pre-commit-fails-to-install-isort-5-11-4-with-error-runtimeerror-the-poetry-co
   - repo: https://github.com/pycqa/isort

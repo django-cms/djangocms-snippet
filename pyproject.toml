@@ -14,9 +14,9 @@ maintainers = [
 license = {file = "LICENSE"}
 description = "Adds snippet plugin to django CMS."
 readme = "README.rst"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 dependencies = [
-    'django-cms>=4.0',
+    'django-cms>=3.7',
 ]
 classifiers=[
     "Development Status :: 5 - Production/Stable",
@@ -26,14 +26,27 @@ classifiers=[
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
+<<<<<<< HEAD
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+=======
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+>>>>>>> cf6e93a (chore: Package overhaul (#140))
     "Framework :: Django",
     "Framework :: Django :: 3.2",
     "Framework :: Django :: 4.2",
     "Framework :: Django CMS",
+<<<<<<< HEAD
     "Framework :: Django CMS :: 4.0",
+=======
+    "Framework :: Django CMS :: 3.8",
+    "Framework :: Django CMS :: 3.9",
+    "Framework :: Django CMS :: 3.10",
+    "Framework :: Django CMS :: 3.11",
+>>>>>>> cf6e93a (chore: Package overhaul (#140))
     "Topic :: Internet :: WWW/HTTP",
     "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
     "Topic :: Software Development",
@@ -44,7 +57,7 @@ classifiers=[
 static-ace = ["djangocms-static-ace"]
 
 [tool.setuptools.packages.find]
-where = ["."]
+where = ["src"]
 exclude = ["tests"]
 
 [project.urls]
@@ -63,7 +76,7 @@ source = [
 
 [tool.coverage.paths]
 source = [
-    "djangocms_snippet",
+    "src",
     ".tox/**/site-packages",
 ]
 
@@ -75,7 +88,7 @@ check_untyped_defs = true
 disallow_any_generics = true
 disallow_incomplete_defs = true
 disallow_untyped_defs = true
-mypy_path = "djangocms_snippet/"
+mypy_path = "src/"
 no_implicit_optional = true
 show_error_codes = true
 warn_unreachable = true
