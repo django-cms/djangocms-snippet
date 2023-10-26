@@ -1,9 +1,13 @@
 """
 Snippet template tags
 """
+from collections.abc import Generator
 from contextlib import contextmanager
+from typing import Any
 
 from django import template
+from django.template.base import Parser, Token
+from django.template.context import BaseContext
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
@@ -16,9 +20,11 @@ EXPECTED_LENGTH = 2
 
 
 @contextmanager
-def exceptionless(truth):
-    # Accepts one truth parameter, when 'False' normal behavior
-    # when 'True' any expection will be suppressed
+def exceptionless(truth: bool) -> Generator[None, None, None]:
+    """
+    Accepts one truth parameter, when 'False' normal behavior
+    when 'True' any exception will be suppressed
+    """
     try:
         yield
     except Exception:
@@ -26,7 +32,7 @@ def exceptionless(truth):
             # WARNING: suppressing exception
             pass
         else:
-            # Reraising exception
+            # Re-raising exception
             raise
 
 
@@ -35,7 +41,7 @@ class SnippetFragment(template.Node):
     Get a snippet HTML fragment
     """
 
-    def __init__(self, snippet_id_varname, *args):
+    def __init__(self, snippet_id_varname: str, *args: Any):
         """
         :type insert_instance_varname: string or object
                                        ``django.db.models.Model``
@@ -53,7 +59,7 @@ class SnippetFragment(template.Node):
             self.parse_until = True
             self.nodelist = args[1]
 
-    def render(self, context):
+    def render(self, context: BaseContext) -> str:
         """
         :type context: dict
         :param context: Context tag object
@@ -75,11 +81,9 @@ class SnippetFragment(template.Node):
                 self.get_content_render(context, snippet_instance)
             )
 
-        # Rely on the fact that manager something went wrong
-        # render the fallback template
-        return self.nodelist.render(context)
-
-    def get_content_render(self, context, instance):
+    def get_content_render(
+        self, context: BaseContext, instance: Snippet
+    ) -> str:
         """
         Render the snippet HTML, using a template if defined in its instance
         """
@@ -113,7 +117,7 @@ class SnippetFragment(template.Node):
 
 
 @register.tag(name="snippet_fragment")
-def do_snippet_fragment(parser, token):
+def do_snippet_fragment(parser: Parser, token: Token) -> SnippetFragment:
     """
     Display a snippet HTML fragment
 

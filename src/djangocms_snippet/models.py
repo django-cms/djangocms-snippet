@@ -49,7 +49,7 @@ class Snippet(models.Model):
         verbose_name = _("Snippet")
         verbose_name_plural = _("Snippets")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -77,6 +77,6 @@ class SnippetPtr(CMSPlugin):
         verbose_name = _("Snippet Ptr")
         verbose_name_plural = _("Snippet Ptrs")
 
-    def __str__(self):
+    def __str__(self) -> str:
         # Return the referenced snippet's name rather than the default (ID #)
         return self.snippet.name
