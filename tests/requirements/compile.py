@@ -19,34 +19,6 @@ if __name__ == "__main__":
     ] + sys.argv[1:]
     subprocess.run(
         [
-            "/usr/local/bin/python3.8",
-            *common_args,
-            "-P",
-            "Django>=3.2a1,<3.3",
-            "-P",
-            "django-cms>=3.11,<4.0",
-            "-o",
-            "py38-django32-cms311.txt",
-        ],
-        check=True,
-        capture_output=True,
-    )
-    subprocess.run(
-        [
-            "/usr/local/bin/python3.8",
-            *common_args,
-            "-P",
-            "Django>=4.2a1,<5.0",
-            "-P",
-            "django-cms>=3.11,<4.0",
-            "-o",
-            "py38-django42-cms311.txt",
-        ],
-        check=True,
-        capture_output=True,
-    )
-    subprocess.run(
-        [
             "/usr/local/bin/python3.9",
             *common_args,
             "-P",

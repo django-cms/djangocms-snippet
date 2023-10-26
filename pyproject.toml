@@ -14,7 +14,7 @@ maintainers = [
 license = {file = "LICENSE"}
 description = "Adds snippet plugin to django CMS."
 readme = "README.rst"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 dependencies = [
     'django-cms>=3.7',
 ]
