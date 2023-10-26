@@ -69,6 +69,8 @@ class SnippetFragment(template.Node):
         """
         # Default assume this is directly an instance
         snippet_instance = self.snippet_id_varname.resolve(context)
+
+        response = self.nodelist.render(context)
         # Assume this is slug
         with exceptionless(self.parse_until):
             if isinstance(snippet_instance, str):
@@ -77,9 +79,11 @@ class SnippetFragment(template.Node):
             elif isinstance(snippet_instance, int):  # pragma: no cover
                 snippet_instance = Snippet.objects.get(pk=snippet_instance)
 
-            return mark_safe(
+            response = mark_safe(
                 self.get_content_render(context, snippet_instance)
             )
+
+        return response
 
     def get_content_render(
         self, context: BaseContext, instance: Snippet
