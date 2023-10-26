@@ -2,6 +2,12 @@
 Changelog
 =========
 
+Unreleased
+==========
+
+* Drop support for Django < 3.2
+* Drop support for Python < 3.9
+
 3.1.1
 =====
 
