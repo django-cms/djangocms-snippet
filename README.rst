@@ -123,11 +123,11 @@ You can run tests by executing::
 
 .. |pypi| image:: https://badge.fury.io/py/djangocms-snippet.svg
     :target: http://badge.fury.io/py/djangocms-snippet
-.. |coverage| image:: https://codecov.io/gh/django-cms/djangocms-snippet/branch/master/graph/badge.svg
+.. |coverage| image:: https://codecov.io/gh/django-cms/djangocms-snippet/graph/badge.svg?token=Ztf8ph4OTk
     :target: https://codecov.io/gh/django-cms/djangocms-snippet
-.. |python| image:: https://img.shields.io/badge/python-3.5+-blue.svg
+.. |python| image:: https://img.shields.io/badge/python-3.9+-blue.svg
     :target: https://pypi.org/project/djangocms-snippet/
-.. |django| image:: https://img.shields.io/badge/django-2.2,%203.0,%203.1-blue.svg
+.. |django| image:: https://img.shields.io/badge/django-3.2,%204.2-blue.svg
     :target: https://www.djangoproject.com/
-.. |djangocms| image:: https://img.shields.io/badge/django%20CMS-3.7%2B-blue.svg
+.. |djangocms| image:: https://img.shields.io/badge/django%20CMS-3.10%2B-blue.svg
     :target: https://www.django-cms.org/

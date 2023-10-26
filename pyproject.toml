@@ -135,6 +135,9 @@ ignore = [
 "__init__.py" = [
   "F401"  # unused-import
 ]
+"snippet_tags.py" = [
+  "FBT001"  # Boolean positional arg in function definition
+]
 
 [tool.ruff.isort]
 combine-as-imports = true

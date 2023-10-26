@@ -1,7 +1,11 @@
+from typing import Any
+
+from cms.models import Placeholder
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 from django import template
 from django.conf import settings
+from django.template.context import BaseContext
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
@@ -19,7 +23,12 @@ class SnippetPlugin(CMSPluginBase):
     text_editor_preview = False
     cache = CACHE_ENABLED
 
-    def render(self, context, instance, placeholder):
+    def render(
+        self,
+        context: BaseContext,
+        instance: SnippetPtr,
+        placeholder: Placeholder,
+    ) -> dict[str, Any]:
         try:
             if instance.snippet.template:
                 context = context.flatten()

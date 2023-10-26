@@ -26,3 +26,4 @@ npm-debug.log
 package-lock.json
 
 local.sqlite
+.coverage*

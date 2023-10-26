@@ -19,7 +19,7 @@ class SnippetAdmin(admin.ModelAdmin):
 
     list_display = ("slug", "name")
     search_fields: ClassVar[list[str]] = ["slug", "name"]
-    prepopulated_fields: ClassVar[dict[str, list[str]]] = {"slug": ("name",)}
+    prepopulated_fields: ClassVar[dict[str, tuple[str]]] = {"slug": ("name",)}
     change_form_template = "djangocms_snippet/admin/change_form.html"
     text_area_attrs: ClassVar[dict[str, Any]] = {
         "rows": 20,
