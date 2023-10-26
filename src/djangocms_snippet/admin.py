@@ -1,3 +1,5 @@
+from typing import Any, ClassVar
+
 from django.conf import settings
 from django.contrib import admin
 from django.db import models
@@ -16,16 +18,16 @@ class SnippetAdmin(admin.ModelAdmin):
         )
 
     list_display = ("slug", "name")
-    search_fields = ["slug", "name"]
-    prepopulated_fields = {"slug": ("name",)}
+    search_fields: ClassVar[list[str]] = ["slug", "name"]
+    prepopulated_fields: ClassVar[dict[str, list[str]]] = {"slug": ("name",)}
     change_form_template = "djangocms_snippet/admin/change_form.html"
-    text_area_attrs = {
+    text_area_attrs: ClassVar[dict[str, Any]] = {
         "rows": 20,
         "data-editor": True,
         "data-mode": getattr(settings, "DJANGOCMS_SNIPPET_THEME", "html"),
         "data-theme": getattr(settings, "DJANGOCMS_SNIPPET_MODE", "github"),
     }
 
-    formfield_overrides = {
+    formfield_overrides: ClassVar[dict[Any, dict[str, Any]]] = {
         models.TextField: {"widget": Textarea(attrs=text_area_attrs)}
     }

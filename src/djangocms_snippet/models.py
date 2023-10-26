@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from cms.models import CMSPlugin
 from django.conf import settings
 from django.db import models
@@ -43,7 +45,7 @@ class Snippet(models.Model):
     )
 
     class Meta:
-        ordering = ["name"]
+        ordering: ClassVar[list[str]] = ["name"]
         verbose_name = _("Snippet")
         verbose_name_plural = _("Snippets")
 
