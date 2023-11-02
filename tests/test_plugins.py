@@ -5,7 +5,6 @@ from djangocms_snippet.models import Snippet
 
 
 class SnippetPluginsTestCase(CMSTestCase):
-
     def setUp(self):
         self.language = "en"
         self.home = create_page(
@@ -29,7 +28,9 @@ class SnippetPluginsTestCase(CMSTestCase):
         self.superuser.delete()
 
     def test_html_rendering(self):
-        request_url = self.page.get_absolute_url(self.language) + "?toolbar_off=true"
+        request_url = (
+            self.page.get_absolute_url(self.language) + "?toolbar_off=true"
+        )
         snippet = Snippet.objects.create(
             name="plugin_snippet",
             html="<p>Hello World</p>",
@@ -52,7 +53,9 @@ class SnippetPluginsTestCase(CMSTestCase):
         self.assertIn(b"<p>Hello World</p>", response.content)
 
     def test_failing_html_rendering(self):
-        request_url = self.page.get_absolute_url(self.language) + "?toolbar_off=true"
+        request_url = (
+            self.page.get_absolute_url(self.language) + "?toolbar_off=true"
+        )
         snippet = Snippet.objects.create(
             name="plugin_snippet",
             html="{% import weirdness %}",
@@ -70,10 +73,14 @@ class SnippetPluginsTestCase(CMSTestCase):
             response = self.client.get(request_url)
 
         self.assertContains(response, "Invalid block tag on line 1")
-        self.assertContains(response, "Did you forget to register or load this tag?")
+        self.assertContains(
+            response, "Did you forget to register or load this tag?"
+        )
 
     def test_template_rendering(self):
-        request_url = self.page.get_absolute_url(self.language) + "?toolbar_off=true"
+        request_url = (
+            self.page.get_absolute_url(self.language) + "?toolbar_off=true"
+        )
         template = "snippet.html"
         snippet = Snippet.objects.create(
             name="plugin_snippet",
@@ -94,13 +101,22 @@ class SnippetPluginsTestCase(CMSTestCase):
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)
 
-        self.assertNotIn("Template {} does not exist".format(template).encode(), response.content)
-        self.assertNotIn(b"context must be a dict rather than Context", response.content)
-        self.assertNotIn(b"context must be a dict rather than PluginContext", response.content)
+        self.assertNotIn(
+            f"Template {template} does not exist".encode(), response.content
+        )
+        self.assertNotIn(
+            b"context must be a dict rather than Context", response.content
+        )
+        self.assertNotIn(
+            b"context must be a dict rather than PluginContext",
+            response.content,
+        )
         self.assertContains(response, "<p>Hello World Template</p>")
 
     def test_failing_template_rendering(self):
-        request_url = self.page.get_absolute_url(self.language) + "?toolbar_off=true"
+        request_url = (
+            self.page.get_absolute_url(self.language) + "?toolbar_off=true"
+        )
         template = "some_template"
         snippet = Snippet.objects.create(
             name="plugin_snippet",
