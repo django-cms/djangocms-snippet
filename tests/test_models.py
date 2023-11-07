@@ -4,7 +4,6 @@ from djangocms_snippet.models import SEARCH_ENABLED, Snippet, SnippetPtr
 
 
 class SnippetModelTestCase(TestCase):
-
     def setUp(self):
         pass
 
