@@ -7,7 +7,7 @@ repos:
 #        args: ["--py38-plus"]
 #
   - repo: https://github.com/adamchainz/django-upgrade
-    rev: '1.4.0'
+    rev: '1.16.0'
     hooks:
       - id: django-upgrade
         args: [--target-version, "4.2"]
@@ -28,6 +28,7 @@ repos:
       - id: check-merge-conflict
       - id: mixed-line-ending
 
+  # upgrade the isort version to fix compatiable issue withe peotry: https://stackoverflow.com/questions/75269700/pre-commit-fails-to-install-isort-5-11-4-with-error-runtimeerror-the-poetry-co
   - repo: https://github.com/pycqa/isort
     rev: 5.13.2
     hooks:
