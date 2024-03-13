@@ -22,6 +22,7 @@ HELPER_SETTINGS = {
     "DEFAULT_AUTO_FIELD": "django.db.models.AutoField",
 }
 
+
 def run():
     from app_helper import runner
     runner.cms('djangocms_snippet')
