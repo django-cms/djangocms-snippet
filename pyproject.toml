@@ -44,7 +44,7 @@ classifiers=[
 static-ace = ["djangocms-static-ace"]
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["djangocms_snippet"]
 exclude = ["tests"]
 
 [project.urls]
@@ -63,7 +63,7 @@ source = [
 
 [tool.coverage.paths]
 source = [
-    "src",
+    "djangocms_snippet",
     ".tox/**/site-packages",
 ]
 
@@ -75,7 +75,7 @@ check_untyped_defs = true
 disallow_any_generics = true
 disallow_incomplete_defs = true
 disallow_untyped_defs = true
-mypy_path = "src/"
+mypy_path = "djangocms_snippet/"
 no_implicit_optional = true
 show_error_codes = true
 warn_unreachable = true
