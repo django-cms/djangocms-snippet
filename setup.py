@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 import os
 import sys
+
 from setuptools import find_packages, setup
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from djangocms_snippet import __version__
-  
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from djangocms_snippet import __version__  # noqa:E402
+
 
 REQUIREMENTS = [
     'django-cms',
