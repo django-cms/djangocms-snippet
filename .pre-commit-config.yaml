@@ -6,11 +6,12 @@ repos:
 #      - id: pyupgrade
 #        args: ["--py38-plus"]
 #
-  - repo: https://github.com/adamchainz/django-upgrade
-    rev: '1.16.0'
-    hooks:
-      - id: django-upgrade
-        args: [--target-version, "4.2"]
+  #  manually run the upgrade command to fix the issue, no need for ci to run.
+  # - repo: https://github.com/adamchainz/django-upgrade
+  #   rev: '1.16.0'
+  #   hooks:
+  #     - id: django-upgrade
+  #       args: [--target-version, "4.2"]
 
   - repo: https://github.com/PyCQA/flake8
     rev: 7.0.0
