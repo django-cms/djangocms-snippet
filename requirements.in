@@ -1,0 +1,6 @@
+bump2version
+https://github.com/django-cms/django-cms/tarball/release/4.0.1.x#egg=django-cms
+django-treebeard
+pip-tools
+pre-commit
+wheel
