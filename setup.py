@@ -1,7 +1,12 @@
 #!/usr/bin/env python
+import os
+import sys
+
 from setuptools import find_packages, setup
 
-from djangocms_snippet import __version__
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from djangocms_snippet import __version__  # noqa:E402
 
 
 REQUIREMENTS = [
@@ -18,16 +23,14 @@ CLASSIFIERS = [
     'Operating System :: OS Independent',
     'Programming Language :: Python',
     'Programming Language :: Python :: 3',
-    'Programming Language :: Python :: 3.6',
-    'Programming Language :: Python :: 3.7',
     'Programming Language :: Python :: 3.8',
     'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
     'Framework :: Django',
-    'Framework :: Django :: 2.2',
-    'Framework :: Django :: 3.0',
-    'Framework :: Django :: 3.1',
     'Framework :: Django :: 3.2',
+    'Framework :: Django :: 4.2',
     'Framework :: Django CMS',
+    'Framework :: Django CMS :: 4.0',
     'Topic :: Internet :: WWW/HTTP',
     'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     'Topic :: Software Development',
