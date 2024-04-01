@@ -44,7 +44,7 @@ classifiers=[
 static-ace = ["djangocms-static-ace"]
 
 [tool.setuptools.packages.find]
-where = ["djangocms_snippet"]
+where = ["."]
 exclude = ["tests"]
 
 [project.urls]
