@@ -1,6 +1,7 @@
 """
 Snippet template tags
 """
+
 from contextlib import contextmanager
 
 from django import template
