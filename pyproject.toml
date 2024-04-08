@@ -17,6 +17,7 @@ readme = "README.rst"
 requires-python = ">=3.8"
 dependencies = [
     'django-cms>=4.0',
+    'django-treebeard>=4.3',
 ]
 classifiers=[
     "Development Status :: 5 - Production/Stable",
