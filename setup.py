@@ -9,12 +9,6 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from djangocms_snippet import __version__  # noqa:E402
 
 
-REQUIREMENTS = [
-    'django-cms',
-    'django-treebeard>=4.3',
-]
-
-
 CLASSIFIERS = [
     'Development Status :: 5 - Production/Stable',
     'Environment :: Web Environment',
@@ -50,7 +44,6 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
-    install_requires=REQUIREMENTS,
     classifiers=CLASSIFIERS,
     test_suite='tests.settings.run',
 )
