@@ -2,16 +2,20 @@
 Changelog
 =========
 
-Unreleased
-==========
+4.1.0 (Unreleased)
+=======================
+
 * add support for python 3.10
-* add support for django 4.2
+* add support for django >= 4.2
 * drop support for django < 3.2
 * drop support python < 3.8
 
+
 4.0.1.dev2 (2022-11-15)
 =======================
+
 * feat: Enable add button to create a snippet when adding a SnippetPlugin
+
 
 4.0.1.dev1 (2022-05-10)
 =======================
