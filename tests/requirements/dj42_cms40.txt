@@ -4,4 +4,4 @@ Django>=4.2,<5.0
 
 # Unreleased django 4.2 & django-cms 4.0.x compatible packages
 https://github.com/django-cms/django-cms/tarball/release/4.0.1.x#egg=django-cms
-https://github.com/joshyu/djangocms-versioning/tarball/feat/django-42-compatible#egg=djangocms-versioning
+https://github.com/django-cms/djangocms-versioning/tarball/support/django-cms-4.0.x#egg=djangocms-versioning
