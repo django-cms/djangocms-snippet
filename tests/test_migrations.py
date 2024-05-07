@@ -19,7 +19,7 @@ class MigrationTestCase(TestCase):
         }
 
         try:
-            call_command('makemigrations', 'djangocms_snippet', **options)
+            call_command("makemigrations", "djangocms_snippet", **options)
         except SystemExit as e:
             status_code = str(e)
         else:
