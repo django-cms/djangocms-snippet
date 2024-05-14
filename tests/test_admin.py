@@ -25,7 +25,11 @@ class SnippetAdminTestCase(CMSTestCase):
             html="<h1>This is a test</h1>",
             snippet_grouper=SnippetGrouper.objects.create(),
         )
-        self.snippet_version = Version.objects.create(content=self.snippet, created_by=self.superuser, state='published')
+        self.snippet_version = Version.objects.create(
+            content=self.snippet,
+            created_by=self.superuser,
+            state='published'
+        )
         self.snippet_admin = snippet_admin.SnippetAdmin(Snippet, admin)
         self.snippet_admin_request = RequestFactory().get("/admin/djangocms_snippet")
         self.edit_url = reverse("admin:djangocms_snippet_snippet_change", args=(self.snippet.id,),)
@@ -41,21 +45,22 @@ class SnippetAdminTestCase(CMSTestCase):
             snippet_grouper=SnippetGrouper.objects.create(),
             site=current_site
         )
-        another_site_snippet= Snippet.objects.create(
+        another_site_snippet = Snippet.objects.create(
             name="Test Snippet 2",
             slug="test-snippet-two",
             html="<h1>This is a test snippet two</h1>",
             snippet_grouper=SnippetGrouper.objects.create(),
             site=another_site
         )
-        current_site_snippet_version = Version.objects.create(
-            content=current_site_snippet, 
-            created_by=self.superuser, 
+        # Create versions of snippets
+        Version.objects.create(
+            content=current_site_snippet,
+            created_by=self.superuser,
             state='published'
         )
-        another_site_snippet_version = Version.objects.create(
-            content=another_site_snippet, 
-            created_by=self.superuser, 
+        Version.objects.create(
+            content=another_site_snippet,
+            created_by=self.superuser,
             state='published'
         )
         queryset = self.snippet_admin.get_queryset(self.snippet_admin_request)
