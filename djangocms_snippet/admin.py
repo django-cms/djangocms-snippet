@@ -33,7 +33,6 @@ except ImportError:
 @admin.register(Snippet)
 class SnippetAdmin(*snippet_admin_classes):
     list_display = ('name',)
-    list_filter = ['site']
     search_fields = ['name']
     change_form_template = 'djangocms_snippet/admin/change_form.html'
     text_area_attrs = {
