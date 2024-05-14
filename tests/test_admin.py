@@ -48,12 +48,23 @@ class SnippetAdminTestCase(CMSTestCase):
             snippet_grouper=SnippetGrouper.objects.create(),
             site=another_site
         )
-        current_site_snippet_version = Version.objects.create(content=current_site_snippet, created_by=self.superuser, state='published')
-        another_site_snippet_version = Version.objects.create(content=another_site_snippet, created_by=self.superuser, state='published')
+        current_site_snippet_version = Version.objects.create(
+            content=current_site_snippet, 
+            created_by=self.superuser, 
+            state='published'
+        )
+        another_site_snippet_version = Version.objects.create(
+            content=another_site_snippet, 
+            created_by=self.superuser, 
+            state='published'
+        )
         queryset = self.snippet_admin.get_queryset(self.snippet_admin_request)
-        self.assertIn(current_site_snippet, queryset) # Test for snippet of current site
-        self.assertIn(self.snippet, queryset) # Test for snippet with no site
-        self.assertNotIn(another_site_snippet, queryset) # Test for snippet with another site
+        # Test for snippet of current site
+        self.assertIn(current_site_snippet, queryset)
+        # Test for snippet with no site
+        self.assertIn(self.snippet, queryset)
+        # Test for snippet with another site
+        self.assertNotIn(another_site_snippet, queryset)
 
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=False)
     def test_admin_list_display_without_versioning(self):

@@ -5,7 +5,6 @@ Changelog
 Unreleased
 ==========
 * feat: Added sites support for Snippets
-* feat: Added site filter in Snippet Admin
 * add support for python 3.10
 * add support for django 4.2
 * drop support for django < 3.2
