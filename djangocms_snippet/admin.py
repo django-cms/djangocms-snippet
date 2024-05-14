@@ -9,6 +9,7 @@ from django.forms import Textarea
 from django.urls import path
 from django.utils.translation import gettext as _
 
+from cms.utils import get_current_site
 from cms.utils.permissions import get_model_permission_codename
 
 from .cms_config import SnippetCMSAppConfig
@@ -50,6 +51,13 @@ class SnippetAdmin(*snippet_admin_classes):
 
     class Meta:
         model = Snippet
+
+    def get_queryset(self, request):
+        site = get_current_site()
+        queryset = super().get_queryset(request)
+        # Filter queryset with current site and no site
+        queryset = queryset.filter(models.Q(site=site) | models.Q(site=None))
+        return queryset
 
     def get_list_display(self, request):
         list_display = super().get_list_display(request)
