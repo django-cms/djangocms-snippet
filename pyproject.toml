@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "djangocms-snippet"
-version = "4.0.1.dev2"
+version = "4.1.0"
 authors = [
   {name = "Divio AG", email = "info@divio.ch"},
 ]
