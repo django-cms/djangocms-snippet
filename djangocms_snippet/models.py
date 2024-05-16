@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.db import models
 from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
@@ -70,6 +71,7 @@ class Snippet(models.Model):
         default='',
         max_length=255,
     )
+    site = models.ForeignKey(Site, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.name

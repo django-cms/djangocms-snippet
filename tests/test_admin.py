@@ -1,10 +1,12 @@
 from importlib import reload
 
 from django.contrib import admin
+from django.contrib.sites.models import Site
 from django.shortcuts import reverse
 from django.test import RequestFactory, override_settings
 
 from cms.test_utils.testcases import CMSTestCase
+from cms.utils import get_current_site
 
 from djangocms_versioning.models import Version
 
@@ -23,11 +25,51 @@ class SnippetAdminTestCase(CMSTestCase):
             html="<h1>This is a test</h1>",
             snippet_grouper=SnippetGrouper.objects.create(),
         )
-        self.snippet_version = Version.objects.create(content=self.snippet, created_by=self.superuser)
+        self.snippet_version = Version.objects.create(
+            content=self.snippet,
+            created_by=self.superuser,
+            state='published'
+        )
         self.snippet_admin = snippet_admin.SnippetAdmin(Snippet, admin)
         self.snippet_admin_request = RequestFactory().get("/admin/djangocms_snippet")
         self.edit_url = reverse("admin:djangocms_snippet_snippet_change", args=(self.snippet.id,),)
         self.delete_url = reverse("admin:djangocms_snippet_snippet_delete", args=(self.snippet.id,),)
+
+    def test_get_queryset(self):
+        current_site = get_current_site()
+        another_site = Site.objects.create(domain='http://www.django-cms.org', name='Django CMS', pk=3)
+        current_site_snippet = Snippet.objects.create(
+            name="Test Snippet 1",
+            slug="test-snippet-one",
+            html="<h1>This is a test snippet one</h1>",
+            snippet_grouper=SnippetGrouper.objects.create(),
+            site=current_site
+        )
+        another_site_snippet = Snippet.objects.create(
+            name="Test Snippet 2",
+            slug="test-snippet-two",
+            html="<h1>This is a test snippet two</h1>",
+            snippet_grouper=SnippetGrouper.objects.create(),
+            site=another_site
+        )
+        # Create versions of snippets
+        Version.objects.create(
+            content=current_site_snippet,
+            created_by=self.superuser,
+            state='published'
+        )
+        Version.objects.create(
+            content=another_site_snippet,
+            created_by=self.superuser,
+            state='published'
+        )
+        queryset = self.snippet_admin.get_queryset(self.snippet_admin_request)
+        # Test for snippet of current site
+        self.assertIn(current_site_snippet, queryset)
+        # Test for snippet with no site
+        self.assertIn(self.snippet, queryset)
+        # Test for snippet with another site
+        self.assertNotIn(another_site_snippet, queryset)
 
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=False)
     def test_admin_list_display_without_versioning(self):
