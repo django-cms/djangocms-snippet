@@ -107,8 +107,7 @@ class SnippetAdminTestCase(CMSTestCase):
         self.assertEqual(
             list_display[:-1], ('name', 'get_author', 'get_modified_date', 'get_versioning_state')
         )
-        self.assertEqual(list_display[-1].short_description, 'actions')
-        self.assertIn("function ExtendedVersionAdminMixin._list_actions", list_display[-1].__str__())
+        self.assertEqual(list_display[-1].short_description.lower(), 'actions')
 
     def test_admin_uses_form(self):
         """

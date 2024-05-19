@@ -35,7 +35,7 @@ class SnippetPluginsTestCase(CMSTestCase):
             self.pagecontent = PageContent._base_manager.filter(page=self.page, language=self.language).first()
             version = self.pagecontent.versions.first()
             version.publish(self.superuser)
-            self.placholder, _ = self.pagecontent.placeholders.get_or_create(slot="content")
+            self.placeholder, _ = self.pagecontent.placeholders.get_or_create(slot="content")
 
     def test_html_rendering(self):
         snippet = SnippetWithVersionFactory(
@@ -141,6 +141,8 @@ class SnippetPluginsTestCase(CMSTestCase):
 @skipIf(cms_version < "4", "Django CMS 4 required")
 class SnippetPluginVersioningRenderTestCase(CMSTestCase):
     def setUp(self):
+        from cms.models import PageContent
+
         self.language = "en"
         self.superuser = self.get_superuser()
         snippet_grouper = SnippetGrouper.objects.create()
@@ -229,6 +231,8 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
         )
 
         # Request for draft page
+        from cms.toolbar.utils import get_object_edit_url
+
         request_url = get_object_edit_url(self.draft_pagecontent, "en")
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)
@@ -314,6 +318,8 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
         )
 
         # Request structure endpoint on page
+        from cms.toolbar.utils import get_object_structure_url
+
         request_url = get_object_structure_url(self.draft_pagecontent, "en")
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)

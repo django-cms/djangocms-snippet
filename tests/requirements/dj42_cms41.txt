@@ -1,0 +1,7 @@
+-r base.txt
+
+Django>=4.2,<5.0
+
+# Unreleased django 4.2 & django-cms 4.0.x compatible packages
+django-cms>=4.1,<4.2
+djangocms-versioning>=2.0.2

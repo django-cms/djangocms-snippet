@@ -59,7 +59,6 @@ class Snippet(models.Model):
 
     name = models.CharField(
         verbose_name=_('Name'),
-        unique=True,
         max_length=255,
     )
     snippet_grouper = models.ForeignKey(
@@ -84,7 +83,6 @@ class Snippet(models.Model):
     )
     slug = models.SlugField(
         verbose_name=_("Slug"),
-        unique=True,
         blank=False,
         default="",
         max_length=255,
@@ -138,4 +136,4 @@ class SnippetPtr(CMSPlugin):
 
     def __str__(self):
         # Return the referenced snippet's name rather than the default (ID #)
-        return self.snippet.name
+        return self.snippet_grouper.name

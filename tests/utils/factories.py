@@ -108,7 +108,7 @@ def get_plugin_position(plugin):
     """
     if hasattr(plugin.placeholder, "get_last_plugin_position"):
         # Placeholder is a CMS v4 Placeholder
-        return (plugin.placeholder.get_last_plugin_position() or 0) + 1
+        return (plugin.placeholder.get_last_plugin_position(language=plugin.language) or 0) + 1
     last_plugin_pos = plugin.placeholder.cmsplugin_set.filter(
         parent=None,
         language=plugin.language,
