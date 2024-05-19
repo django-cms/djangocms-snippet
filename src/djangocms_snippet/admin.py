@@ -21,10 +21,13 @@ snippet_admin_classes = [admin.ModelAdmin]
 djangocms_versioning_enabled = getattr(settings, "DJANGOCMS_SNIPPET_VERSIONING_ENABLED", True)
 
 try:
-    from djangocms_versioning.admin import ExtendedVersionAdminMixin
+    try:
+        from djangocms_versioning.admin import ExtendedIndicatorVersionAdminMixin
+    except ImportError:
+        from djangocms_versioning.admin import ExtendedVersionAdminMixin as ExtendedIndicatorVersionAdminMixin
 
     if djangocms_versioning_enabled:
-        snippet_admin_classes.insert(0, ExtendedVersionAdminMixin)
+        snippet_admin_classes.insert(0, ExtendedIndicatorVersionAdminMixin)
 except ImportError:
     djangocms_versioning_enabled = False
 
@@ -40,7 +43,6 @@ class SnippetAdmin(*snippet_admin_classes):
 
     list_display = ('name',)
     search_fields: ClassVar[list[str]] = ['name']
-    change_form_template = 'djangocms_snippet/admin/change_form.html'
     text_area_attrs: ClassVar[dict] = {
         'rows': 20,
         'data-editor': True,

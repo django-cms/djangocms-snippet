@@ -5,13 +5,10 @@ Changelog
 Unreleased
 ==========
 
+* feat: Added universal support for django CMS 3 and 4
 * Drop support for Django < 3.2
 * Drop support for Python < 3.9
 
-3.1.1
-=====
-
-* fix: Removed tight django-treebeard restriction added when 4.5.0 contained breaking changes. The core CMS and django-treebeard have since been patched to resolve the issue.
 
 4.1.0 (2024-05-16)
 ==================
@@ -68,6 +65,11 @@ Unreleased
 * fix: Publish snippets by default as they were already in that state pre-versioning and cleanup unnecessary migration files before release!
 * feat: djangocms-versioning support added, including model restructure and configuration
 * feat: django-cms v4.0.x support added
+
+3.1.1
+=====
+
+* fix: Removed tight django-treebeard restriction added when 4.5.0 contained breaking changes. The core CMS and django-treebeard have since been patched to resolve the issue.
 
 3.1.0 2022-09-01
 ================
