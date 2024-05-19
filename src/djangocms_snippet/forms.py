@@ -1,21 +1,14 @@
+from cms.utils.urlutils import admin_reverse
 from django import forms
 from django.contrib import admin
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
-from cms.utils.urlutils import admin_reverse
-
-from djangocms_snippet.cms_config import SnippetCMSAppConfig
 from djangocms_snippet.models import Snippet, SnippetGrouper, SnippetPtr
-
-
-try:
-    from djangocms_versioning import __version__  # NOQA
-    is_versioning_installed = True
-except ImportError:
-    is_versioning_installed = False
-
-djangocms_versioning_enabled = SnippetCMSAppConfig.djangocms_versioning_enabled
+from djangocms_snippet.utils import (
+    djangocms_versioning_enabled,
+    is_versioning_installed,
+)
 
 
 class SnippetForm(forms.ModelForm):
@@ -43,8 +36,7 @@ class SnippetForm(forms.ModelForm):
         snippet_grouper = data.get("snippet_grouper")
         snippet_queryset = Snippet.objects.all()
 
-        if djangocms_versioning_enabled and is_versioning_installed:
-            if snippet_grouper:
+        if djangocms_versioning_enabled and is_versioning_installed and snippet_grouper:
                 snippet_queryset = snippet_queryset.exclude(snippet_grouper=snippet_grouper)
 
         for snippet in snippet_queryset:

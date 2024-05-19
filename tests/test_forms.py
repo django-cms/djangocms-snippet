@@ -1,10 +1,12 @@
 from importlib import reload
+from unittest import skipIf
 
 from django.test import override_settings
 
+from cms import __version__ as cms_version
 from cms.test_utils.testcases import CMSTestCase
 
-from djangocms_snippet import cms_config, forms
+from djangocms_snippet import forms
 from djangocms_snippet.forms import SnippetPluginForm
 from djangocms_snippet.models import Snippet, SnippetGrouper
 
@@ -19,7 +21,6 @@ class SnippetFormTestCase(CMSTestCase):
         Without versioning enabled, the application still has the grouper implemented, therefore the form
         should be creating one for each new snippet created.
         """
-        reload(cms_config)
         reload(forms)
         form_data = {
             "name": "test_snippet",
@@ -41,7 +42,6 @@ class SnippetFormTestCase(CMSTestCase):
         """
         With versioning enabled, groupers should also be created in the background.
         """
-        reload(cms_config)
         reload(forms)
         form_data = {
             "name": "test_snippet",
@@ -63,7 +63,6 @@ class SnippetFormTestCase(CMSTestCase):
         """
         With versioning enabled, but no commit flag, models should still be created
         """
-        reload(cms_config)
         reload(forms)
         form_data = {
             "name": "test_snippet",
@@ -80,12 +79,12 @@ class SnippetFormTestCase(CMSTestCase):
         self.assertEqual(SnippetGrouper.objects.count(), 1)
         self.assertEqual(Snippet._base_manager.count(), 1)
 
+    @skipIf(cms_version < "4", "Django CMS 4 required")
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_snippet_form_adds_to_existing_grouper_with_versioning(self):
         """
         With versioning enabled, if a grouper already exists, a new one shouldn't be created
         """
-        reload(cms_config)
         reload(forms)
         grouper = SnippetGrouper.objects.create()
         form_data = {
@@ -122,7 +121,6 @@ class SnippetFormTestCase(CMSTestCase):
         With versioning enabled, the snippet form doesn't have to create groupers, but does have to validate
         that no other active (i.e. the latest published snippet from a given grouper) shares the same name or slug.
         """
-        reload(cms_config)
         reload(forms)
         form_data = {
             "name": "test_snippet",
@@ -154,11 +152,11 @@ class SnippetFormTestCase(CMSTestCase):
 
         self.assertDictEqual(new_form.errors, {'slug': ['A Snippet with this slug already exists']})
 
+    @skipIf(cms_version < "4", "Django CMS 4 required")
     def test_snippet_form_validation_multiple_version_states_in_grouper(self):
         """
         Snippet forms should be valid regardless of the versions, or states which already exist within its grouper.
         """
-        reload(cms_config)
         reload(forms)
         # snippet_to_archive starts as draft
         snippet_to_archive = SnippetWithVersionFactory()

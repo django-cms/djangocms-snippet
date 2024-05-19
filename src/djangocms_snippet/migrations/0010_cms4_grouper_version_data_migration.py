@@ -3,11 +3,6 @@ from django.conf import settings
 from django.contrib.contenttypes.management import create_contenttypes
 from django.db import migrations
 
-from djangocms_snippet.cms_config import SnippetCMSAppConfig
-from djangocms_snippet.conf import (
-    DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID,
-)
-
 
 try:
     from djangocms_versioning.constants import DRAFT, PUBLISHED
@@ -16,11 +11,15 @@ try:
 except ImportError:
     djangocms_versioning_installed = False
 
+djangocms_versioning_config_enabled = getattr(
+    settings, 'DJANGOCMS_SNIPPET_VERSIONING_ENABLED', True
+)
+
 
 def cms4_grouper_version_migration(apps, schema_editor):
     create_contenttypes(global_apps.get_app_config("djangocms_snippet"))
 
-    djangocms_versioning_config_enabled = SnippetCMSAppConfig.djangocms_versioning_enabled
+
 
     ContentType = apps.get_model('contenttypes', 'ContentType')
     Snippet = apps.get_model('djangocms_snippet', 'Snippet')
@@ -33,8 +32,7 @@ def cms4_grouper_version_migration(apps, schema_editor):
     # Get a migration user to create a version.
     if djangocms_versioning_config_enabled and djangocms_versioning_installed and len(snippet_queryset):
         Version = apps.get_model('djangocms_versioning', 'Version')
-
-        migration_user = User.objects.get(id=DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID)
+        migration_user = User.objects.get(id=getattr(settings, "DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID", 1))
 
     for snippet in snippet_queryset:
         grouper = SnippetGrouper.objects.create()
@@ -55,7 +53,7 @@ def cms4_grouper_version_migration(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('cms', '0034_remove_pagecontent_placeholders'),  # Run after the CMS4 migrations
+        # ('cms', '0034_remove_pagecontent_placeholders'),  # Run after the CMS4 migrations
         ('djangocms_snippet', '0009_auto_20210915_0445'),
     ]
 

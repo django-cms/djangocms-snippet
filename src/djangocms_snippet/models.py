@@ -1,27 +1,42 @@
 from typing import ClassVar
 
+from cms.models import CMSPlugin
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db import models
 from django.shortcuts import reverse
 from django.utils.translation import gettext_lazy as _
 
-from cms.models import CMSPlugin
-
-from djangocms_versioning.constants import DRAFT, PUBLISHED
-
-
 # Search is enabled by default to keep backwards compatibility.
 SEARCH_ENABLED = getattr(settings, "DJANGOCMS_SNIPPET_SEARCH", False)
+
+
+
+
+class AdminQuerySet(models.QuerySet):
+    def current_content(self, **kwargs):
+        """If a versioning package is installed, this returns the currently valid content
+        that matches the filter given in kwargs. Used to find content to be copied, e.g..
+        Without versioning every page is current."""
+        return self.filter(**kwargs)
+
+    def latest_content(self, **kwargs):
+        """If a versioning package is installed, returns the latest version that matches the
+        filter given in kwargs including discarded or unpublished page content. Without versioning
+        every page content is the latest."""
+        return self.filter(**kwargs)
 
 
 class SnippetGrouper(models.Model):
     """
     The Grouper model for snippet, this is required for versioning
     """
+    def __str__(self):
+        return self.name
+
     @property
     def name(self):
-        snippet_qs = Snippet._base_manager.filter(
+        snippet_qs = Snippet.admin_manager.filter(
             snippet_grouper=self
         )
         return snippet_qs.first().name or super().__str__
@@ -29,15 +44,11 @@ class SnippetGrouper(models.Model):
     def snippet(self, show_editable=False):
         if show_editable:
             # When in "edit" or "preview" mode we should be able to see the latest content
-            return Snippet._base_manager.filter(
-                versions__state__in=[DRAFT, PUBLISHED],
+            return Snippet.admin_manager.current_content().filter(
                 snippet_grouper=self,
             ).order_by("-pk").first()
         # When in "live" mode we should only be able to see the default published version
         return Snippet.objects.filter(snippet_grouper=self).first()
-
-    def __str__(self):
-        return self.name
 
 
 # Stores the actual data
@@ -80,6 +91,9 @@ class Snippet(models.Model):
     )
     site = models.ForeignKey(Site, on_delete=models.CASCADE, null=True, blank=True)
 
+    objects = models.Manager()
+    admin_manager = AdminQuerySet.as_manager()
+
     class Meta:
         ordering: ClassVar[list[str]] = ["name"]
         verbose_name = _("Snippet")
@@ -90,15 +104,9 @@ class Snippet(models.Model):
 
     def get_preview_url(self):
         return reverse(
-            "admin:{app}_{model}_preview".format(
-                app=self._meta.app_label, model=self._meta.model_name,
-            ),
+            f"admin:{self._meta.app_label}_{self._meta.model_name}_preview",
             args=[self.id],
         )
-
-    class Meta:
-        verbose_name = _('Snippet')
-        verbose_name_plural = _('Snippets')
 
 
 # Plugin model - just a pointer to Snippet

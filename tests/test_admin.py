@@ -1,17 +1,21 @@
 from importlib import reload
+from unittest import skipIf
 
 from django.contrib import admin
 from django.contrib.sites.models import Site
 from django.shortcuts import reverse
 from django.test import RequestFactory, override_settings
 
+from cms import __version__ as cms_version
 from cms.test_utils.testcases import CMSTestCase
 from cms.utils import get_current_site
 
-from djangocms_versioning.models import Version
+try:
+    from djangocms_versioning.models import Version
+except ImportError:
+    from tests.utils.models import Version
 
 from djangocms_snippet import admin as snippet_admin
-from djangocms_snippet import cms_config
 from djangocms_snippet.forms import SnippetForm
 from djangocms_snippet.models import Snippet, SnippetGrouper
 
@@ -77,7 +81,6 @@ class SnippetAdminTestCase(CMSTestCase):
         Without versioning enabled, list_display should not be extended with version related items
         """
         admin.site.unregister(Snippet)
-        reload(cms_config)
         reload(snippet_admin)
         # This has to be declared again, since it will now be constructed without the versioning extension
         self.snippet_admin = snippet_admin.SnippetAdmin(Snippet, admin)
@@ -87,6 +90,7 @@ class SnippetAdminTestCase(CMSTestCase):
         self.assertEqual(self.snippet_admin.__class__.__bases__, (admin.ModelAdmin, ))
         self.assertEqual(list_display, ('slug', 'name'))
 
+    @skipIf(cms_version < "4", "Django CMS 4 required")
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_admin_list_display_with_versioning(self):
         """
@@ -113,13 +117,13 @@ class SnippetAdminTestCase(CMSTestCase):
         """
         self.assertEqual(self.snippet_admin.form, SnippetForm)
 
+    @skipIf(cms_version < "4", "Django CMS 4 required")
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_admin_delete_button_disabled_versioning_enabled(self):
         """
         If versioning is enabled, the delete button should not be rendered on the change form
         """
         admin.site.unregister(Snippet)
-        reload(cms_config)
         reload(snippet_admin)
 
         with self.login_user_context(self.superuser):
@@ -135,7 +139,6 @@ class SnippetAdminTestCase(CMSTestCase):
         If versioning is disabled, the delete button should be rendered on the change form
         """
         admin.site.unregister(Snippet)
-        reload(cms_config)
         reload(snippet_admin)
 
         with self.login_user_context(self.superuser):
@@ -145,13 +148,13 @@ class SnippetAdminTestCase(CMSTestCase):
             response, '<a href="/en/admin/djangocms_snippet/snippet/1/delete/" class="deletelink">Delete</a>'
         )
 
+    @skipIf(cms_version < "4", "Django CMS 4 required")
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_admin_delete_endpoint_inaccessible_versioning_enabled(self):
         """
         If versioning is enabled, the delete endpoint should not be accessible.
         """
         admin.site.unregister(Snippet)
-        reload(cms_config)
         reload(snippet_admin)
 
         with self.login_user_context(self.superuser):
@@ -166,7 +169,6 @@ class SnippetAdminTestCase(CMSTestCase):
         If versioning is disabled, the delete endpoint should be accessible.
         """
         admin.site.unregister(Snippet)
-        reload(cms_config)
         reload(snippet_admin)
 
         with self.login_user_context(self.superuser):
@@ -190,6 +192,7 @@ class SnippetAdminFormTestCase(CMSTestCase):
         )
         self.snippet_version = Version.objects.create(content=self.snippet, created_by=self.superuser)
 
+    @skipIf(cms_version < "4", "Django CMS 4 required")
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_admin_form_save_method(self):
         with self.login_user_context(self.superuser):
@@ -206,6 +209,7 @@ class SnippetAdminFormTestCase(CMSTestCase):
         self.assertEqual(Snippet._base_manager.count(), 2)
         self.assertEqual(SnippetGrouper._base_manager.count(), 2)
 
+    @skipIf(cms_version < "4", "Django CMS 4 required")
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_admin_form_edit_when_locked(self):
         """
@@ -228,7 +232,6 @@ class SnippetAdminFormTestCase(CMSTestCase):
         Slug column should be visible and hyperlinked when versioning is disabled
         """
         admin.site.unregister(Snippet)
-        reload(cms_config)
         reload(snippet_admin)
 
         with self.login_user_context(self.get_superuser()):
@@ -236,6 +239,7 @@ class SnippetAdminFormTestCase(CMSTestCase):
         self.assertContains(response, '<th class="field-slug"><a href="/en/admin/djangocms_snippet/'
                                       'snippet/1/change/">test-snippet</a></th>')
 
+    @skipIf(cms_version < "4", "Django CMS 4 required")
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_name_colomn_should_not_be_hyperlinked_with_versioning_enabled(self):
         """
@@ -243,7 +247,6 @@ class SnippetAdminFormTestCase(CMSTestCase):
         Slug column should not be visible when versioning is enabled.
         """
         admin.site.unregister(Snippet)
-        reload(cms_config)
         reload(snippet_admin)
 
         with self.login_user_context(self.get_superuser()):

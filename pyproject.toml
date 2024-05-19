@@ -26,27 +26,19 @@ classifiers=[
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-<<<<<<< HEAD
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
-=======
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
->>>>>>> cf6e93a (chore: Package overhaul (#140))
     "Framework :: Django",
     "Framework :: Django :: 3.2",
     "Framework :: Django :: 4.2",
     "Framework :: Django CMS",
-<<<<<<< HEAD
-    "Framework :: Django CMS :: 4.0",
-=======
     "Framework :: Django CMS :: 3.8",
     "Framework :: Django CMS :: 3.9",
     "Framework :: Django CMS :: 3.10",
     "Framework :: Django CMS :: 3.11",
->>>>>>> cf6e93a (chore: Package overhaul (#140))
+    "Framework :: Django CMS :: 4.0",
+    "Framework :: Django CMS :: 4.1",
     "Topic :: Internet :: WWW/HTTP",
     "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
     "Topic :: Software Development",

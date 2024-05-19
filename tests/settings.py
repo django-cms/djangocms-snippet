@@ -1,11 +1,18 @@
 #!/usr/bin/env python
+
+try:
+    import djangocms_versioning
+
+    add_apps = ['djangocms_versioning']
+except ImportError:
+    add_apps = []
+
 HELPER_SETTINGS = {
     'SECRET_KEY': "djangocmssnippetstestsuitekey",
     'INSTALLED_APPS': [
         'tests.utils',
-        'djangocms_versioning',
         'djangocms_snippet',
-    ],
+    ] + add_apps,
     'CMS_LANGUAGES': {
         1: [{
             'code': 'en',

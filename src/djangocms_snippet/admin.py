@@ -1,3 +1,7 @@
+from typing import ClassVar
+
+from cms.utils import get_current_site
+from cms.utils.permissions import get_model_permission_codename
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin import helpers
@@ -9,17 +13,12 @@ from django.forms import Textarea
 from django.urls import path
 from django.utils.translation import gettext as _
 
-from cms.utils import get_current_site
-from cms.utils.permissions import get_model_permission_codename
-
-from .cms_config import SnippetCMSAppConfig
 from .forms import SnippetForm
 from .models import Snippet
 
-
 # Use the version mixin if djangocms-versioning is installed and enabled
 snippet_admin_classes = [admin.ModelAdmin]
-djangocms_versioning_enabled = SnippetCMSAppConfig.djangocms_versioning_enabled
+djangocms_versioning_enabled = getattr(settings, "DJANGOCMS_SNIPPET_VERSIONING_ENABLED", True)
 
 try:
     from djangocms_versioning.admin import ExtendedVersionAdminMixin
@@ -40,16 +39,16 @@ class SnippetAdmin(*snippet_admin_classes):
         )
 
     list_display = ('name',)
-    search_fields = ['name']
+    search_fields: ClassVar[list[str]] = ['name']
     change_form_template = 'djangocms_snippet/admin/change_form.html'
-    text_area_attrs = {
+    text_area_attrs: ClassVar[dict] = {
         'rows': 20,
         'data-editor': True,
         'data-mode': getattr(settings, 'DJANGOCMS_SNIPPET_THEME', 'html'),
         'data-theme': getattr(settings, 'DJANGOCMS_SNIPPET_MODE', 'github'),
     }
     form = SnippetForm
-    formfield_overrides = {
+    formfield_overrides: ClassVar[dict] = {
         models.TextField: {'widget': Textarea(attrs=text_area_attrs)}
     }
     # This was move here from model, otherwise first() and last() return the same when handling grouper queries
@@ -114,22 +113,22 @@ class SnippetAdmin(*snippet_admin_classes):
             return self._get_obj_does_not_exist_redirect(request, opts, str(snippet_id))
 
         fieldsets = self.get_fieldsets(request, obj)
-        ModelForm = self.get_form(
+        model_form = self.get_form(
             request, obj, change=False, fields=flatten_fieldsets(fieldsets)
         )
-        form = ModelForm(instance=obj)
+        form = model_form(instance=obj)
         formsets, inline_instances = self._create_formsets(request, obj, change=True)
 
         readonly_fields = flatten_fieldsets(fieldsets)
 
-        adminForm = helpers.AdminForm(
+        admin_form = helpers.AdminForm(
             form,
             list(fieldsets),
             # Clear prepopulated fields on a view-only form to avoid a crash.
             {},
             readonly_fields,
             model_admin=self)
-        media = self.media + adminForm.media
+        media = self.media + admin_form.media
 
         inline_formsets = self.get_inline_formsets(request, formsets, inline_instances, obj)
         for inline_formset in inline_formsets:
@@ -140,7 +139,7 @@ class SnippetAdmin(*snippet_admin_classes):
             **self.admin_site.each_context(request),
             'title': title % opts.verbose_name,
             'subtitle': str(obj) if obj else None,
-            'adminform': adminForm,
+            'adminform': admin_form,
             'object_id': snippet_id,
             'original': obj,
             'is_popup': IS_POPUP_VAR in request.POST or IS_POPUP_VAR in request.GET,
@@ -163,7 +162,8 @@ class SnippetAdmin(*snippet_admin_classes):
                    self.admin_site.admin_view(self.preview_view),
                    name="{}_{}_preview".format(*info),
             ),
-        ] + super().get_urls()
+            *super().get_urls(),
+        ]
 
     def has_delete_permission(self, request, obj=None):
         """

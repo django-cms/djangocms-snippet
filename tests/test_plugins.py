@@ -1,11 +1,14 @@
 import datetime
+from unittest import skipIf
+
+from cms import __version__ as cms_version
 
 from cms.api import add_plugin, create_page
-from cms.models import PageContent
 from cms.test_utils.testcases import CMSTestCase
-from cms.toolbar.utils import get_object_edit_url, get_object_structure_url
-
-from djangocms_versioning.models import Version
+try:
+    from djangocms_versioning.models import Version
+except ImportError:
+    from tests.utils.models import Version
 
 from djangocms_snippet.models import Snippet, SnippetGrouper
 
@@ -23,10 +26,16 @@ class SnippetPluginsTestCase(CMSTestCase):
             language=self.language,
             created_by=self.superuser,
         )
-        # Publish our page content
-        self.pagecontent = PageContent._base_manager.filter(page=self.page, language=self.language).first()
-        version = self.pagecontent.versions.first()
-        version.publish(self.superuser)
+        if cms_version < "4":
+            self.page.publish(self.language)
+            self.placeholder, _ = self.page.placeholders.get_or_create(slot="content")
+        else:
+            # Publish our page content
+            from cms.models import PageContent
+            self.pagecontent = PageContent._base_manager.filter(page=self.page, language=self.language).first()
+            version = self.pagecontent.versions.first()
+            version.publish(self.superuser)
+            self.placholder, _ = self.pagecontent.placeholders.get_or_create(slot="content")
 
     def test_html_rendering(self):
         snippet = SnippetWithVersionFactory(
@@ -36,7 +45,7 @@ class SnippetPluginsTestCase(CMSTestCase):
         )
         snippet_grouper = snippet.snippet_grouper
         plugin = add_plugin(
-            self.pagecontent.placeholders.get(slot="content"),
+            self.placeholder,
             "SnippetPlugin",
             self.language,
             snippet_grouper=snippet_grouper,
@@ -66,7 +75,7 @@ class SnippetPluginsTestCase(CMSTestCase):
         snippet.versions.last().publish(user=self.get_superuser())
 
         add_plugin(
-            self.pagecontent.placeholders.get(slot="content"),
+            self.placeholder,
             "SnippetPlugin",
             self.language,
             snippet_grouper=snippet_grouper,
@@ -89,7 +98,7 @@ class SnippetPluginsTestCase(CMSTestCase):
         snippet_grouper = snippet.snippet_grouper
         snippet.versions.last().publish(user=self.get_superuser())
         plugin = add_plugin(
-            self.pagecontent.placeholders.get(slot="content"),
+            self.placeholder,
             "SnippetPlugin",
             self.language,
             snippet_grouper=snippet_grouper,
@@ -117,7 +126,7 @@ class SnippetPluginsTestCase(CMSTestCase):
         snippet_grouper = snippet.snippet_grouper
         snippet.versions.last().publish(user=self.get_superuser())
         add_plugin(
-            self.pagecontent.placeholders.get(slot="content"),
+            self.placeholder,
             "SnippetPlugin",
             self.language,
             snippet_grouper=snippet_grouper,
@@ -129,6 +138,7 @@ class SnippetPluginsTestCase(CMSTestCase):
         self.assertContains(response, "Template some_template does not exist")
 
 
+@skipIf(cms_version < "4", "Django CMS 4 required")
 class SnippetPluginVersioningRenderTestCase(CMSTestCase):
     def setUp(self):
         self.language = "en"

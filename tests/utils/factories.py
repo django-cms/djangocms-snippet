@@ -6,10 +6,16 @@ from django.contrib.contenttypes.models import ContentType
 from cms.models import Placeholder
 
 import factory
-from djangocms_versioning.models import Version
+from django.db import models
 from factory.fuzzy import FuzzyInteger, FuzzyText
 
 from djangocms_snippet.models import Snippet, SnippetGrouper, SnippetPtr
+
+
+try:
+    from djangocms_versioning.models import Version
+except ImportError:
+    from tests.utils.models import Version
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -100,7 +106,14 @@ def get_plugin_position(plugin):
     """Helper function to correctly calculate the plugin position.
     Use this in plugin factory classes
     """
-    offset = plugin.placeholder.get_last_plugin_position(plugin.language) or 0
+    if hasattr(plugin.placeholder, "get_last_plugin_position"):
+        # Placeholder is a CMS v4 Placeholder
+        return (plugin.placeholder.get_last_plugin_position() or 0) + 1
+    last_plugin_pos = plugin.placeholder.cmsplugin_set.filter(
+        parent=None,
+        language=plugin.language,
+    ).aggregate(models.Max("position")).get("position__max")
+    offset = (last_plugin_pos or -1) + 1
     return offset + 1
 
 
