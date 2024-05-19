@@ -90,7 +90,7 @@ class SnippetAdminTestCase(CMSTestCase):
         self.assertEqual(self.snippet_admin.__class__.__bases__, (admin.ModelAdmin, ))
         self.assertEqual(list_display, ('slug', 'name'))
 
-    @skipIf(cms_version < "4", "Django CMS 4 required")
+    @skipIf(not cms_version.startswith("4.0."), "Django CMS 4 required")
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_admin_list_display_with_versioning(self):
         """
