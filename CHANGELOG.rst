@@ -5,9 +5,7 @@ Changelog
 Unreleased
 ==========
 
-* feat: Added universal support for django CMS 3 and 4
-* Drop support for Django < 3.2
-* Drop support for Python < 3.9
+* feat: Universal support for django CMS 3.11 and 4.x
 
 
 4.1.0 (2024-05-16)
