@@ -133,12 +133,15 @@ lint.ignore = [
   "W191",  # tab-indentation
 ]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "__init__.py" = [
   "F401"  # unused-import
 ]
+"test_plugins.py" = [
+  "FBT003",  # Boolean positional value in function call
+]
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 combine-as-imports = true
 known-first-party = [
   "djangocms_snippet",
