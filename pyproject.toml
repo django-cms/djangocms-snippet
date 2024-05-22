@@ -93,8 +93,8 @@ allow_untyped_defs = true
 
 [tool.ruff]
 # https://beta.ruff.rs/docs/configuration/
-line-length = 79
-select = [
+line-length = 120
+lint.select = [
   "E",    # pycodestyle errors
   "W",    # pycodestyle warnings
   "F",    # pyflakes
@@ -128,7 +128,7 @@ exclude = [
   "venv",
 ]
 
-ignore = [
+lint.ignore = [
   "E501",  # line-too-long
   "W191",  # tab-indentation
 ]

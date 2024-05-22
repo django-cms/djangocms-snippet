@@ -115,7 +115,7 @@ class SnippetAdmin(*snippet_admin_classes):
 
         if to_field and not self.to_field_allowed(request, to_field):
             raise DisallowedModelAdminToField(
-                "The field %s cannot be referenced." % to_field
+                f"The field {to_field} cannot be referenced."
             )
 
         model = self.model
@@ -184,12 +184,11 @@ class SnippetAdmin(*snippet_admin_classes):
         )
 
     def get_urls(self):
-        info = self.model._meta.app_label, self.model._meta.model_name
         return [
             path(
                 "<int:snippet_id>/preview/",
                 self.admin_site.admin_view(self.preview_view),
-                name="{}_{}_preview".format(*info),
+                name=f"{self.model._meta.app_label}_{self.model._meta.model_name}_preview"
             ),
             *super().get_urls(),
         ]
