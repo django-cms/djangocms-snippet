@@ -1,5 +1,3 @@
-from typing import ClassVar
-
 from cms.utils import get_current_site
 from cms.utils.permissions import get_model_permission_codename
 from typing import Any, ClassVar
@@ -43,7 +41,7 @@ class SnippetAdmin(*snippet_admin_classes):
             else "https://cdnjs.cloudflare.com/ajax/libs/ace/1.9.6/ace.js",
         )
 
-    list_display = ("slug", "name")
+    list_display = ("name",)
     search_fields: ClassVar[list[str]] = ['name']
     text_area_attrs: ClassVar[dict[str, Any]] = {
         'rows': 20,

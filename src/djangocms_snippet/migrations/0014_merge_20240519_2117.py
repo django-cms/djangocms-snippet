@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("djangocms_snippet", "0009_alter_snippetptr_cmsplugin_ptr"),
+        ("djangocms_snippet", "0010_alter_snippet_id"),
         ("djangocms_snippet", "0013_snippet_site"),
     ]
 
@@ -28,6 +28,13 @@ class Migration(migrations.Migration):
             name="slug",
             field=models.SlugField(
                 default="", max_length=255, verbose_name="Slug"
+            ),
+        ),
+        migrations.AlterField(
+            model_name="snippetgrouper",
+            name="id",
+            field=models.BigAutoField(
+                auto_created=True, primary_key=True, serialize=False, verbose_name="ID"
             ),
         ),
     ]
