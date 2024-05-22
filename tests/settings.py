@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 try:
-    import djangocms_versioning
+    import djangocms_versioning  #NOQA: F401
 
     add_apps = ['djangocms_versioning']
 except ImportError:
@@ -12,7 +12,8 @@ HELPER_SETTINGS = {
     'INSTALLED_APPS': [
         'tests.utils',
         'djangocms_snippet',
-    ] + add_apps,
+        *add_apps,
+    ],
     'CMS_LANGUAGES': {
         1: [{
             'code': 'en',

@@ -3,10 +3,9 @@
 from io import StringIO
 from unittest import skipIf
 
+from cms import __version__ as cms_version
 from django.core.management import call_command
 from django.test import TestCase, override_settings
-
-from cms import __version__ as cms_version
 
 
 class MigrationTestCase(TestCase):

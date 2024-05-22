@@ -2,9 +2,9 @@ import datetime
 from unittest import skipIf
 
 from cms import __version__ as cms_version
-
 from cms.api import add_plugin, create_page
 from cms.test_utils.testcases import CMSTestCase
+
 try:
     from djangocms_versioning.models import Version
 except ImportError:

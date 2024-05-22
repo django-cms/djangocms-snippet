@@ -1,16 +1,13 @@
 import string
 
+import factory
+from cms.models import Placeholder
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
-
-from cms.models import Placeholder
-
-import factory
 from django.db import models
 from factory.fuzzy import FuzzyInteger, FuzzyText
 
 from djangocms_snippet.models import Snippet, SnippetGrouper, SnippetPtr
-
 
 try:
     from djangocms_versioning.models import Version
@@ -23,7 +20,7 @@ class UserFactory(factory.django.DjangoModelFactory):
     first_name = factory.Faker("first_name")
     last_name = factory.Faker("last_name")
     email = factory.LazyAttribute(
-        lambda u: "%s.%s@example.com" % (u.first_name.lower(), u.last_name.lower())
+        lambda u: f"{u.first_name.lower()}.{u.last_name.lower()}@example.com"
     )
 
     class Meta:
@@ -45,7 +42,7 @@ class AbstractVersionFactory(factory.django.DjangoModelFactory):
     created_by = factory.SubFactory(UserFactory)
 
     class Meta:
-        exclude = ["content"]
+        exclude = ("content",)
         abstract = True
 
 

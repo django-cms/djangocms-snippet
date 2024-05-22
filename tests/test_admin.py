@@ -1,14 +1,13 @@
 from importlib import reload
 from unittest import skipIf
 
+from cms import __version__ as cms_version
+from cms.test_utils.testcases import CMSTestCase
+from cms.utils import get_current_site
 from django.contrib import admin
 from django.contrib.sites.models import Site
 from django.shortcuts import reverse
 from django.test import RequestFactory, override_settings
-
-from cms import __version__ as cms_version
-from cms.test_utils.testcases import CMSTestCase
-from cms.utils import get_current_site
 
 try:
     from djangocms_versioning.models import Version
