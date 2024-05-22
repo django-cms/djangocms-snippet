@@ -13,7 +13,7 @@ class Form(forms.BaseForm):
         required=False,
     )
     enable_search = forms.CheckboxField(
-        'Enable snippet content to be searchable.',
+        "Enable snippet content to be searchable.",
         required=False,
         initial=False,
     )

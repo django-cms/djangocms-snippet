@@ -33,8 +33,9 @@ HELPER_SETTINGS = {
 
 def run():
     from app_helper import runner
-    runner.cms('djangocms_snippet')
+
+    runner.cms("djangocms_snippet")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     run()

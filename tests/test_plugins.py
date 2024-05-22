@@ -85,7 +85,9 @@ class SnippetPluginsTestCase(CMSTestCase):
             response = self.client.get(request_url)
 
         self.assertContains(response, "Invalid block tag on line 1")
-        self.assertContains(response, "Did you forget to register or load this tag?")
+        self.assertContains(
+            response, "Did you forget to register or load this tag?"
+        )
 
     def test_template_rendering(self):
         request_url = self.page.get_absolute_url()
@@ -110,13 +112,22 @@ class SnippetPluginsTestCase(CMSTestCase):
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)
 
-        self.assertNotIn("Template {} does not exist".format(template).encode(), response.content)
-        self.assertNotIn(b"context must be a dict rather than Context", response.content)
-        self.assertNotIn(b"context must be a dict rather than PluginContext", response.content)
+        self.assertNotIn(
+            f"Template {template} does not exist".encode(), response.content
+        )
+        self.assertNotIn(
+            b"context must be a dict rather than Context", response.content
+        )
+        self.assertNotIn(
+            b"context must be a dict rather than PluginContext",
+            response.content,
+        )
         self.assertContains(response, "<p>Hello World Template</p>")
 
     def test_failing_template_rendering(self):
-        request_url = self.page.get_absolute_url(self.language) + "?toolbar_off=true"
+        request_url = (
+            self.page.get_absolute_url(self.language) + "?toolbar_off=true"
+        )
         template = "some_template"
         snippet = SnippetWithVersionFactory(
             name="plugin_snippet",
