@@ -18,4 +18,3 @@ class Migration(migrations.Migration):
             field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, related_name='%(app_label)s_%(class)s', serialize=False, to='cms.cmsplugin'),
         ),
     ]
-
