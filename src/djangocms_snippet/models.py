@@ -11,8 +11,6 @@ from django.utils.translation import gettext_lazy as _
 SEARCH_ENABLED = getattr(settings, "DJANGOCMS_SNIPPET_SEARCH", False)
 
 
-
-
 class AdminQuerySet(models.QuerySet):
     def current_content(self, **kwargs):
         """If a versioning package is installed, this returns the currently valid content
@@ -31,22 +29,26 @@ class SnippetGrouper(models.Model):
     """
     The Grouper model for snippet, this is required for versioning
     """
+
     def __str__(self):
         return self.name
 
     @property
     def name(self):
-        snippet_qs = Snippet.admin_manager.filter(
-            snippet_grouper=self
-        )
+        snippet_qs = Snippet.admin_manager.filter(snippet_grouper=self)
         return snippet_qs.first().name or super().__str__
 
-    def snippet(self, show_editable=False):
+    def snippet(self, show_editable=False):  # NOQA: FBT002
         if show_editable:
             # When in "edit" or "preview" mode we should be able to see the latest content
-            return Snippet.admin_manager.current_content().filter(
-                snippet_grouper=self,
-            ).order_by("-pk").first()
+            return (
+                Snippet.admin_manager.current_content()
+                .filter(
+                    snippet_grouper=self,
+                )
+                .order_by("-pk")
+                .first()
+            )
         # When in "live" mode we should only be able to see the default published version
         return Snippet.objects.filter(snippet_grouper=self).first()
 
@@ -58,7 +60,7 @@ class Snippet(models.Model):
     """
 
     name = models.CharField(
-        verbose_name=_('Name'),
+        verbose_name=_("Name"),
         max_length=255,
     )
     snippet_grouper = models.ForeignKey(
@@ -87,7 +89,9 @@ class Snippet(models.Model):
         default="",
         max_length=255,
     )
-    site = models.ForeignKey(Site, on_delete=models.CASCADE, null=True, blank=True)
+    site = models.ForeignKey(
+        Site, on_delete=models.CASCADE, null=True, blank=True
+    )
 
     objects = models.Manager()
     admin_manager = AdminQuerySet.as_manager()
@@ -127,12 +131,14 @@ class SnippetPtr(CMSPlugin):
     search_fields = ["snippet__html"] if SEARCH_ENABLED else []
 
     def get_short_description(self):
-        snippet_label = SnippetGrouper.objects.filter(pk=self.snippet_grouper.pk).first()
+        snippet_label = SnippetGrouper.objects.filter(
+            pk=self.snippet_grouper.pk
+        ).first()
         return snippet_label
 
     class Meta:
-        verbose_name = _('Snippet Ptr')
-        verbose_name_plural = _('Snippet Ptrs')
+        verbose_name = _("Snippet Ptr")
+        verbose_name_plural = _("Snippet Ptrs")
 
     def __str__(self):
         # Return the referenced snippet's name rather than the default (ID #)

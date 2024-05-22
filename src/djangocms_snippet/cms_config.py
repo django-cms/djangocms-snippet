@@ -5,7 +5,7 @@ from djangocms_snippet.models import Snippet
 from djangocms_snippet.rendering import render_snippet
 
 try:
-    from djangocms_moderation import __version__  # NOQA
+    from djangocms_moderation import __version__  # NOQA: F401
 
     djangocms_moderation_installed = True
 except ImportError:
@@ -14,10 +14,10 @@ except ImportError:
 
 class SnippetCMSAppConfig(CMSAppConfig):
     djangocms_versioning_enabled = getattr(
-        settings, 'DJANGOCMS_SNIPPET_VERSIONING_ENABLED', True
+        settings, "DJANGOCMS_SNIPPET_VERSIONING_ENABLED", True
     )
     djangocms_moderation_enabled = getattr(
-        settings, 'DJANGOCMS_SNIPPET_MODERATION_ENABLED', True
+        settings, "DJANGOCMS_SNIPPET_MODERATION_ENABLED", True
     )
 
     cms_enabled = True

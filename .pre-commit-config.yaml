@@ -8,31 +8,19 @@ ci:
     autoupdate_schedule: monthly
 
 repos:
-# Need to drop python 3.5 and 3.6 before we include python upgrade
-#  - repo: https://github.com/asottile/pyupgrade
-#    rev: v2.31.0
-#    hooks:
-#      - id: pyupgrade
-#        args: ["--py38-plus"]
-#
-  #  manually run the upgrade command to fix the issue, no need for ci to run.
-  # - repo: https://github.com/adamchainz/django-upgrade
-  #   rev: '1.16.0'
-  #   hooks:
-  #     - id: django-upgrade
-  #       args: [--target-version, "4.2"]
-
-  - repo: https://github.com/PyCQA/flake8
-    rev: 7.0.0
+ Need to drop python 3.5 and 3.6 before we include python upgrade
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v2.31.0
     hooks:
-      - id: ruff
-        args: [--fix, --exit-non-zero-on-fix]
+      - id: pyupgrade
+        args: ["--py38-plus"]
 
   - repo: https://github.com/asottile/yesqa
     rev: v1.5.0
     hooks:
-      - id: ruff-format
-
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+        
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
     hooks:
@@ -44,9 +32,3 @@ repos:
       - id: check-toml
       - id: end-of-file-fixer
       - id: trailing-whitespace
-
-  # upgrade the isort version to fix compatiable issue withe peotry: https://stackoverflow.com/questions/75269700/pre-commit-fails-to-install-isort-5-11-4-with-error-runtimeerror-the-poetry-co
-  - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
-    hooks:
-      - id: isort

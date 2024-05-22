@@ -1,7 +1,7 @@
-from cms.utils import get_current_site
-from cms.utils.permissions import get_model_permission_codename
 from typing import Any, ClassVar
 
+from cms.utils import get_current_site
+from cms.utils.permissions import get_model_permission_codename
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin import helpers
@@ -18,13 +18,19 @@ from .models import Snippet
 
 # Use the version mixin if djangocms-versioning is installed and enabled
 snippet_admin_classes = [admin.ModelAdmin]
-djangocms_versioning_enabled = getattr(settings, "DJANGOCMS_SNIPPET_VERSIONING_ENABLED", True)
+djangocms_versioning_enabled = getattr(
+    settings, "DJANGOCMS_SNIPPET_VERSIONING_ENABLED", True
+)
 
 try:
     try:
-        from djangocms_versioning.admin import ExtendedIndicatorVersionAdminMixin
+        from djangocms_versioning.admin import (
+            ExtendedIndicatorVersionAdminMixin,
+        )
     except ImportError:
-        from djangocms_versioning.admin import ExtendedVersionAdminMixin as ExtendedIndicatorVersionAdminMixin
+        from djangocms_versioning.admin import (
+            ExtendedVersionAdminMixin as ExtendedIndicatorVersionAdminMixin,
+        )
 
     if djangocms_versioning_enabled:
         snippet_admin_classes.insert(0, ExtendedIndicatorVersionAdminMixin)
@@ -38,23 +44,23 @@ class SnippetAdmin(*snippet_admin_classes):
         js = (
             "admin/vendor/ace/ace.js"
             if "djangocms_static_ace" in settings.INSTALLED_APPS
-            else "https://cdnjs.cloudflare.com/ajax/libs/ace/1.9.6/ace.js",
+            else "https://cdnjs.cloudflare.com/ajax/libs/ace/1.33.3/ace.js",
         )
 
     list_display = ("name",)
-    search_fields: ClassVar[list[str]] = ['name']
+    search_fields: ClassVar[list[str]] = ["name"]
     text_area_attrs: ClassVar[dict[str, Any]] = {
-        'rows': 20,
-        'data-editor': True,
-        'data-mode': getattr(settings, 'DJANGOCMS_SNIPPET_THEME', 'html'),
-        'data-theme': getattr(settings, 'DJANGOCMS_SNIPPET_MODE', 'github'),
+        "rows": 20,
+        "data-editor": True,
+        "data-mode": getattr(settings, "DJANGOCMS_SNIPPET_THEME", "html"),
+        "data-theme": getattr(settings, "DJANGOCMS_SNIPPET_MODE", "github"),
     }
     form = SnippetForm
     formfield_overrides: ClassVar[dict] = {
-        models.TextField: {'widget': Textarea(attrs=text_area_attrs)}
+        models.TextField: {"widget": Textarea(attrs=text_area_attrs)}
     }
     # This was move here from model, otherwise first() and last() return the same when handling grouper queries
-    ordering = ('name',)
+    ordering = ("name",)
 
     class Meta:
         model = Snippet
@@ -71,7 +77,7 @@ class SnippetAdmin(*snippet_admin_classes):
         list_display = list(list_display)
 
         if not djangocms_versioning_enabled:
-            list_display.insert(0, 'slug')
+            list_display.insert(0, "slug")
 
         list_display = tuple(list_display)
         return list_display
@@ -79,13 +85,13 @@ class SnippetAdmin(*snippet_admin_classes):
     def get_search_fields(self, request):
         search_fields = super().get_search_fields(request)
         if not djangocms_versioning_enabled:
-            search_fields.append('slug')
+            search_fields.append("slug")
         return search_fields
 
     def get_prepopulated_fields(self, obj, request):
         prepopulated_fields = super().get_prepopulated_fields(request)
         if not djangocms_versioning_enabled:
-            prepopulated_fields = {'slug': ('name',)}
+            prepopulated_fields = {"slug": ("name",)}
         return prepopulated_fields
 
     def get_list_display_links(self, request, list_display):
@@ -95,16 +101,22 @@ class SnippetAdmin(*snippet_admin_classes):
             self.list_display_links = (None,)
             return self.list_display_links
 
-    def preview_view(self, request, snippet_id=None, form_url='', extra_context=None):
+    def preview_view(
+        self, request, snippet_id=None, form_url="", extra_context=None
+    ):
         """
         Custom preview endpoint to display a change form in read only mode
         Solution based on django changeform view implementation
         https://github.com/django/django/blob/4b8e9492d9003ca357a4402f831112dd72efd2f8/django/contrib/admin/options.py#L1553
         """
-        to_field = request.POST.get(TO_FIELD_VAR, request.GET.get(TO_FIELD_VAR))
+        to_field = request.POST.get(
+            TO_FIELD_VAR, request.GET.get(TO_FIELD_VAR)
+        )
 
         if to_field and not self.to_field_allowed(request, to_field):
-            raise DisallowedModelAdminToField("The field %s cannot be referenced." % to_field)
+            raise DisallowedModelAdminToField(
+                "The field %s cannot be referenced." % to_field
+            )
 
         model = self.model
         opts = model._meta
@@ -112,14 +124,18 @@ class SnippetAdmin(*snippet_admin_classes):
         obj = self.get_object(request, unquote(str(snippet_id)), to_field)
 
         if obj is None:
-            return self._get_obj_does_not_exist_redirect(request, opts, str(snippet_id))
+            return self._get_obj_does_not_exist_redirect(
+                request, opts, str(snippet_id)
+            )
 
         fieldsets = self.get_fieldsets(request, obj)
         model_form = self.get_form(
             request, obj, change=False, fields=flatten_fieldsets(fieldsets)
         )
         form = model_form(instance=obj)
-        formsets, inline_instances = self._create_formsets(request, obj, change=True)
+        formsets, inline_instances = self._create_formsets(
+            request, obj, change=True
+        )
 
         readonly_fields = flatten_fieldsets(fieldsets)
 
@@ -129,40 +145,51 @@ class SnippetAdmin(*snippet_admin_classes):
             # Clear prepopulated fields on a view-only form to avoid a crash.
             {},
             readonly_fields,
-            model_admin=self)
+            model_admin=self,
+        )
         media = self.media + admin_form.media
 
-        inline_formsets = self.get_inline_formsets(request, formsets, inline_instances, obj)
+        inline_formsets = self.get_inline_formsets(
+            request, formsets, inline_instances, obj
+        )
         for inline_formset in inline_formsets:
             media = media + inline_formset.media
 
-        title = _('View %s')
+        title = _("View %s")
         context = {
             **self.admin_site.each_context(request),
-            'title': title % opts.verbose_name,
-            'subtitle': str(obj) if obj else None,
-            'adminform': admin_form,
-            'object_id': snippet_id,
-            'original': obj,
-            'is_popup': IS_POPUP_VAR in request.POST or IS_POPUP_VAR in request.GET,
-            'to_field': to_field,
-            'media': media,
-            'inline_admin_formsets': inline_formsets,
-            'errors': [],
-            'preserved_filters': self.get_preserved_filters(request),
+            "title": title % opts.verbose_name,
+            "subtitle": str(obj) if obj else None,
+            "adminform": admin_form,
+            "object_id": snippet_id,
+            "original": obj,
+            "is_popup": IS_POPUP_VAR in request.POST
+            or IS_POPUP_VAR in request.GET,
+            "to_field": to_field,
+            "media": media,
+            "inline_admin_formsets": inline_formsets,
+            "errors": [],
+            "preserved_filters": self.get_preserved_filters(request),
         }
 
         context.update(extra_context or {})
 
-        return self.render_change_form(request, context, add=False, change=False, obj=obj, form_url=form_url)
+        return self.render_change_form(
+            request,
+            context,
+            add=False,
+            change=False,
+            obj=obj,
+            form_url=form_url,
+        )
 
     def get_urls(self):
         info = self.model._meta.app_label, self.model._meta.model_name
         return [
             path(
-                   "<int:snippet_id>/preview/",
-                   self.admin_site.admin_view(self.preview_view),
-                   name="{}_{}_preview".format(*info),
+                "<int:snippet_id>/preview/",
+                self.admin_site.admin_view(self.preview_view),
+                name="{}_{}_preview".format(*info),
             ),
             *super().get_urls(),
         ]
@@ -175,6 +202,6 @@ class SnippetAdmin(*snippet_admin_classes):
         """
         if obj and not djangocms_versioning_enabled:
             return request.user.has_perm(
-                get_model_permission_codename(self.model, 'add'),
+                get_model_permission_codename(self.model, "add"),
             )
         return False
