@@ -1,10 +1,9 @@
 from importlib import reload
 from unittest import skipIf
 
-from django.test import override_settings
-
 from cms import __version__ as cms_version
 from cms.test_utils.testcases import CMSTestCase
+from django.test import override_settings
 
 from djangocms_snippet import forms
 from djangocms_snippet.forms import SnippetPluginForm

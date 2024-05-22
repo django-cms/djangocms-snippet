@@ -1,8 +1,6 @@
+from cms import __version__ as cms_version
 from django.conf import settings
 from django.db import models
-
-from cms import __version__ as cms_version
-
 
 if cms_version < "4":
     class Version(models.Model):

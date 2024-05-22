@@ -1,9 +1,8 @@
 from unittest import skipIf
 
-from django.apps import apps
-
 from cms import __version__ as cms_version
 from cms.test_utils.testcases import CMSTestCase
+from django.apps import apps
 
 from djangocms_snippet.models import Snippet, SnippetGrouper
 

@@ -1,8 +1,7 @@
+from cms.test_utils.testcases import CMSTestCase
 from django.core.exceptions import ObjectDoesNotExist
 from django.template import Context, Template
 from django.template.exceptions import TemplateSyntaxError
-
-from cms.test_utils.testcases import CMSTestCase
 
 from .utils.factories import SnippetPluginFactory, SnippetWithVersionFactory
 
