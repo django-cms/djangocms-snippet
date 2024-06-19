@@ -7,6 +7,8 @@ Changelog
 Unreleased
 ==========
 
+* feat: Added multiselect feature and add to moderation collection
+
 4.1.0 (2024-05-16)
 ==================
 
