@@ -1,3 +1,4 @@
+from django.apps import apps
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin import helpers
@@ -28,6 +29,21 @@ try:
         snippet_admin_classes.insert(0, ExtendedVersionAdminMixin)
 except ImportError:
     djangocms_versioning_enabled = False
+
+
+def is_moderation_enabled():
+    """
+    Returns True if the Snippet model is enabled for moderation.
+    If it is not, or djangocms_moderation is not installed, returns False.
+
+    :returns: True or False
+    """
+    try:
+        moderation_config = apps.get_app_config("djangocms_moderation")
+    except LookupError:
+        return False
+
+    return Snippet in moderation_config.cms_extension.moderated_models
 
 
 @admin.register(Snippet)
@@ -169,3 +185,24 @@ class SnippetAdmin(*snippet_admin_classes):
                 get_model_permission_codename(self.model, 'add'),
             )
         return False
+
+    def get_actions(self, request):
+        """
+        If djangocms-moderation is enabled, adds admin action to allow multiple snippets to be added to a moderation
+        collection.
+
+        :param request: Request object
+        :returns: dict of admin actions
+        """
+        actions = super().get_actions(request)
+        if not is_moderation_enabled():
+            return actions
+
+        from djangocms_moderation.admin_actions import add_items_to_collection
+
+        actions["add_items_to_collection"] = (
+            add_items_to_collection,
+            "add_items_to_collection",
+            add_items_to_collection.short_description
+        )
+        return actions
