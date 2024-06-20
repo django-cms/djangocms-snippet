@@ -18,9 +18,7 @@ from .models import Snippet
 
 # Use the version mixin if djangocms-versioning is installed and enabled
 snippet_admin_classes = [admin.ModelAdmin]
-djangocms_versioning_enabled = getattr(
-    settings, "DJANGOCMS_SNIPPET_VERSIONING_ENABLED", True
-)
+djangocms_versioning_enabled = getattr(settings, "DJANGOCMS_SNIPPET_VERSIONING_ENABLED", True)
 
 try:
     try:
@@ -56,9 +54,7 @@ class SnippetAdmin(*snippet_admin_classes):
         "data-theme": getattr(settings, "DJANGOCMS_SNIPPET_MODE", "github"),
     }
     form = SnippetForm
-    formfield_overrides: ClassVar[dict] = {
-        models.TextField: {"widget": Textarea(attrs=text_area_attrs)}
-    }
+    formfield_overrides: ClassVar[dict] = {models.TextField: {"widget": Textarea(attrs=text_area_attrs)}}
     # This was move here from model, otherwise first() and last() return the same when handling grouper queries
     ordering = ("name",)
 
@@ -101,22 +97,16 @@ class SnippetAdmin(*snippet_admin_classes):
             self.list_display_links = (None,)
             return self.list_display_links
 
-    def preview_view(
-        self, request, snippet_id=None, form_url="", extra_context=None
-    ):
+    def preview_view(self, request, snippet_id=None, form_url="", extra_context=None):
         """
         Custom preview endpoint to display a change form in read only mode
         Solution based on django changeform view implementation
         https://github.com/django/django/blob/4b8e9492d9003ca357a4402f831112dd72efd2f8/django/contrib/admin/options.py#L1553
         """
-        to_field = request.POST.get(
-            TO_FIELD_VAR, request.GET.get(TO_FIELD_VAR)
-        )
+        to_field = request.POST.get(TO_FIELD_VAR, request.GET.get(TO_FIELD_VAR))
 
         if to_field and not self.to_field_allowed(request, to_field):
-            raise DisallowedModelAdminToField(
-                f"The field {to_field} cannot be referenced."
-            )
+            raise DisallowedModelAdminToField(f"The field {to_field} cannot be referenced.")
 
         model = self.model
         opts = model._meta
@@ -124,18 +114,12 @@ class SnippetAdmin(*snippet_admin_classes):
         obj = self.get_object(request, unquote(str(snippet_id)), to_field)
 
         if obj is None:
-            return self._get_obj_does_not_exist_redirect(
-                request, opts, str(snippet_id)
-            )
+            return self._get_obj_does_not_exist_redirect(request, opts, str(snippet_id))
 
         fieldsets = self.get_fieldsets(request, obj)
-        model_form = self.get_form(
-            request, obj, change=False, fields=flatten_fieldsets(fieldsets)
-        )
+        model_form = self.get_form(request, obj, change=False, fields=flatten_fieldsets(fieldsets))
         form = model_form(instance=obj)
-        formsets, inline_instances = self._create_formsets(
-            request, obj, change=True
-        )
+        formsets, inline_instances = self._create_formsets(request, obj, change=True)
 
         readonly_fields = flatten_fieldsets(fieldsets)
 
@@ -149,9 +133,7 @@ class SnippetAdmin(*snippet_admin_classes):
         )
         media = self.media + admin_form.media
 
-        inline_formsets = self.get_inline_formsets(
-            request, formsets, inline_instances, obj
-        )
+        inline_formsets = self.get_inline_formsets(request, formsets, inline_instances, obj)
         for inline_formset in inline_formsets:
             media = media + inline_formset.media
 
@@ -163,8 +145,7 @@ class SnippetAdmin(*snippet_admin_classes):
             "adminform": admin_form,
             "object_id": snippet_id,
             "original": obj,
-            "is_popup": IS_POPUP_VAR in request.POST
-            or IS_POPUP_VAR in request.GET,
+            "is_popup": IS_POPUP_VAR in request.POST or IS_POPUP_VAR in request.GET,
             "to_field": to_field,
             "media": media,
             "inline_admin_formsets": inline_formsets,
@@ -188,7 +169,7 @@ class SnippetAdmin(*snippet_admin_classes):
             path(
                 "<int:snippet_id>/preview/",
                 self.admin_site.admin_view(self.preview_view),
-                name=f"{self.model._meta.app_label}_{self.model._meta.model_name}_preview"
+                name=f"{self.model._meta.app_label}_{self.model._meta.model_name}_preview",
             ),
             *super().get_urls(),
         ]

@@ -13,7 +13,6 @@ from .utils.factories import SnippetWithVersionFactory
 
 
 class SnippetFormTestCase(CMSTestCase):
-
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=False)
     def test_snippet_form_creates_grouper_no_versioning(self):
         """
@@ -21,11 +20,7 @@ class SnippetFormTestCase(CMSTestCase):
         should be creating one for each new snippet created.
         """
         reload(forms)
-        form_data = {
-            "name": "test_snippet",
-            "slug": "test_snippet",
-            "html": "<h1>Test Title</h1>"
-        }
+        form_data = {"name": "test_snippet", "slug": "test_snippet", "html": "<h1>Test Title</h1>"}
         form = forms.SnippetForm(form_data)
 
         self.assertTrue(form.is_valid())
@@ -42,11 +37,7 @@ class SnippetFormTestCase(CMSTestCase):
         With versioning enabled, groupers should also be created in the background.
         """
         reload(forms)
-        form_data = {
-            "name": "test_snippet",
-            "slug": "test_snippet",
-            "html": "<h1>Test Title</h1>"
-        }
+        form_data = {"name": "test_snippet", "slug": "test_snippet", "html": "<h1>Test Title</h1>"}
         form = forms.SnippetForm(form_data)
 
         self.assertTrue(form.is_valid())
@@ -63,11 +54,7 @@ class SnippetFormTestCase(CMSTestCase):
         With versioning enabled, but no commit flag, models should still be created
         """
         reload(forms)
-        form_data = {
-            "name": "test_snippet",
-            "slug": "test_snippet",
-            "html": "<h1>Test Title</h1>"
-        }
+        form_data = {"name": "test_snippet", "slug": "test_snippet", "html": "<h1>Test Title</h1>"}
         form = forms.SnippetForm(form_data)
 
         self.assertTrue(form.is_valid())
@@ -149,7 +136,7 @@ class SnippetFormTestCase(CMSTestCase):
 
         new_form.clean()
 
-        self.assertDictEqual(new_form.errors, {'slug': ['A Snippet with this slug already exists']})
+        self.assertDictEqual(new_form.errors, {"slug": ["A Snippet with this slug already exists"]})
 
     @skipIf(cms_version < "4", "Django CMS 4 required")
     def test_snippet_form_validation_multiple_version_states_in_grouper(self):
@@ -165,7 +152,7 @@ class SnippetFormTestCase(CMSTestCase):
         snippet_to_publish = SnippetWithVersionFactory(
             name=snippet_to_archive.name,
             slug=snippet_to_archive.slug,
-            snippet_grouper=snippet_to_archive.snippet_grouper
+            snippet_grouper=snippet_to_archive.snippet_grouper,
         )
         # Snippet_to_publish is published, archiving snippet_to_archive
         snippet_to_publish.versions.first().publish(user=self.get_superuser())
@@ -173,7 +160,7 @@ class SnippetFormTestCase(CMSTestCase):
         SnippetWithVersionFactory(
             name=snippet_to_archive.name,
             slug=snippet_to_archive.slug,
-            snippet_grouper=snippet_to_archive.snippet_grouper
+            snippet_grouper=snippet_to_archive.snippet_grouper,
         )
 
         form_data = {
@@ -189,7 +176,6 @@ class SnippetFormTestCase(CMSTestCase):
 
 
 class SnippetPluginFormTestCase(CMSTestCase):
-
     def setUp(self):
         self.form = SnippetPluginForm()
 

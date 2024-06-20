@@ -29,43 +29,39 @@ class SnippetAdminTestCase(CMSTestCase):
             snippet_grouper=SnippetGrouper.objects.create(),
         )
         self.snippet_version = Version.objects.create(
-            content=self.snippet,
-            created_by=self.superuser,
-            state='published'
+            content=self.snippet, created_by=self.superuser, state="published"
         )
         self.snippet_admin = snippet_admin.SnippetAdmin(Snippet, admin)
         self.snippet_admin_request = RequestFactory().get("/admin/djangocms_snippet")
-        self.edit_url = reverse("admin:djangocms_snippet_snippet_change", args=(self.snippet.id,),)
-        self.delete_url = reverse("admin:djangocms_snippet_snippet_delete", args=(self.snippet.id,),)
+        self.edit_url = reverse(
+            "admin:djangocms_snippet_snippet_change",
+            args=(self.snippet.id,),
+        )
+        self.delete_url = reverse(
+            "admin:djangocms_snippet_snippet_delete",
+            args=(self.snippet.id,),
+        )
 
     def test_get_queryset(self):
         current_site = get_current_site()
-        another_site = Site.objects.create(domain='http://www.django-cms.org', name='Django CMS', pk=3)
+        another_site = Site.objects.create(domain="http://www.django-cms.org", name="Django CMS", pk=3)
         current_site_snippet = Snippet.objects.create(
             name="Test Snippet 1",
             slug="test-snippet-one",
             html="<h1>This is a test snippet one</h1>",
             snippet_grouper=SnippetGrouper.objects.create(),
-            site=current_site
+            site=current_site,
         )
         another_site_snippet = Snippet.objects.create(
             name="Test Snippet 2",
             slug="test-snippet-two",
             html="<h1>This is a test snippet two</h1>",
             snippet_grouper=SnippetGrouper.objects.create(),
-            site=another_site
+            site=another_site,
         )
         # Create versions of snippets
-        Version.objects.create(
-            content=current_site_snippet,
-            created_by=self.superuser,
-            state='published'
-        )
-        Version.objects.create(
-            content=another_site_snippet,
-            created_by=self.superuser,
-            state='published'
-        )
+        Version.objects.create(content=current_site_snippet, created_by=self.superuser, state="published")
+        Version.objects.create(content=another_site_snippet, created_by=self.superuser, state="published")
         queryset = self.snippet_admin.get_queryset(self.snippet_admin_request)
         # Test for snippet of current site
         self.assertIn(current_site_snippet, queryset)
@@ -86,8 +82,8 @@ class SnippetAdminTestCase(CMSTestCase):
 
         list_display = self.snippet_admin.get_list_display(self.snippet_admin_request)
 
-        self.assertEqual(self.snippet_admin.__class__.__bases__, (admin.ModelAdmin, ))
-        self.assertEqual(list_display, ('slug', 'name'))
+        self.assertEqual(self.snippet_admin.__class__.__bases__, (admin.ModelAdmin,))
+        self.assertEqual(list_display, ("slug", "name"))
 
     @skipIf(not cms_version.startswith("4.0."), "Django CMS 4 required")
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
@@ -97,16 +93,13 @@ class SnippetAdminTestCase(CMSTestCase):
         list actions items
         """
         from djangocms_versioning.admin import ExtendedVersionAdminMixin
+
         list_display = self.snippet_admin.get_list_display(self.snippet_admin_request)
 
         # Mixins should always come first in the class bases
-        self.assertEqual(
-            self.snippet_admin.__class__.__bases__, (ExtendedVersionAdminMixin, admin.ModelAdmin)
-        )
-        self.assertEqual(
-            list_display[:-1], ('name', 'get_author', 'get_modified_date', 'get_versioning_state')
-        )
-        self.assertEqual(list_display[-1].short_description.lower(), 'actions')
+        self.assertEqual(self.snippet_admin.__class__.__bases__, (ExtendedVersionAdminMixin, admin.ModelAdmin))
+        self.assertEqual(list_display[:-1], ("name", "get_author", "get_modified_date", "get_versioning_state"))
+        self.assertEqual(list_display[-1].short_description.lower(), "actions")
 
     def test_admin_uses_form(self):
         """
@@ -200,7 +193,8 @@ class SnippetAdminFormTestCase(CMSTestCase):
                     "name": "Test Snippet 2",
                     "html": "<p>Test Save Snippet</p>",
                     "slug": "test-snippet-2",
-                })
+                },
+            )
             self.assertRedirects(response, self.changelist_url)
 
         # We should have 2 groupers and snippets, due to the creation of the others in setUp
@@ -216,7 +210,10 @@ class SnippetAdminFormTestCase(CMSTestCase):
         """
         self.snippet_version.publish(user=self.superuser)
         with self.login_user_context(self.superuser):
-            edit_url = reverse("admin:djangocms_snippet_snippet_change", args=(self.snippet.id,),)
+            edit_url = reverse(
+                "admin:djangocms_snippet_snippet_change",
+                args=(self.snippet.id,),
+            )
             response = self.client.get(edit_url)
 
         # Check that we are loading in readonly mode
@@ -234,8 +231,10 @@ class SnippetAdminFormTestCase(CMSTestCase):
 
         with self.login_user_context(self.get_superuser()):
             response = self.client.get(self.changelist_url)
-        self.assertContains(response, '<th class="field-slug"><a href="/en/admin/djangocms_snippet/'
-                                      'snippet/1/change/">test-snippet</a></th>')
+        self.assertContains(
+            response,
+            '<th class="field-slug"><a href="/en/admin/djangocms_snippet/' 'snippet/1/change/">test-snippet</a></th>',
+        )
 
     @skipIf(cms_version < "4", "Django CMS 4 required")
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
@@ -250,8 +249,10 @@ class SnippetAdminFormTestCase(CMSTestCase):
         with self.login_user_context(self.get_superuser()):
             response = self.client.get(self.changelist_url)
         self.assertContains(response, '<td class="field-name">Test Snippet</td>')
-        self.assertNotContains(response, '<th class="field-slug"><a href="/en/admin/djangocms_snippet/'
-                                         'snippet/1/change/">test-snippet</a></th>')
+        self.assertNotContains(
+            response,
+            '<th class="field-slug"><a href="/en/admin/djangocms_snippet/' 'snippet/1/change/">test-snippet</a></th>',
+        )
 
     def test_preview_renders_read_only_fields(self):
         """
@@ -259,7 +260,10 @@ class SnippetAdminFormTestCase(CMSTestCase):
         """
         self.snippet_version.publish(user=self.superuser)
         with self.login_user_context(self.superuser):
-            edit_url = reverse("admin:djangocms_snippet_snippet_preview", args=(self.snippet.id,),)
+            edit_url = reverse(
+                "admin:djangocms_snippet_snippet_preview",
+                args=(self.snippet.id,),
+            )
             response = self.client.get(edit_url)
 
         # Snippet name

@@ -19,9 +19,7 @@ class UserFactory(factory.django.DjangoModelFactory):
     username = FuzzyText(length=12)
     first_name = factory.Faker("first_name")
     last_name = factory.Faker("last_name")
-    email = factory.LazyAttribute(
-        lambda u: f"{u.first_name.lower()}.{u.last_name.lower()}@example.com"
-    )
+    email = factory.LazyAttribute(lambda u: f"{u.first_name.lower()}.{u.last_name.lower()}@example.com")
 
     class Meta:
         model = User
@@ -36,9 +34,7 @@ class UserFactory(factory.django.DjangoModelFactory):
 
 class AbstractVersionFactory(factory.django.DjangoModelFactory):
     object_id = factory.SelfAttribute("content.id")
-    content_type = factory.LazyAttribute(
-        lambda o: ContentType.objects.get_for_model(o.content)
-    )
+    content_type = factory.LazyAttribute(lambda o: ContentType.objects.get_for_model(o.content))
     created_by = factory.SubFactory(UserFactory)
 
     class Meta:
@@ -57,7 +53,6 @@ class PlaceholderFactory(factory.django.DjangoModelFactory):
 
 
 class SnippetGrouperFactory(factory.django.DjangoModelFactory):
-
     class Meta:
         model = SnippetGrouper
 
@@ -106,10 +101,14 @@ def get_plugin_position(plugin):
     if hasattr(plugin.placeholder, "get_last_plugin_position"):
         # Placeholder is a CMS v4 Placeholder
         return (plugin.placeholder.get_last_plugin_position(language=plugin.language) or 0) + 1
-    last_plugin_pos = plugin.placeholder.cmsplugin_set.filter(
-        parent=None,
-        language=plugin.language,
-    ).aggregate(models.Max("position")).get("position__max")
+    last_plugin_pos = (
+        plugin.placeholder.cmsplugin_set.filter(
+            parent=None,
+            language=plugin.language,
+        )
+        .aggregate(models.Max("position"))
+        .get("position__max")
+    )
     offset = (last_plugin_pos or -1) + 1
     return offset + 1
 

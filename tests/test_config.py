@@ -11,7 +11,6 @@ from .utils.factories import SnippetWithVersionFactory
 
 @skipIf(cms_version < "4", "Django CMS 4 required")
 class VersioningConfigTestCase(CMSTestCase):
-
     def test_snippet_copy_method(self):
         """
         App should use the default copy method, and return an identical model (apart from PK)

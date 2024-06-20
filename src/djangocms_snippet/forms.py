@@ -37,17 +37,13 @@ class SnippetForm(forms.ModelForm):
         snippet_queryset = Snippet.objects.all()
 
         if djangocms_versioning_enabled and is_versioning_installed and snippet_grouper:
-                snippet_queryset = snippet_queryset.exclude(snippet_grouper=snippet_grouper)
+            snippet_queryset = snippet_queryset.exclude(snippet_grouper=snippet_grouper)
 
         for snippet in snippet_queryset:
             if snippet.name == name:
-                self.add_error(
-                    "name", _("A Snippet with this name already exists")
-                )
+                self.add_error("name", _("A Snippet with this name already exists"))
             elif snippet.slug == slug:
-                self.add_error(
-                    "slug", _("A Snippet with this slug already exists")
-                )
+                self.add_error("slug", _("A Snippet with this slug already exists"))
 
         return data
 
@@ -63,7 +59,6 @@ class SnippetForm(forms.ModelForm):
 
 
 class SnippetPluginForm(forms.ModelForm):
-
     class Meta:
         model = SnippetPtr
         fields = ("cmsplugin_ptr", "snippet_grouper")

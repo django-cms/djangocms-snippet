@@ -9,8 +9,7 @@ from django.test import TestCase, override_settings
 
 
 class MigrationTestCase(TestCase):
-
-    @skipIf(cms_version.startswith("4.0."), 'This test fails on django-cms 4.0')
+    @skipIf(cms_version.startswith("4.0."), "This test fails on django-cms 4.0")
     @override_settings(MIGRATION_MODULES={})
     def test_for_missing_migrations(self):
         output = StringIO()

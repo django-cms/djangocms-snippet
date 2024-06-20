@@ -20,6 +20,4 @@ def show_draft_content(request=None):
     if not request:
         return False
     request_toolbar = get_toolbar_from_request(request)
-    return request_toolbar.edit_mode_active or getattr(
-        request_toolbar, "preview_mode_active", True
-    )
+    return request_toolbar.edit_mode_active or getattr(request_toolbar, "preview_mode_active", True)

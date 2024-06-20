@@ -13,12 +13,8 @@ except ImportError:
 
 
 class SnippetCMSAppConfig(CMSAppConfig):
-    djangocms_versioning_enabled = getattr(
-        settings, "DJANGOCMS_SNIPPET_VERSIONING_ENABLED", True
-    )
-    djangocms_moderation_enabled = getattr(
-        settings, "DJANGOCMS_SNIPPET_MODERATION_ENABLED", True
-    )
+    djangocms_versioning_enabled = getattr(settings, "DJANGOCMS_SNIPPET_VERSIONING_ENABLED", True)
+    djangocms_moderation_enabled = getattr(settings, "DJANGOCMS_SNIPPET_MODERATION_ENABLED", True)
 
     cms_enabled = True
     # cms toolbar enabled to allow for versioning compare view

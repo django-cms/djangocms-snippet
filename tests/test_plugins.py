@@ -16,7 +16,6 @@ from .utils.factories import SnippetWithVersionFactory
 
 
 class SnippetPluginsTestCase(CMSTestCase):
-
     def setUp(self):
         self.language = "en"
         self.superuser = self.get_superuser()
@@ -32,6 +31,7 @@ class SnippetPluginsTestCase(CMSTestCase):
         else:
             # Publish our page content
             from cms.models import PageContent
+
             self.pagecontent = PageContent._base_manager.filter(page=self.page, language=self.language).first()
             version = self.pagecontent.versions.first()
             version.publish(self.superuser)
@@ -85,9 +85,7 @@ class SnippetPluginsTestCase(CMSTestCase):
             response = self.client.get(request_url)
 
         self.assertContains(response, "Invalid block tag on line 1")
-        self.assertContains(
-            response, "Did you forget to register or load this tag?"
-        )
+        self.assertContains(response, "Did you forget to register or load this tag?")
 
     def test_template_rendering(self):
         request_url = self.page.get_absolute_url()
@@ -112,12 +110,8 @@ class SnippetPluginsTestCase(CMSTestCase):
         with self.login_user_context(self.superuser):
             response = self.client.get(request_url)
 
-        self.assertNotIn(
-            f"Template {template} does not exist".encode(), response.content
-        )
-        self.assertNotIn(
-            b"context must be a dict rather than Context", response.content
-        )
+        self.assertNotIn(f"Template {template} does not exist".encode(), response.content)
+        self.assertNotIn(b"context must be a dict rather than Context", response.content)
         self.assertNotIn(
             b"context must be a dict rather than PluginContext",
             response.content,
@@ -125,9 +119,7 @@ class SnippetPluginsTestCase(CMSTestCase):
         self.assertContains(response, "<p>Hello World Template</p>")
 
     def test_failing_template_rendering(self):
-        request_url = (
-            self.page.get_absolute_url(self.language) + "?toolbar_off=true"
-        )
+        request_url = self.page.get_absolute_url(self.language) + "?toolbar_off=true"
         template = "some_template"
         snippet = SnippetWithVersionFactory(
             name="plugin_snippet",
@@ -167,9 +159,7 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
 
         # Publish the snippet
         snippet_version = Version.objects.create(
-            content=self.snippet,
-            created_by=self.superuser,
-            created=datetime.datetime.now()
+            content=self.snippet, created_by=self.superuser, created=datetime.datetime.now()
         )
         snippet_version.publish(user=self.superuser)
         # Copy the snippet to create a draft
@@ -263,11 +253,7 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
             slug="plugin_snippet",
             snippet_grouper=snippet_grouper,
         )
-        Version.objects.create(
-            content=snippet,
-            created_by=self.superuser,
-            created=datetime.datetime.now()
-        )
+        Version.objects.create(content=snippet, created_by=self.superuser, created=datetime.datetime.now())
 
         add_plugin(
             self.pagecontent.placeholders.get(slot="content"),
@@ -297,9 +283,7 @@ class SnippetPluginVersioningRenderTestCase(CMSTestCase):
             snippet_grouper=snippet_grouper,
         )
         snippet_version = Version.objects.create(
-            content=snippet,
-            created_by=self.superuser,
-            created=datetime.datetime.now()
+            content=snippet, created_by=self.superuser, created=datetime.datetime.now()
         )
         snippet_version.publish(user=self.superuser)
 

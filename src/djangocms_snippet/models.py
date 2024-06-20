@@ -89,9 +89,7 @@ class Snippet(models.Model):
         default="",
         max_length=255,
     )
-    site = models.ForeignKey(
-        Site, on_delete=models.CASCADE, null=True, blank=True
-    )
+    site = models.ForeignKey(Site, on_delete=models.CASCADE, null=True, blank=True)
 
     objects = models.Manager()
     admin_manager = AdminQuerySet.as_manager()
@@ -131,9 +129,7 @@ class SnippetPtr(CMSPlugin):
     search_fields = ["snippet__html"] if SEARCH_ENABLED else []
 
     def get_short_description(self):
-        snippet_label = SnippetGrouper.objects.filter(
-            pk=self.snippet_grouper.pk
-        ).first()
+        snippet_label = SnippetGrouper.objects.filter(pk=self.snippet_grouper.pk).first()
         return snippet_label
 
     class Meta:

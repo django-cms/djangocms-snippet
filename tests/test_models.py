@@ -6,7 +6,6 @@ from .utils.factories import SnippetPluginFactory, SnippetWithVersionFactory
 
 
 class SnippetModelTestCase(CMSTestCase):
-
     def setUp(self):
         self.snippet = SnippetWithVersionFactory(
             name="test snippet",

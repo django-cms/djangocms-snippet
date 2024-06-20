@@ -40,9 +40,7 @@ class SnippetPlugin(CMSPluginBase):
                 t = template.Template(snippet.html)
                 content = t.render(context)
         except template.TemplateDoesNotExist:
-            content = _("Template %(template)s does not exist.") % {
-                "template": snippet.template
-            }
+            content = _("Template %(template)s does not exist.") % {"template": snippet.template}
         except Exception as e:
             content = escape(str(e))
 
