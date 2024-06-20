@@ -72,9 +72,7 @@ class SnippetFragment(template.Node):
             elif isinstance(snippet_instance, int):  # pragma: no cover
                 snippet_instance = Snippet.objects.get(pk=snippet_instance)
 
-            return mark_safe(
-                self.get_content_render(context, snippet_instance)
-            )
+            return mark_safe(self.get_content_render(context, snippet_instance))
 
         # Rely on the fact that manager something went wrong
         # render the fallback template
@@ -100,9 +98,7 @@ class SnippetFragment(template.Node):
                 t = template.Template(instance.html)
                 content = t.render(context)
         except template.TemplateDoesNotExist:
-            content = _("Template %(template)s does not exist.") % {
-                "template": instance.template
-            }
+            content = _("Template %(template)s does not exist.") % {"template": instance.template}
         except Exception as e:  # pragma: no cover
             content = escape(str(e))
             if self.parse_until:
@@ -127,9 +123,7 @@ def do_snippet_fragment(parser, token):
     """
     args = token.split_contents()
     if len(args) < EXPECTED_LENGTH:
-        raise template.TemplateSyntaxError(
-            'You need to specify at least a "snippet" ID, slug or instance'
-        )
+        raise template.TemplateSyntaxError('You need to specify at least a "snippet" ID, slug or instance')
     if "or" in args:
         # Catch contents between tags and pass to renderer
         args.append(parser.parse(("endsnippet_fragment",)))

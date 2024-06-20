@@ -2,7 +2,7 @@
 django CMS Snippet
 ==================
 
-|pypi| |coverage| |python| |django| |djangocms|
+|pypi| |coverage| |python| |django| |djangocms| |django-cms4|
 
 
 **django CMS Snippet** provides a plugin for `django CMS <http://django-cms.org>`_
@@ -89,6 +89,12 @@ please set ``DJANGOCMS_SNIPPET_CACHE`` to ``False`` in your settings::
 
     DJANGOCMS_SNIPPET_CACHE = False # default value is False
 
+Migration 0010 requires the use of a user in order to create versions for existing snippets (if djangocms_versioning is installed and enabled),
+a user can be chosen with the setting ``DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID``, the default is 1.
+This setting is also exposed as an Environment variable for Divio projects using the Divio addon.
+
+    DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID = 2 # Will use user with id: 2
+
 Template tag
 ------------
 
@@ -125,9 +131,11 @@ You can run tests by executing::
     :target: http://badge.fury.io/py/djangocms-snippet
 .. |coverage| image:: https://codecov.io/gh/django-cms/djangocms-snippet/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/django-cms/djangocms-snippet
-.. |python| image:: https://img.shields.io/badge/python-3.5+-blue.svg
+.. |python| image:: https://img.shields.io/badge/python-3.9+-blue.svg
     :target: https://pypi.org/project/djangocms-snippet/
-.. |django| image:: https://img.shields.io/badge/django-2.2,%203.0,%203.1-blue.svg
+.. |django| image:: https://img.shields.io/badge/django-3.2+-blue.svg
     :target: https://www.djangoproject.com/
 .. |djangocms| image:: https://img.shields.io/badge/django%20CMS-3.7%2B-blue.svg
+    :target: https://www.django-cms.org/
+.. |djangocms4| image:: https://img.shields.io/badge/django%20CMS-4-blue.svg
     :target: https://www.django-cms.org/
