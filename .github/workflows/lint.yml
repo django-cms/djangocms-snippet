@@ -27,4 +27,4 @@ jobs:
           pip install ruff
       - name: Run Ruff
         working-directory: ./src
-        run: ruff djangocms_snippet
+        run: ruff check djangocms_snippet
