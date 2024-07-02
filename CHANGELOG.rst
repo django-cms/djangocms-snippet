@@ -7,10 +7,14 @@ Changelog
 Unreleased
 ==========
 
-4.1.0 (2024-05-16)
+4.1.1 (2024-07-02)
 ==================
 
 * feat: Added sites support for Snippets
+
+4.1.0 (2024-05-16)
+==================
+
 * add support for python 3.10
 * add support for django >= 4.2
 * drop support for django < 3.2
