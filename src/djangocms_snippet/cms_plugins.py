@@ -6,7 +6,9 @@ from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
+from .forms import SnippetPluginForm
 from .models import SnippetPtr
+from .utils import show_draft_content
 
 CACHE_ENABLED = getattr(settings, "DJANGOCMS_SNIPPET_CACHE", False)
 
@@ -18,22 +20,27 @@ class SnippetPlugin(CMSPluginBase):
     text_enabled = True
     text_editor_preview = False
     cache = CACHE_ENABLED
+    form = SnippetPluginForm
 
     def render(self, context, instance, placeholder):
+        snippet = instance.snippet_grouper.snippet(show_editable=show_draft_content(context["request"]))
+
+        # Handle the potential for no snippet to be found i.e. Draft
+        if not snippet:
+            return context
+
         try:
-            if instance.snippet.template:
+            if snippet.template:
                 context = context.flatten()
-                context.update({"html": mark_safe(instance.snippet.html)})
-                t = template.loader.get_template(instance.snippet.template)
+                context.update({"html": mark_safe(snippet.html)})
+                t = template.loader.get_template(snippet.template)
                 content = t.render(context)
             else:
                 # only html provided
-                t = template.Template(instance.snippet.html)
+                t = template.Template(snippet.html)
                 content = t.render(context)
         except template.TemplateDoesNotExist:
-            content = _("Template %(template)s does not exist.") % {
-                "template": instance.snippet.template
-            }
+            content = _("Template %(template)s does not exist.") % {"template": snippet.template}
         except Exception as e:
             content = escape(str(e))
 
@@ -41,7 +48,7 @@ class SnippetPlugin(CMSPluginBase):
             {
                 "placeholder": placeholder,
                 "object": instance,
-                "html": mark_safe(instance.snippet.html),
+                "html": mark_safe(snippet.html),
                 "content": content,
             }
         )

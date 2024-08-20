@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "djangocms-snippet"
-version = "3.1.1"
+dynamic = ["version"]
 authors = [
   {name = "Divio AG", email = "info@divio.ch"},
 ]
@@ -26,9 +26,9 @@ classifiers=[
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
     "Framework :: Django",
     "Framework :: Django :: 3.2",
     "Framework :: Django :: 4.2",
@@ -37,6 +37,8 @@ classifiers=[
     "Framework :: Django CMS :: 3.9",
     "Framework :: Django CMS :: 3.10",
     "Framework :: Django CMS :: 3.11",
+    "Framework :: Django CMS :: 4.0",
+    "Framework :: Django CMS :: 4.1",
     "Topic :: Internet :: WWW/HTTP",
     "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
     "Topic :: Software Development",
@@ -91,8 +93,8 @@ allow_untyped_defs = true
 
 [tool.ruff]
 # https://beta.ruff.rs/docs/configuration/
-line-length = 79
-select = [
+line-length = 120
+lint.select = [
   "E",    # pycodestyle errors
   "W",    # pycodestyle warnings
   "F",    # pyflakes
@@ -126,17 +128,20 @@ exclude = [
   "venv",
 ]
 
-ignore = [
+lint.ignore = [
   "E501",  # line-too-long
   "W191",  # tab-indentation
 ]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "__init__.py" = [
   "F401"  # unused-import
 ]
+"test_plugins.py" = [
+  "FBT003",  # Boolean positional value in function call
+]
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 combine-as-imports = true
 known-first-party = [
   "djangocms_snippet",

@@ -1,0 +1,6 @@
+coverage
+django-app-helper
+factory-boy
+flake8
+isort
+tox

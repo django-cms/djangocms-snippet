@@ -5,8 +5,64 @@ Changelog
 Unreleased
 ==========
 
-* Drop support for Django < 3.2
-* Drop support for Python < 3.9
+* feat: Universal support for django CMS 3.11 and 4.x
+
+
+4.1.0 (2024-05-16)
+==================
+
+* feat: Added sites support for Snippets
+* add support for python 3.10
+* add support for django >= 4.2
+* drop support for django < 3.2
+* drop support python < 3.8
+
+
+4.0.1.dev2 (2022-11-15)
+=======================
+
+* feat: Enable add button to create a snippet when adding a SnippetPlugin
+
+
+4.0.1.dev1 (2022-05-10)
+=======================
+
+* Python 3.8, 3.9 support added
+* Django 3.0, 3.1 and 3.2 support added
+* Python 3.5 and 3.6 support removed
+* Django 1.11 support removed
+* port-feat: pre-commit config added from the v3 workstream
+* fix: Added test coverage to admin preview view
+
+
+4.0.0.dev4 (2022-02-03)
+=======================
+
+* feat: Preview icon renders form in read only mode
+
+
+4.0.0.dev3 (2022-01-11)
+=======================
+
+* fix: Snippet plugin added to a page now displays name instead of ID
+* fix: Slug field on list display for admin should only be displayed when versioning is not available
+* fix: Removed unused contents within templates, reducing the clutter within version compare views. Previously this was causing a lot of junk to be included in the version comparison, this will now be reduced.
+
+
+4.0.0.dev2 (2021-12-22)
+=======================
+
+* fix: Removed tight django-treebeard restriction added when 4.5.0 contained breaking changes. The core CMS and django-treebeard have since been patched to resolve the issue.
+
+
+4.0.0.dev1 (2021-12-14)
+=======================
+
+* feat: Exposed the setting DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID as an environment variable for the Divio addon
+* fix: Error when rendering a Draft Snippet plugin on a Published page
+* fix: Publish snippets by default as they were already in that state pre-versioning and cleanup unnecessary migration files before release!
+* feat: djangocms-versioning support added, including model restructure and configuration
+* feat: django-cms v4.0.x support added
 
 3.1.1
 =====
