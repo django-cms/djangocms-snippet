@@ -47,6 +47,7 @@ class SnippetAdmin(*snippet_admin_classes):
 
     list_display = ("name",)
     search_fields: ClassVar[list[str]] = ["name"]
+    change_form_template = 'djangocms_snippet/admin/change_form.html'
     text_area_attrs: ClassVar[dict[str, Any]] = {
         "rows": 20,
         "data-editor": True,
