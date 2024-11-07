@@ -5,6 +5,9 @@ Changelog
 Unreleased
 ==========
 
+
+5.0.0
+==================
 * feat: Universal support for django CMS 3.11 and 4.x
 
 
