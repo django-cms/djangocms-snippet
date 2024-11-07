@@ -52,6 +52,9 @@ static-ace = ["djangocms-static-ace"]
 where = ["src"]
 exclude = ["tests"]
 
+[tool.setuptools.dynamic]
+version = {attr = "djangocms_snippet.__version__"}
+
 [project.urls]
 "Bug Tracker" = "https://github.com/django-cms/djangocms-snippet/issues"
 Changelog = "https://github.com/django-cms/djangocms-snippet/blob/master/CHANGELOG.rst"
