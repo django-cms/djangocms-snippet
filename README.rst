@@ -2,7 +2,7 @@
 django CMS Snippet
 ==================
 
-|pypi| |coverage| |python| |django| |djangocms| |django-cms4|
+|pypi| |coverage| |python| |django| |djangocms| |djangocms4|
 
 
 **django CMS Snippet** provides a plugin for `django CMS <http://django-cms.org>`_
@@ -133,9 +133,9 @@ You can run tests by executing::
     :target: https://codecov.io/gh/django-cms/djangocms-snippet
 .. |python| image:: https://img.shields.io/badge/python-3.9+-blue.svg
     :target: https://pypi.org/project/djangocms-snippet/
-.. |django| image:: https://img.shields.io/badge/django-3.2+-blue.svg
+.. |django| image:: https://img.shields.io/badge/django-4.2+-blue.svg
     :target: https://www.djangoproject.com/
-.. |djangocms| image:: https://img.shields.io/badge/django%20CMS-3.7%2B-blue.svg
+.. |djangocms| image:: https://img.shields.io/badge/django%20CMS-3.11-blue.svg
     :target: https://www.django-cms.org/
-.. |djangocms4| image:: https://img.shields.io/badge/django%20CMS-4-blue.svg
+.. |djangocms4| image:: https://img.shields.io/badge/django%20CMS-4%2B-blue.svg
     :target: https://www.django-cms.org/
