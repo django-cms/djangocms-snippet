@@ -5,10 +5,6 @@ from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
 from djangocms_snippet.models import Snippet, SnippetGrouper, SnippetPtr
-from djangocms_snippet.utils import (
-    djangocms_versioning_enabled,
-    is_versioning_installed,
-)
 
 
 class SnippetForm(forms.ModelForm):
