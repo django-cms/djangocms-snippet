@@ -34,10 +34,7 @@ class SnippetForm(forms.ModelForm):
         name = data.get("name")
         slug = data.get("slug")
         snippet_grouper = data.get("snippet_grouper")
-        snippet_queryset = Snippet.objects.all()
-
-        if djangocms_versioning_enabled and is_versioning_installed and snippet_grouper:
-            snippet_queryset = snippet_queryset.exclude(snippet_grouper=snippet_grouper)
+        snippet_queryset = Snippet.objects.exclude(snippet_grouper=snippet_grouper)
 
         for snippet in snippet_queryset:
             if snippet.name == name:
