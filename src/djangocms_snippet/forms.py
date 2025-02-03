@@ -5,10 +5,6 @@ from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 
 from djangocms_snippet.models import Snippet, SnippetGrouper, SnippetPtr
-from djangocms_snippet.utils import (
-    djangocms_versioning_enabled,
-    is_versioning_installed,
-)
 
 
 class SnippetForm(forms.ModelForm):
@@ -34,10 +30,7 @@ class SnippetForm(forms.ModelForm):
         name = data.get("name")
         slug = data.get("slug")
         snippet_grouper = data.get("snippet_grouper")
-        snippet_queryset = Snippet.objects.all()
-
-        if djangocms_versioning_enabled and is_versioning_installed and snippet_grouper:
-            snippet_queryset = snippet_queryset.exclude(snippet_grouper=snippet_grouper)
+        snippet_queryset = Snippet.objects.exclude(snippet_grouper=snippet_grouper)
 
         for snippet in snippet_queryset:
             if snippet.name == name:
