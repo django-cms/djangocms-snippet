@@ -233,7 +233,7 @@ class SnippetAdminFormTestCase(CMSTestCase):
             response = self.client.get(self.changelist_url)
         self.assertContains(
             response,
-            '<th class="field-slug"><a href="/en/admin/djangocms_snippet/' 'snippet/1/change/">test-snippet</a></th>',
+            '<th class="field-slug"><a href="/en/admin/djangocms_snippet/snippet/1/change/">test-snippet</a></th>',
         )
 
     @skipIf(cms_version < "4", "Django CMS 4 required")
@@ -251,7 +251,7 @@ class SnippetAdminFormTestCase(CMSTestCase):
         self.assertContains(response, '<td class="field-name">Test Snippet</td>')
         self.assertNotContains(
             response,
-            '<th class="field-slug"><a href="/en/admin/djangocms_snippet/' 'snippet/1/change/">test-snippet</a></th>',
+            '<th class="field-slug"><a href="/en/admin/djangocms_snippet/snippet/1/change/">test-snippet</a></th>',
         )
 
     def test_preview_renders_read_only_fields(self):

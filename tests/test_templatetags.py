@@ -18,14 +18,14 @@ class SnippetTemplateTagTestCase(CMSTestCase):
         SnippetPluginFactory(snippet_grouper=snippet_grouper, language=["en"])
 
         context = Context({"title": "world"})
-        template_to_render = Template("{% load snippet_tags %}" '{% snippet_fragment "test_snippet" %}')
+        template_to_render = Template('{% load snippet_tags %}{% snippet_fragment "test_snippet" %}')
         rendered_template = template_to_render.render(context)
 
         self.assertInHTML("<p>hello world</p>", rendered_template)
 
         # test html errors
         context = Context({"title": "world"})
-        template_to_render = Template("{% load snippet_tags %}" '{% snippet_fragment "test_snippet_2" %}')
+        template_to_render = Template('{% load snippet_tags %}{% snippet_fragment "test_snippet_2" %}')
         with self.assertRaises(ObjectDoesNotExist):
             # Snippet matching query does not exist.
             rendered_template = template_to_render.render(context)
@@ -44,7 +44,7 @@ class SnippetTemplateTagTestCase(CMSTestCase):
 
         # use a string to identify
         context = Context({})
-        template_to_render = Template("{% load snippet_tags %}" '{% snippet_fragment "test_snippet" %}')
+        template_to_render = Template('{% load snippet_tags %}{% snippet_fragment "test_snippet" %}')
         rendered_template = template_to_render.render(context)
         self.assertInHTML("<p>Hello World Template</p>", rendered_template)
 
@@ -76,7 +76,7 @@ class SnippetTemplateTagTestCase(CMSTestCase):
         SnippetPluginFactory(snippet_grouper=snippet_grouper, language=["en"])
 
         context = Context({})
-        template_to_render = Template("{% load snippet_tags %}" '{% snippet_fragment "test_snippet" %}')
+        template_to_render = Template('{% load snippet_tags %}{% snippet_fragment "test_snippet" %}')
         rendered_template = template_to_render.render(context)
         self.assertIn("Template does_not_exist.html does not exist.", rendered_template)
 
