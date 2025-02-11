@@ -116,7 +116,7 @@ Optionally provide a fallback if there is no matching id/slug/instance::
     {% endsnippet_fragment %}
 
 
-Known issues
+Known Issues
 ------------
 
 When adding a snippet with the `object` or `embed` tag as root element, the CMS toolbar crashes, making any further editing of the page difficult or impossible. A workaround is to just put those elements inside a `div` tag.
