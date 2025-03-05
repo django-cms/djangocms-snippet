@@ -24,13 +24,17 @@ class SnippetToolbar(CMSToolbar):
     def add_snippet_link_to_admin_menu(self):
         admin_menu = self.toolbar.get_or_create_menu(ADMIN_MENU_IDENTIFIER)
 
-        url = admin_reverse("djangocms_snippet_snippet_changelist")
+        url = admin_reverse('djangocms_snippet_snippet_changelist')
 
-        admin_menu.add_sideframe_item(
-            _("Snippets"),
-            url=url,
-            position=self.get_insert_position(admin_menu, self.plural_name),
-        )
+        add_perm = self.request.user.has_perm('djangocms_snippet.add_snippet')
+        change_perm = self.request.user.has_perm('djangocms_snippet.change_snippet')
+
+        if add_perm or change_perm:
+            admin_menu.add_sideframe_item(
+                _("Snippets"),
+                url=url,
+                position=self.get_insert_position(admin_menu, self.plural_name),
+            )
 
     @classmethod
     def get_insert_position(cls, admin_menu, item_name):
@@ -47,10 +51,10 @@ class SnippetToolbar(CMSToolbar):
             start = admin_menu.find_first(Break, identifier=SHORTCUTS_BREAK)
         end = admin_menu.find_first(Break, identifier=ADMINISTRATION_BREAK)
 
-        items = admin_menu.get_items()[start.index + 1 : end.index]
+        items = admin_menu.get_items()[start.index + 1: end.index]
         for idx, item in enumerate(items):
             try:
-                if force_str(item_name.lower()) < force_str(item.name.lower()):
+                if force_str(item_name.lower()) < force_str(item.name.lower()):  # noqa: E501
                     return idx + start.index + 1
             except AttributeError:
                 # Some item types do not have a 'name' attribute.
