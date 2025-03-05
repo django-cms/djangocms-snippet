@@ -14,17 +14,17 @@ from django.utils.translation import (
 
 
 @toolbar_pool.register
-class AliasToolbar(CMSToolbar):
+class SnippetToolbar(CMSToolbar):
     name = _("Snippet")
     plural_name = _("Snippets")
 
     def populate(self):
-        self.add_aliases_link_to_admin_menu()
+        self.add_snippet_link_to_admin_menu()
 
-    def add_aliases_link_to_admin_menu(self):
+    def add_snippet_link_to_admin_menu(self):
         admin_menu = self.toolbar.get_or_create_menu(ADMIN_MENU_IDENTIFIER)
 
-        url = admin_reverse("djangocms_snippet_snippet_changelist")
+        url = admin_reverse('djangocms_snippet_snippet_changelist')
 
         admin_menu.add_sideframe_item(
             _("Snippets"),
@@ -47,10 +47,10 @@ class AliasToolbar(CMSToolbar):
             start = admin_menu.find_first(Break, identifier=SHORTCUTS_BREAK)
         end = admin_menu.find_first(Break, identifier=ADMINISTRATION_BREAK)
 
-        items = admin_menu.get_items()[start.index + 1 : end.index]
+        items = admin_menu.get_items()[start.index + 1: end.index]
         for idx, item in enumerate(items):
             try:
-                if force_str(item_name.lower()) < force_str(item.name.lower()):
+                if force_str(item_name.lower()) < force_str(item.name.lower()):  # noqa: E501
                     return idx + start.index + 1
             except AttributeError:
                 # Some item types do not have a 'name' attribute.
