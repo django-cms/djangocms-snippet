@@ -121,6 +121,14 @@ Known Issues
 
 When adding a snippet with the `object` or `embed` tag as root element, the CMS toolbar crashes, making any further editing of the page difficult or impossible. A workaround is to just put those elements inside a `div` tag.
 
+**Versioning for djangocms-snippet installations that migrated to version 5.0.0 on django CMS 3.11**
+
+If you are upgrading from a django CMS 3.11 installation to django CMS 4.1 or later, please be aware of the following:
+
+While `djangocms-snippet` includes a migration (``0010_cms4_grouper_version_data_migration``) designed to create initial versions for existing snippets when `djangocms_versioning` is enabled, this migration may not retroactively apply versioning to snippets that existed in a django CMS 3.11 environment if you already migrated to `djangocms-snippet` version 5.0.0.
+Therefore, if you are upgrading from a django CMS 3.11 with `djangocms_snippet` already at version 5.0.0, you will currently not be able to enable versioning for your snippets.
+This might be fixed in a future release.
+
 
 Running Tests
 -------------
