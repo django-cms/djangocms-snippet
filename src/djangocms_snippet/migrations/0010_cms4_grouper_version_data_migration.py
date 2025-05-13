@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
         ('djangocms_snippet', '0009_auto_20210915_0445'),
     ]
 
-    if djangocms_versioning_installed:
+    if djangocms_versioning_installed and djangocms_versioning_config_enabled:
         dependencies += [('djangocms_versioning', '0015_version_modified'), ]
 
     operations = [
