@@ -98,7 +98,7 @@ adding the following to your settings::
     DJANGOCMS_SNIPPET_VERSIONING = True  # Set to version with djangocms-versioning
     DJANGOCMS_SNIPPET_MODERATION = True  # Set to moderate with djangocms-moderation
 
-When adding versioning to djangocms-snippets, you will need to create ``Version``objects using
+When adding versioning to djangocms-snippets, you will need to create ``Version`` objects using
 djangocms-versioning's ``create_version`` management command.
 
 Template tag
