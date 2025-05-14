@@ -7,10 +7,10 @@ def cms4_grouper_version_migration(apps, schema_editor):
     Snippet = apps.get_model('djangocms_snippet', 'Snippet')
     SnippetGrouper = apps.get_model('djangocms_snippet', 'SnippetGrouper')
 
-    snippet_queryset = Snippet.objects.using(db_alias).all()
+    snippet_queryset = Snippet.objects.using(db_alias).iterator()
 
     for snippet in snippet_queryset:
-        grouper = SnippetGrouper.objects.create()
+        grouper = SnippetGrouper.objects.using(db_alias).create()
         snippet.snippet_grouper = grouper
         snippet.save()
 
