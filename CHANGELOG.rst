@@ -2,14 +2,14 @@
 Changelog
 =========
 
-Unreleased
-==========
+5.0.1 (2025-05-14)
+==================
+* fix: Allow for later adding of django CMS versioning
 
 
-5.0.0
+5.0.0 (2025-01-07)
 ==================
 * feat: Universal support for django CMS 3.11 and 4.x
-
 
 4.1.0 (2024-05-16)
 ==================
