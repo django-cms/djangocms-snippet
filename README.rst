@@ -89,11 +89,16 @@ please set ``DJANGOCMS_SNIPPET_CACHE`` to ``False`` in your settings::
 
     DJANGOCMS_SNIPPET_CACHE = False # default value is False
 
-Migration 0010 requires the use of a user in order to create versions for existing snippets (if djangocms_versioning is installed and enabled),
-a user can be chosen with the setting ``DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID``, the default is 1.
-This setting is also exposed as an Environment variable for Divio projects using the Divio addon.
+django CMS 4 and later
+----------------------
 
-    DJANGOCMS_SNIPPET_VERSIONING_MIGRATION_USER_ID = 2 # Will use user with id: 2
+If you use djangocms-versioning or djangocms-moderation, you can have snippets versioned and moderated by
+adding the following to your settings::
+
+    DJANGOCMS_SNIPPET_VERSIONING = True  # Set to version with djangocms-versioning
+    DJANGOCMS_SNIPPET_MODERATION = True  # Set to moderate with djangocms-moderation
+
+If you enable versioning (e.g., set `DJANGOCMS_SNIPPET_VERSIONING = True`) for djangocms-snippets in a project that already contains snippets, you will need to create `Version` objects for those existing snippets using the `create_version` management command provided by djangocms-versioning.
 
 Template tag
 ------------
@@ -119,7 +124,8 @@ Optionally provide a fallback if there is no matching id/slug/instance::
 Known Issues
 ------------
 
-When adding a snippet with the `object` or `embed` tag as root element, the CMS toolbar crashes, making any further editing of the page difficult or impossible. A workaround is to just put those elements inside a `div` tag.
+When adding a snippet with the `object` or `embed` tag as root element, the CMS toolbar crashes, making any further
+editing of the page difficult or impossible. A workaround is to just put those elements inside a `div` tag.
 
 
 Running Tests

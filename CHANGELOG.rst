@@ -2,14 +2,20 @@
 Changelog
 =========
 
-Unreleased
-==========
+5.0.1 (2025-05-14)
+==================
+* fix: Allow for later adding of django CMS versioning
+* fix: Editing of existing snippet not allowed (unversioned snippets) by @fsbraun in https://github.com/django-cms/djangocms-snippet/pull/177
+* docs: Document workaround about issue with object and embed tag. by @sepi in https://github.com/django-cms/djangocms-snippet/pull/178
 
+**New contributors**
 
-5.0.0
+* @mrbazzan made their first contribution in https://github.com/django-cms/djangocms-snippet/pull/175
+* @sepi made their first contribution in https://github.com/django-cms/djangocms-snippet/pull/178
+
+5.0.0 (2025-01-07)
 ==================
 * feat: Universal support for django CMS 3.11 and 4.x
-
 
 4.1.0 (2024-05-16)
 ==================
