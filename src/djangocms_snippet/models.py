@@ -30,6 +30,8 @@ class SnippetGrouper(models.Model):
     The Grouper model for snippet, this is required for versioning
     """
 
+    id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")
+
     def __str__(self):
         return self.name
 
@@ -58,6 +60,8 @@ class Snippet(models.Model):
     """
     A snippet of HTML or a Django template
     """
+
+    id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")
 
     name = models.CharField(
         verbose_name=_("Name"),
