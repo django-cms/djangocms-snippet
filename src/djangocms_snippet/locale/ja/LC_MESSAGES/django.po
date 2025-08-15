@@ -11,42 +11,59 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-08 10:18+0200\n"
+"POT-Creation-Date: 2025-08-15 13:16+0200\n"
 "PO-Revision-Date: 2016-09-02 05:26+0000\n"
 "Last-Translator: Angelo Dini <angelo.dini@divio.ch>, 2016\n"
 "Language-Team: Japanese (https://www.transifex.com/divio/teams/58664/ja/)\n"
+"Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: apps.py:8 models.py:54 models.py:76
+#: admin.py:141
+#, python-format
+msgid "View %s"
+msgstr ""
+
+#: apps.py:7 models.py:103
 msgid "Snippets"
 msgstr "スニペット"
 
-#: cms_plugins.py:18 models.py:53 models.py:75
+#: cms_plugins.py:18 models.py:102
 msgid "Snippet"
 msgstr "スニペット"
 
-#: cms_plugins.py:39 templatetags/snippet_tags.py:98
+#: cms_plugins.py:43 templatetags/snippet_tags.py:101
 #, python-format
 msgid "Template %(template)s does not exist."
 msgstr "テンプレート %(template)s がありません。"
 
-#: models.py:22
+#: forms.py:37
+msgid "A Snippet with this name already exists"
+msgstr ""
+
+#: forms.py:39
+msgid "A Snippet with this slug already exists"
+msgstr ""
+
+#: models.py:40
+msgid "Empty Snippet Grouper"
+msgstr ""
+
+#: models.py:66
 msgid "Name"
 msgstr ""
 
-#: models.py:27
+#: models.py:74
 msgid "HTML"
 msgstr "HTML"
 
-#: models.py:31
+#: models.py:78
 msgid "Template"
 msgstr ""
 
-#: models.py:34
+#: models.py:82
 msgid ""
 "Enter a template (e.g. \"snippets/plugin_xy.html\") to be rendered. If "
 "\"template\" is given, the contents of field \"HTML\" will be passed as "
@@ -54,6 +71,18 @@ msgid ""
 "\"HTML\" is rendered."
 msgstr ""
 
-#: models.py:41
+#: models.py:90
 msgid "Slug"
 msgstr ""
+
+#: models.py:149
+#, fuzzy
+#| msgid "Snippet"
+msgid "Snippet Ptr"
+msgstr "スニペット"
+
+#: models.py:150
+#, fuzzy
+#| msgid "Snippets"
+msgid "Snippet Ptrs"
+msgstr "スニペット"
