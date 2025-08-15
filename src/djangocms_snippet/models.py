@@ -116,10 +116,11 @@ class Snippet(models.Model):
         # check if this snippet was the only one connected to it
         # and if so, delete the grouper instance as well
 
+        deleted = super().delete(*args, **kwargs)
         if not Snippet.admin_manager.filter(snippet_grouper=self.snippet_grouper).exclude(id=self.id).exists():
             self.snippet_grouper.delete()
 
-        return super().delete(*args, **kwargs)
+        return deleted
 
 
 # Plugin model - just a pointer to Snippet

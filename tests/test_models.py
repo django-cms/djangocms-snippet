@@ -1,12 +1,5 @@
 from cms.test_utils.testcases import CMSTestCase
-
-from djangocms_snippet.models import (
-    SEARCH_ENABLED,
-    Snippet,
-    SnippetGrouper,
-    SnippetPtr,
-)
-
+from djangocms_snippet.models import SEARCH_ENABLED, Snippet, SnippetGrouper, SnippetPtr
 from .utils.factories import SnippetPluginFactory, SnippetWithVersionFactory
 
 
@@ -20,6 +13,21 @@ class SnippetModelTestCase(CMSTestCase):
         self.snippet.versions.last().publish(user=self.get_superuser())
         self.snippet_grouper = self.snippet.snippet_grouper
         SnippetPluginFactory(snippet_grouper=self.snippet_grouper, language=["en"])
+
+    def test_snippet_grouper_deleted_with_last_snippet(self):
+        grouper = SnippetGrouper.objects.create()
+        snippet = Snippet.objects.create(
+            name="Test Snippet",
+            snippet_grouper=grouper,
+            html="<p>test</p>",
+            template="",
+            slug="test-snippet-2",
+            site=self.snippet.site,
+        )
+        self.assertTrue(Snippet.objects.filter(pk=snippet.pk).exists())
+        self.assertTrue(SnippetGrouper.objects.filter(pk=grouper.pk).exists())
+        snippet.delete()
+        self.assertFalse(SnippetGrouper.objects.filter(pk=grouper.pk).exists())
 
     def test_settings(self):
         self.assertEqual(SEARCH_ENABLED, False)
@@ -46,10 +54,3 @@ class SnippetModelTestCase(CMSTestCase):
 
         # test strings
         self.assertEqual(instance.snippet_grouper.name, "test snippet")
-
-    def test_snippet_grouper_deletion(self):
-        grouper = SnippetGrouper.objects.all()
-        self.assertEqual(grouper.count(), 1)
-        self.snippet.delete()
-        grouper = SnippetGrouper.objects.all()
-        self.assertEqual(grouper.count(), 0)
