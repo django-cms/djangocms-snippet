@@ -35,11 +35,11 @@ class SnippetGrouper(models.Model):
 
     @property
     def name(self):
-        snippet_qs = Snippet.admin_manager.filter(snippet_grouper=self)
-        if not snippet_qs.exists():
+        snippet = Snippet.admin_manager.latest_content(snippet_grouper=self).first()
+        if not snippet:
             empty_grouper = _("Empty Snippet Grouper")  # xgettext cannot handle f-strings
             return f"{empty_grouper} - {self.pk}"
-        return snippet_qs.first().name or super().__str__
+        return snippet.name
 
     def snippet(self, show_editable=False):  # NOQA: FBT002
         if show_editable:
