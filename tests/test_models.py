@@ -1,6 +1,11 @@
 from cms.test_utils.testcases import CMSTestCase
 
-from djangocms_snippet.models import SEARCH_ENABLED, Snippet, SnippetPtr
+from djangocms_snippet.models import (
+    SEARCH_ENABLED,
+    Snippet,
+    SnippetGrouper,
+    SnippetPtr,
+)
 
 from .utils.factories import SnippetPluginFactory, SnippetWithVersionFactory
 
@@ -41,3 +46,10 @@ class SnippetModelTestCase(CMSTestCase):
 
         # test strings
         self.assertEqual(instance.snippet_grouper.name, "test snippet")
+
+    def test_snippet_grouper_deletion(self):
+        grouper = SnippetGrouper.objects.all()
+        self.assertEqual(grouper.count(), 1)
+        self.snippet.delete()
+        grouper = SnippetGrouper.objects.all()
+        self.assertEqual(grouper.count(), 0)
