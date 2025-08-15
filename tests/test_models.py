@@ -1,5 +1,12 @@
 from cms.test_utils.testcases import CMSTestCase
-from djangocms_snippet.models import SEARCH_ENABLED, Snippet, SnippetGrouper, SnippetPtr
+
+from djangocms_snippet.models import (
+    SEARCH_ENABLED,
+    Snippet,
+    SnippetGrouper,
+    SnippetPtr,
+)
+
 from .utils.factories import SnippetPluginFactory, SnippetWithVersionFactory
 
 
@@ -20,11 +27,10 @@ class SnippetModelTestCase(CMSTestCase):
             name="Test Snippet",
             snippet_grouper=grouper,
             html="<p>test</p>",
-            template="",
             slug="test-snippet-2",
             site=self.snippet.site,
         )
-        self.assertTrue(Snippet.objects.filter(pk=snippet.pk).exists())
+        self.assertTrue(Snippet.admin_manager.filter(pk=snippet.pk).exists())
         self.assertTrue(SnippetGrouper.objects.filter(pk=grouper.pk).exists())
         snippet.delete()
         self.assertFalse(SnippetGrouper.objects.filter(pk=grouper.pk).exists())
