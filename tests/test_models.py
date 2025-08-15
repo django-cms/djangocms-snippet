@@ -21,6 +21,23 @@ class SnippetModelTestCase(CMSTestCase):
         self.snippet_grouper = self.snippet.snippet_grouper
         SnippetPluginFactory(snippet_grouper=self.snippet_grouper, language=["en"])
 
+    def test_snippet_grouper_stays_when_snippet_deleted(self):
+        """
+        Test that the snippet grouper stays when a snippet is deleted.
+        This is to ensure that the grouper is not deleted when there are
+        other snippets associated with it.
+        """
+        temp_snippet = Snippet.objects.create(
+            name="Temporary Snippet",
+            snippet_grouper=self.snippet_grouper,
+            html="<p>temporary</p>",
+            slug="temporary_snippet",
+        )
+        self.assertTrue(Snippet.admin_manager.filter(pk=self.snippet.pk).exists())
+        self.assertTrue(SnippetGrouper.objects.filter(pk=self.snippet_grouper.pk).exists())
+        temp_snippet.delete()
+        self.assertTrue(SnippetGrouper.objects.filter(pk=self.snippet_grouper.pk).exists())
+
     def test_snippet_grouper_deleted_with_last_snippet(self):
         grouper = SnippetGrouper.objects.create()
         snippet = Snippet.objects.create(
