@@ -36,6 +36,9 @@ class SnippetGrouper(models.Model):
     @property
     def name(self):
         snippet_qs = Snippet.admin_manager.filter(snippet_grouper=self)
+        if not snippet_qs.exists():
+            empty_grouper = _("Empty Snippet Grouper")  # xgettext cannot handle f-strings
+            return f"{empty_grouper} - {self.pk}"
         return snippet_qs.first().name or super().__str__
 
     def snippet(self, show_editable=False):  # NOQA: FBT002
@@ -107,6 +110,16 @@ class Snippet(models.Model):
             f"admin:{self._meta.app_label}_{self._meta.model_name}_preview",
             args=[self.id],
         )
+
+    def delete(self, *args, **kwargs):
+        # to avoid orphaned grouper instances,
+        # check if this snippet was the only one connected to it
+        # and if so, delete the grouper instance as well
+
+        if not Snippet.admin_manager.filter(snippet_grouper=self.snippet_grouper).exclude(id=self.id).exists():
+            self.snippet_grouper.delete()
+
+        return super().delete(*args, **kwargs)
 
 
 # Plugin model - just a pointer to Snippet
