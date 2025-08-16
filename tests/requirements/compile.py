@@ -16,7 +16,8 @@ if __name__ == "__main__":
         "compile",
         "--generate-hashes",
         "--allow-unsafe",
-    ] + sys.argv[1:]
+        *sys.argv[1:],
+    ]
     subprocess.run(
         [
             "/usr/local/bin/python3.9",

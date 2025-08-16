@@ -186,3 +186,12 @@ class SnippetAdmin(*snippet_admin_classes):
                 get_model_permission_codename(self.model, "add"),
             )
         return False
+
+    def delete_queryset(self, request, queryset):
+        """
+        Override delete_queryset to ensure that the snippet grouper is deleted
+        when the last snippet in a group is deleted.
+        """
+        for obj in queryset:
+            obj.delete()
+        return queryset
