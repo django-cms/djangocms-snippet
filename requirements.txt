@@ -40,7 +40,7 @@ django-treebeard==4.7.1
     #   django-cms
 djangocms-admin-style==3.3.1
     # via django-cms
-filelock==3.14.0
+filelock==3.19.1
     # via virtualenv
 identify==2.5.36
     # via pre-commit
@@ -70,9 +70,11 @@ tomli==2.0.1
     # via
     #   build
     #   pip-tools
-typing-extensions==4.11.0
-    # via asgiref
-virtualenv==20.26.2
+typing-extensions==4.15.0
+    # via
+    #   asgiref
+    #   virtualenv
+virtualenv==20.36.1
     # via pre-commit
 wheel==0.43.0
     # via
