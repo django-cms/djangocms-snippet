@@ -2,6 +2,17 @@
 Changelog
 =========
 
+5.0.2 (2025-09-03)
+==================
+
+* Add `BigAutoField` to `id` fields by @arkain in https://github.com/django-cms/djangocms-snippet/pull/189
+* Automatically remove orphaned grouper instances by @ms-18 in https://github.com/django-cms/djangocms-snippet/pull/190
+
+**New Contributors**
+* @arkain made their first contribution in https://github.com/django-cms/djangocms-snippet/pull/189
+* @ms-18 made their first contribution in https://github.com/django-cms/djangocms-snippet/pull/190
+
+
 5.0.1 (2025-05-14)
 ==================
 * fix: Allow for later adding of django CMS versioning
