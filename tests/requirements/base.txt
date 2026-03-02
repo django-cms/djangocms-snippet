@@ -1,7 +1,0 @@
-coverage
-factory-boy
-flake8
-isort
-tox
-pytest
-pytest-django

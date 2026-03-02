@@ -142,6 +142,9 @@ lint.ignore = [
 "test_plugins.py" = [
   "FBT003",  # Boolean positional value in function call
 ]
+"tests/conftest.py" = [
+  "N806",  # Ignore lowercase for variable name in function
+]
 
 [tool.ruff.lint.isort]
 combine-as-imports = true
