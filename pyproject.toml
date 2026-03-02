@@ -56,7 +56,7 @@ version = {attr = "djangocms_snippet.__version__"}
 "Bug Tracker" = "https://github.com/django-cms/djangocms-snippet/issues"
 Changelog = "https://github.com/django-cms/djangocms-snippet/blob/master/CHANGELOG.rst"
 Repository = "https://github.com/django-cms/djangocms-snippet"
-Support = "https://www.django-cms.org/slack/"
+Support = "https://discord-support-channel.django-cms.org"
 
 [tool.coverage.run]
 branch = true

@@ -2,7 +2,7 @@
 django CMS Snippet
 ==================
 
-|pypi| |coverage| |python| |django| |djangocms| |djangocms4|
+|pypi| |coverage| |python| |django| |djangocms|
 
 
 **django CMS Snippet** provides a plugin for `django CMS <http://django-cms.org>`_
@@ -49,7 +49,7 @@ One of the easiest contributions you can make is helping to translate this addon
 Documentation
 =============
 
-See ``REQUIREMENTS`` in the `setup.py <https://github.com/divio/djangocms-snippet/blob/master/setup.py>`_
+See ``REQUIREMENTS`` in the `setup.py <https://github.com/django-cms/djangocms-snippet/blob/master/setup.py>`_
 file for additional dependencies.
 
 
@@ -141,13 +141,11 @@ You can run tests by executing::
 
 .. |pypi| image:: https://badge.fury.io/py/djangocms-snippet.svg
     :target: http://badge.fury.io/py/djangocms-snippet
-.. |coverage| image:: https://codecov.io/gh/django-cms/djangocms-snippet/branch/master/graph/badge.svg
+.. |coverage| image:: https://img.shields.io/codecov/c/github/django-cms/djangocms-snippet
     :target: https://codecov.io/gh/django-cms/djangocms-snippet
-.. |python| image:: https://img.shields.io/badge/python-3.9+-blue.svg
+.. |python| image:: https://img.shields.io/pypi/pyversions/djangocms-snippet
     :target: https://pypi.org/project/djangocms-snippet/
-.. |django| image:: https://img.shields.io/badge/django-4.2+-blue.svg
+.. |django| image:: https://img.shields.io/pypi/frameworkversions/django/djangocms-snippet
     :target: https://www.djangoproject.com/
-.. |djangocms| image:: https://img.shields.io/badge/django%20CMS-3.11-blue.svg
-    :target: https://www.django-cms.org/
-.. |djangocms4| image:: https://img.shields.io/badge/django%20CMS-4%2B-blue.svg
+.. |djangocms| image:: https://img.shields.io/pypi/frameworkversions/django-cms/djangocms-snippet
     :target: https://www.django-cms.org/
