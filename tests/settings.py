@@ -11,7 +11,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.admin",
     "django.contrib.messages",
-
     "cms",
     "menus",
     "sekizai",
@@ -48,15 +47,15 @@ TEMPLATES = [
 
 SITE_ID = 1
 
-CMS_TEMPLATES = (
-    ("page.html", "Normal page"),
-)
+CMS_TEMPLATES = (("page.html", "Normal page"),)
 
 CMS_LANGUAGES = {
-    1: [{
-        "code": "en",
-        "name": "English",
-    }]
+    1: [
+        {
+            "code": "en",
+            "name": "English",
+        }
+    ]
 }
 
 DATABASES = {

@@ -123,7 +123,8 @@ class SnippetAdminTestCase(CMSTestCase):
 
         if django_version >= "6":
             self.assertNotContains(
-                response, '<a role="button" href="/en/admin/djangocms_snippet/snippet/1/delete/" class="deletelink">Delete</a>'
+                response,
+                '<a role="button" href="/en/admin/djangocms_snippet/snippet/1/delete/" class="deletelink">Delete</a>',
             )
         else:
             self.assertNotContains(
@@ -143,7 +144,8 @@ class SnippetAdminTestCase(CMSTestCase):
 
         if django_version >= "6":
             self.assertContains(
-                response, '<a role="button" href="/en/admin/djangocms_snippet/snippet/1/delete/" class="deletelink">Delete</a>'
+                response,
+                '<a role="button" href="/en/admin/djangocms_snippet/snippet/1/delete/" class="deletelink">Delete</a>',
             )
         else:
             self.assertContains(
