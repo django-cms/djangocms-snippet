@@ -1,0 +1,9 @@
+coverage
+factory-boy
+tox
+django
+django-cms
+django-treebeard<5.0.3
+djangocms-versioning
+pytest
+pytest-django
