@@ -100,14 +100,15 @@ class SnippetTemplateTagTestCase(CMSTestCase):
         snippet.versions.last().publish(user=self.get_superuser())
 
         # Initialize context and capture the initial stack size. Since
-        # the Context is just a stack of dicts, by checking the lenght of
+        # the Context is just a stack of dicts, by checking the length of
         # the stack we ensure that every 'push' has a corresponding 'pop'.
-        og_object = "This shouldn't change"
+        og_object = "This should not change"
         context = Context({"object": og_object})
         initial_stack_len = len(context.dicts)
 
-        template_to_render = Template('{% load snippet_tags %}{% snippet_fragment "pollution_test" %}')
-        template_to_render.render(context)
+        template_to_render = Template('{% load snippet_tags %}{% snippet_fragment "pollution_test" %} "{{ object }}"')
+        rendered_template = template_to_render.render(context)
 
+        self.assertIn(og_object, rendered_template)
         self.assertEqual(context.get("object"), og_object)
         self.assertEqual(len(context.dicts), initial_stack_len, "Context stack leaked")
