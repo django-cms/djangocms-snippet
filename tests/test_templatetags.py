@@ -90,3 +90,21 @@ class SnippetTemplateTagTestCase(CMSTestCase):
         with self.assertRaises(TemplateSyntaxError):
             # You need to specify at least a "snippet" ID, slug or instance
             template_to_render = Template("{% load snippet_tags %}{% snippet_fragment %}")
+
+    def test_context_pollution(self):
+        snippet = SnippetWithVersionFactory(
+            name="test snippet",
+            html="<p>Snippet content</p>",
+            slug="pollution_test",
+        )
+        snippet.versions.last().publish(user=self.get_superuser())
+
+        og_object = "This shouldn't change"
+        context = Context({"object": og_object})
+        initial_stack_len = len(context.dicts)
+
+        template_to_render = Template('{% load snippet_tags %}{% snippet_fragment "pollution_test" %}')
+        template_to_render.render(context)
+
+        self.assertEqual(context.get("object"), og_object)
+        self.assertEqual(len(context.dicts), initial_stack_len, "Context stack leaked")

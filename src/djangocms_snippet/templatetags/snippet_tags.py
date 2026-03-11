@@ -82,31 +82,27 @@ class SnippetFragment(template.Node):
         """
         Render the snippet HTML, using a template if defined in its instance
         """
-        context.update(
-            {
-                "object": instance,
-            }
-        )
-        try:
-            if instance.template:
-                context.update({"html": mark_safe(instance.html)})
-                content = template.loader.render_to_string(
-                    instance.template,
-                    context.flatten(),
-                )
-            else:
-                t = template.Template(instance.html)
-                content = t.render(context)
-        except template.TemplateDoesNotExist:
-            content = _("Template %(template)s does not exist.") % {"template": instance.template}
-        except Exception as e:  # pragma: no cover
-            content = escape(str(e))
-            if self.parse_until:
-                # In case we are running 'exceptionless'
-                # Re-raise exception in order not to get the
-                # error rendered
-                raise
-        return content
+        with context.push({"object": instance}):
+            try:
+                if instance.template:
+                    context.update({"html": mark_safe(instance.html)})
+                    content = template.loader.render_to_string(
+                        instance.template,
+                        context.flatten(),
+                    )
+                else:
+                    t = template.Template(instance.html)
+                    content = t.render(context)
+            except template.TemplateDoesNotExist:
+                content = _("Template %(template)s does not exist.") % {"template": instance.template}
+            except Exception as e:  # pragma: no cover
+                content = escape(str(e))
+                if self.parse_until:
+                    # In case we are running 'exceptionless'
+                    # Re-raise exception in order not to get the
+                    # error rendered
+                    raise
+            return content
 
 
 @register.tag(name="snippet_fragment")
