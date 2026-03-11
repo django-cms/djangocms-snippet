@@ -4,6 +4,7 @@ from unittest import skipIf
 from cms import __version__ as cms_version
 from cms.test_utils.testcases import CMSTestCase
 from cms.utils import get_current_site
+from django import __version__ as django_version
 from django.contrib import admin
 from django.contrib.sites.models import Site
 from django.shortcuts import reverse
@@ -120,9 +121,15 @@ class SnippetAdminTestCase(CMSTestCase):
         with self.login_user_context(self.superuser):
             response = self.client.get(self.edit_url)
 
-        self.assertNotContains(
-            response, '<a href="/en/admin/djangocms_snippet/snippet/1/delete/" class="deletelink">Delete</a>'
-        )
+        if django_version >= "6":
+            self.assertNotContains(
+                response,
+                '<a role="button" href="/en/admin/djangocms_snippet/snippet/1/delete/" class="deletelink">Delete</a>',
+            )
+        else:
+            self.assertNotContains(
+                response, '<a href="/en/admin/djangocms_snippet/snippet/1/delete/" class="deletelink">Delete</a>'
+            )
 
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=False)
     def test_admin_delete_button_available_versioning_disabled(self):
@@ -135,9 +142,15 @@ class SnippetAdminTestCase(CMSTestCase):
         with self.login_user_context(self.superuser):
             response = self.client.get(self.edit_url)
 
-        self.assertContains(
-            response, '<a href="/en/admin/djangocms_snippet/snippet/1/delete/" class="deletelink">Delete</a>'
-        )
+        if django_version >= "6":
+            self.assertContains(
+                response,
+                '<a role="button" href="/en/admin/djangocms_snippet/snippet/1/delete/" class="deletelink">Delete</a>',
+            )
+        else:
+            self.assertContains(
+                response, '<a href="/en/admin/djangocms_snippet/snippet/1/delete/" class="deletelink">Delete</a>'
+            )
 
     @skipIf(cms_version < "4", "Django CMS 4 required")
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
@@ -273,4 +286,4 @@ class SnippetAdminFormTestCase(CMSTestCase):
         # Snippet HTML
         self.assertContains(response, '<div class="readonly">&lt;h1&gt;This is a test&lt;/h1&gt;</div>')
         # Snippet template
-        self.assertContains(response, '<div class="readonly"></div>')
+        self.assertContains(response, '<div class="readonly">-</div>')

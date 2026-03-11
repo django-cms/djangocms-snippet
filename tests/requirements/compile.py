@@ -6,6 +6,87 @@ import subprocess
 import sys
 from pathlib import Path
 
+CONFIG_MATRIX = [
+    [
+        "python3.10",
+        "Django>=5.2,<6.0",
+        "django-cms>=4.1,<5.0",
+        "py310-django52-cms41.txt",
+    ],
+    [
+        "python3.10",
+        "Django>=5.2,<6.0",
+        "django-cms>=5.0,<5.1.0a1",
+        "py310-django52-cms50.txt",
+    ],
+    [
+        "python3.11",
+        "Django>=5.2,<6.0",
+        "django-cms>=4.1,<5.0",
+        "py311-django52-cms41.txt",
+    ],
+    [
+        "python3.11",
+        "Django>=5.2,<6.0",
+        "django-cms>=5.0,<5.1.0a1",
+        "py311-django52-cms50.txt",
+    ],
+    [
+        "python3.12",
+        "Django>=5.2,<6.0",
+        "django-cms>=4.1,<5.0",
+        "py312-django52-cms41.txt",
+    ],
+    [
+        "python3.12",
+        "Django>=5.2,<6.0",
+        "django-cms>=5.0,<5.1.0a1",
+        "py312-django52-cms50.txt",
+    ],
+    [
+        "python3.12",
+        "Django>=5.2,<6.0",
+        "django-cms==5.1.0a1",
+        "py312-django52-cms51alpha1.txt",
+    ],
+    [
+        "python3.12",
+        "Django==6.0",
+        "django-cms>=5.0,<5.1.0a1",
+        "py312-django60-cms50.txt",
+    ],
+    [
+        "python3.12",
+        "Django==6.0",
+        "django-cms==5.1.0a1",
+        "py312-django60-cms51alpha1.txt",
+    ],
+    [
+        "python3.13",
+        "Django>=5.2,<6.0",
+        "django-cms>=5.0,<5.1.0a1",
+        "py313-django52-cms50.txt",
+    ],
+    [
+        "python3.13",
+        "Django>=5.2,<6.0",
+        "django-cms==5.1.0a1",
+        "py313-django52-cms51alpha1.txt",
+    ],
+    [
+        "python3.13",
+        "Django==6.0",
+        "django-cms>=5.0,<5.1.0a1",
+        "py313-django60-cms50.txt",
+    ],
+    [
+        "python3.13",
+        "Django==6.0",
+        "django-cms==5.1.0a1",
+        "py313-django60-cms51alpha1.txt",
+    ],
+]
+
 if __name__ == "__main__":
     os.chdir(Path(__file__).parent)
     os.environ["CUSTOM_COMPILE_COMMAND"] = "requirements/compile.py"
@@ -18,87 +99,22 @@ if __name__ == "__main__":
         "--allow-unsafe",
         *sys.argv[1:],
     ]
-    subprocess.run(
-        [
-            "/usr/local/bin/python3.9",
+
+    for req in CONFIG_MATRIX:
+        cmd = [
+            req[0],
             *common_args,
-            "-P",
-            "Django>=3.2a1,<3.3",
-            "-P",
-            "django-cms>=3.11,<4.0",
-            "-o",
-            "py39-django32-cms311.txt",
-        ],
-        check=True,
-        capture_output=True,
-    )
-    subprocess.run(
-        [
-            "/usr/local/bin/python3.9",
-            *common_args,
-            "-P",
-            "Django>=4.2a1,<5.0",
-            "-P",
-            "django-cms>=3.11,<4.0",
-            "-o",
-            "py39-django42-cms311.txt",
-        ],
-        check=True,
-        capture_output=True,
-    )
-    subprocess.run(
-        [
-            "/usr/local/bin/python3.10",
-            *common_args,
-            "-P",
-            "Django>=3.2a1,<3.3",
-            "-P",
-            "django-cms>=3.11,<4.0",
-            "-o",
-            "py310-django32-cms311.txt",
-        ],
-        check=True,
-        capture_output=True,
-    )
-    subprocess.run(
-        [
-            "/usr/local/bin/python3.10",
-            *common_args,
-            "-P",
-            "Django>=4.2a1,<5.0",
-            "-P",
-            "django-cms>=3.11,<4.0",
-            "-o",
-            "py310-django42-cms311.txt",
-        ],
-        check=True,
-        capture_output=True,
-    )
-    subprocess.run(
-        [
-            "/usr/local/bin/python3.11",
-            *common_args,
-            "-P",
-            "Django>=3.2a1,<4.0",
-            "-P",
-            "django-cms>=3.11,<4.0",
-            "-o",
-            "py311-django32-cms311.txt",
-        ],
-        check=True,
-        capture_output=True,
-    )
-    subprocess.run(
-        [
-            "/usr/local/bin/python3.11",
-            *common_args,
-            "-P",
-            "Django>=4.2a1,<5.0",
-            "-P",
-            "django-cms>=3.11,<4.0",
-            "-o",
-            "py311-django42-cms311.txt",
-        ],
-        check=True,
-        capture_output=True,
-    )
+            "--upgrade-package",
+            req[1],
+            "--upgrade-package",
+            req[2],
+            "--output-file",
+            req[3],
+        ]
+        print(" ".join(cmd))
+        output = subprocess.run(
+            cmd,
+            check=True,
+            capture_output=True,
+        )
+        print(output.stderr.decode("utf-8"))
