@@ -82,10 +82,16 @@ class SnippetFragment(template.Node):
         """
         Render the snippet HTML, using a template if defined in its instance
         """
-        with context.push({"object": instance}):
+
+        # Create the data to push to the context all at once, including
+        # the 'html' if there's a template.
+        context_data = {"object": instance}
+        if instance.template:
+            context_data["html"] = mark_safe(instance.html)
+
+        with context.push(**context_data):
             try:
                 if instance.template:
-                    context.update({"html": mark_safe(instance.html)})
                     content = template.loader.render_to_string(
                         instance.template,
                         context.flatten(),

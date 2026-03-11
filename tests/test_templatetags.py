@@ -99,6 +99,9 @@ class SnippetTemplateTagTestCase(CMSTestCase):
         )
         snippet.versions.last().publish(user=self.get_superuser())
 
+        # Initialize context and capture the initial stack size. Since
+        # the Context is just a stack of dicts, by checking the lenght of
+        # the stack we ensure that every 'push' has a corresponding 'pop'.
         og_object = "This shouldn't change"
         context = Context({"object": og_object})
         initial_stack_len = len(context.dicts)
