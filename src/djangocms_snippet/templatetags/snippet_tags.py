@@ -82,31 +82,33 @@ class SnippetFragment(template.Node):
         """
         Render the snippet HTML, using a template if defined in its instance
         """
-        context.update(
-            {
-                "object": instance,
-            }
-        )
-        try:
-            if instance.template:
-                context.update({"html": mark_safe(instance.html)})
-                content = template.loader.render_to_string(
-                    instance.template,
-                    context.flatten(),
-                )
-            else:
-                t = template.Template(instance.html)
-                content = t.render(context)
-        except template.TemplateDoesNotExist:
-            content = _("Template %(template)s does not exist.") % {"template": instance.template}
-        except Exception as e:  # pragma: no cover
-            content = escape(str(e))
-            if self.parse_until:
-                # In case we are running 'exceptionless'
-                # Re-raise exception in order not to get the
-                # error rendered
-                raise
-        return content
+
+        # Create the data to push to the context all at once, including
+        # the 'html' if there's a template.
+        context_data = {"object": instance}
+        if instance.template:
+            context_data["html"] = mark_safe(instance.html)
+
+        with context.push(**context_data):
+            try:
+                if instance.template:
+                    content = template.loader.render_to_string(
+                        instance.template,
+                        context.flatten(),
+                    )
+                else:
+                    t = template.Template(instance.html)
+                    content = t.render(context)
+            except template.TemplateDoesNotExist:
+                content = _("Template %(template)s does not exist.") % {"template": instance.template}
+            except Exception as e:  # pragma: no cover
+                content = escape(str(e))
+                if self.parse_until:
+                    # In case we are running 'exceptionless'
+                    # Re-raise exception in order not to get the
+                    # error rendered
+                    raise
+            return content
 
 
 @register.tag(name="snippet_fragment")
