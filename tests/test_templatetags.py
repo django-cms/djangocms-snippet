@@ -110,5 +110,6 @@ class SnippetTemplateTagTestCase(CMSTestCase):
         rendered_template = template_to_render.render(context)
 
         self.assertIn(og_object, rendered_template)
+        self.assertIn("<p>Snippet content</p>", rendered_template)
         self.assertEqual(context.get("object"), og_object)
         self.assertEqual(len(context.dicts), initial_stack_len, "Context stack leaked")
