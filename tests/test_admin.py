@@ -1,7 +1,5 @@
 from importlib import reload
-from unittest import skipIf
 
-from cms import __version__ as cms_version
 from cms.test_utils.testcases import CMSTestCase
 from cms.utils import get_current_site
 from django import __version__ as django_version
@@ -9,6 +7,7 @@ from django.contrib import admin
 from django.contrib.sites.models import Site
 from django.shortcuts import reverse
 from django.test import RequestFactory, override_settings
+from djangocms_versioning.admin import ExtendedIndicatorVersionAdminMixin
 
 try:
     from djangocms_versioning.models import Version
@@ -86,20 +85,29 @@ class SnippetAdminTestCase(CMSTestCase):
         self.assertEqual(self.snippet_admin.__class__.__bases__, (admin.ModelAdmin,))
         self.assertEqual(list_display, ("slug", "name"))
 
-    @skipIf(not cms_version.startswith("4.0."), "Django CMS 4 required")
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_admin_list_display_with_versioning(self):
         """
         With versioning enabled, list_display should be populated with both versioning related items, and the
         list actions items
         """
-        from djangocms_versioning.admin import ExtendedVersionAdminMixin
-
         list_display = self.snippet_admin.get_list_display(self.snippet_admin_request)
 
         # Mixins should always come first in the class bases
-        self.assertEqual(self.snippet_admin.__class__.__bases__, (ExtendedVersionAdminMixin, admin.ModelAdmin))
-        self.assertEqual(list_display[:-1], ("name", "get_author", "get_modified_date", "get_versioning_state"))
+        self.assertEqual(
+            self.snippet_admin.__class__.__bases__,
+            (ExtendedIndicatorVersionAdminMixin, admin.ModelAdmin),
+        )
+
+        # Verify static fields
+        self.assertEqual(list_display[:3], ("name", "get_author", "get_modified_date"))
+
+        # Verify dynamic indicator
+        indicator_field = list_display[3]
+        self.assertTrue(callable(indicator_field), f"{indicator_field} is not callable")
+        self.assertEqual(indicator_field.__name__, "indicator")
+
+        # Verify actions
         self.assertEqual(list_display[-1].short_description.lower(), "actions")
 
     def test_admin_uses_form(self):
@@ -109,7 +117,6 @@ class SnippetAdminTestCase(CMSTestCase):
         """
         self.assertEqual(self.snippet_admin.form, SnippetForm)
 
-    @skipIf(cms_version < "4", "Django CMS 4 required")
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_admin_delete_button_disabled_versioning_enabled(self):
         """
@@ -152,7 +159,6 @@ class SnippetAdminTestCase(CMSTestCase):
                 response, '<a href="/en/admin/djangocms_snippet/snippet/1/delete/" class="deletelink">Delete</a>'
             )
 
-    @skipIf(cms_version < "4", "Django CMS 4 required")
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_admin_delete_endpoint_inaccessible_versioning_enabled(self):
         """
@@ -196,7 +202,6 @@ class SnippetAdminFormTestCase(CMSTestCase):
         )
         self.snippet_version = Version.objects.create(content=self.snippet, created_by=self.superuser)
 
-    @skipIf(cms_version < "4", "Django CMS 4 required")
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_admin_form_save_method(self):
         with self.login_user_context(self.superuser):
@@ -214,7 +219,6 @@ class SnippetAdminFormTestCase(CMSTestCase):
         self.assertEqual(Snippet._base_manager.count(), 2)
         self.assertEqual(SnippetGrouper._base_manager.count(), 2)
 
-    @skipIf(cms_version < "4", "Django CMS 4 required")
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_admin_form_edit_when_locked(self):
         """
@@ -235,7 +239,7 @@ class SnippetAdminFormTestCase(CMSTestCase):
         self.assertEqual(Snippet.objects.count(), 1)
 
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=False)
-    def test_slug_colomn_should_hyperlinked_with_versioning_disabled(self):
+    def test_slug_column_should_hyperlinked_with_versioning_disabled(self):
         """
         Slug column should be visible and hyperlinked when versioning is disabled
         """
@@ -249,7 +253,6 @@ class SnippetAdminFormTestCase(CMSTestCase):
             '<th class="field-slug"><a href="/en/admin/djangocms_snippet/snippet/1/change/">test-snippet</a></th>',
         )
 
-    @skipIf(cms_version < "4", "Django CMS 4 required")
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_name_colomn_should_not_be_hyperlinked_with_versioning_enabled(self):
         """
