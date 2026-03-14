@@ -7,6 +7,7 @@ from django.contrib import admin
 from django.contrib.sites.models import Site
 from django.shortcuts import reverse
 from django.test import RequestFactory, override_settings
+from djangocms_versioning.admin import ExtendedIndicatorVersionAdminMixin
 
 try:
     from djangocms_versioning.models import Version
@@ -90,13 +91,23 @@ class SnippetAdminTestCase(CMSTestCase):
         With versioning enabled, list_display should be populated with both versioning related items, and the
         list actions items
         """
-        from djangocms_versioning.admin import ExtendedVersionAdminMixin
-
         list_display = self.snippet_admin.get_list_display(self.snippet_admin_request)
 
         # Mixins should always come first in the class bases
-        self.assertEqual(self.snippet_admin.__class__.__bases__, (ExtendedVersionAdminMixin, admin.ModelAdmin))
-        self.assertEqual(list_display[:-1], ("name", "get_author", "get_modified_date", "get_versioning_state"))
+        self.assertEqual(
+            self.snippet_admin.__class__.__bases__,
+            (ExtendedIndicatorVersionAdminMixin, admin.ModelAdmin),
+        )
+
+        # Verify static fields
+        self.assertEqual(list_display[:3], ("name", "get_author", "get_modified_date"))
+
+        # Verify dynamic indicator
+        indicator_field = list_display[3]
+        self.assertTrue(callable(indicator_field), f"{indicator_field} is not callable")
+        self.assertEqual(indicator_field.__name__, "indicator")
+
+        # Verify actions
         self.assertEqual(list_display[-1].short_description.lower(), "actions")
 
     def test_admin_uses_form(self):
@@ -228,7 +239,7 @@ class SnippetAdminFormTestCase(CMSTestCase):
         self.assertEqual(Snippet.objects.count(), 1)
 
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=False)
-    def test_slug_colomn_should_hyperlinked_with_versioning_disabled(self):
+    def test_slug_column_should_hyperlinked_with_versioning_disabled(self):
         """
         Slug column should be visible and hyperlinked when versioning is disabled
         """
