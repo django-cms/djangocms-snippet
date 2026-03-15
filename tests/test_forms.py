@@ -1,7 +1,5 @@
 from importlib import reload
-from unittest import skipIf
 
-from cms import __version__ as cms_version
 from cms.test_utils.testcases import CMSTestCase
 from django.test import override_settings
 
@@ -65,7 +63,6 @@ class SnippetFormTestCase(CMSTestCase):
         self.assertEqual(SnippetGrouper.objects.count(), 1)
         self.assertEqual(Snippet._base_manager.count(), 1)
 
-    @skipIf(cms_version < "4", "Django CMS 4 required")
     @override_settings(DJANGOCMS_SNIPPET_VERSIONING_ENABLED=True)
     def test_snippet_form_adds_to_existing_grouper_with_versioning(self):
         """
@@ -138,7 +135,6 @@ class SnippetFormTestCase(CMSTestCase):
 
         self.assertDictEqual(new_form.errors, {"slug": ["A Snippet with this slug already exists"]})
 
-    @skipIf(cms_version < "4", "Django CMS 4 required")
     def test_snippet_form_validation_multiple_version_states_in_grouper(self):
         """
         Snippet forms should be valid regardless of the versions, or states which already exist within its grouper.

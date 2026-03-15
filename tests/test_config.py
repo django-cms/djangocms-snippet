@@ -1,6 +1,3 @@
-from unittest import skipIf
-
-from cms import __version__ as cms_version
 from cms.test_utils.testcases import CMSTestCase
 from django.apps import apps
 
@@ -9,7 +6,6 @@ from djangocms_snippet.models import Snippet, SnippetGrouper
 from .utils.factories import SnippetWithVersionFactory
 
 
-@skipIf(cms_version < "4", "Django CMS 4 required")
 class VersioningConfigTestCase(CMSTestCase):
     def test_snippet_copy_method(self):
         """

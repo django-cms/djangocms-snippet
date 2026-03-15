@@ -1,5 +1,4 @@
 import datetime
-from unittest import skipIf
 
 from cms import __version__ as cms_version
 from cms.api import add_plugin, create_page
@@ -141,7 +140,6 @@ class SnippetPluginsTestCase(CMSTestCase):
         self.assertContains(response, "Template some_template does not exist")
 
 
-@skipIf(cms_version < "4", "Django CMS 4 required")
 class SnippetPluginVersioningRenderTestCase(CMSTestCase):
     def setUp(self):
         from cms.models import PageContent
