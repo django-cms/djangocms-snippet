@@ -1,6 +1,0 @@
-bump2version
-django-cms>=3.7
-django-treebeard
-pip-tools
-pre-commit
-wheel
