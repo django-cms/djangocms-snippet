@@ -145,9 +145,9 @@ django-classy-tags==4.1.0 \
     # via
     #   django-cms
     #   django-sekizai
-django-cms==5.1.0a1 \
-    --hash=sha256:1ba02cef54384a1ff3bc7bec4bb6ee22a6c997669545b5f29b3107bdcf418ef4 \
-    --hash=sha256:f1702344b493ea817556730856552a9ce9d04c3cc2122c039a54f0c94e9bbff4
+django-cms==5.0.9 \
+    --hash=sha256:5c37b691c295604b10ccafdf9245bed109c9d54a92c39aa6558f65baca84f972 \
+    --hash=sha256:89f362910d152781e859a9cec1d223f87c95c814ea19c4e967736b9a5d1c4145
     # via
     #   -r requirements.in
     #   djangocms-versioning
