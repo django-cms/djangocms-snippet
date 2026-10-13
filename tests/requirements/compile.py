@@ -85,6 +85,30 @@ CONFIG_MATRIX = [
         "django-cms==5.1.0a1",
         "py313-django60-cms51alpha1.txt",
     ],
+    [
+        "python3.15",
+        "Django>=5.2,<6.0",
+        "django-cms>=5.0,<5.1.0a1",
+        "py315-django52-cms50.txt",
+    ],
+    [
+        "python3.15",
+        "Django>=5.2,<6.0",
+        "django-cms==5.1.0a1",
+        "py315-django52-cms51alpha1.txt",
+    ],
+    [
+        "python3.15",
+        "Django==6.0",
+        "django-cms>=5.0,<5.1.0a1",
+        "py315-django60-cms50.txt",
+    ],
+    [
+        "python3.15",
+        "Django==6.0",
+        "django-cms==5.1.0a1",
+        "py315-django60-cms51alpha1.txt",
+    ],
 ]
 
 if __name__ == "__main__":
