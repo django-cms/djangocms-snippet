@@ -169,9 +169,9 @@ django-treebeard==5.0.2 \
     # via
     #   -r requirements.in
     #   django-cms
-djangocms-versioning==2.5.1 \
-    --hash=sha256:8e4d69e583918a8bb6264049a865c68abd2adc8cd14aa150b8ab1ad4d852a226 \
-    --hash=sha256:f396014400dab3a561227d5395496aec40666f5e36aa8337f99aff8752249581
+djangocms-versioning==2.6.1 \
+    --hash=sha256:85f1601398bc497f433068a3325454c763e076a0d8bd0060a5b996e211c8290e \
+    --hash=sha256:a271bab0503c09344539f2ea339dd4a90409034e3be9997f951c09c23c681182
     # via -r requirements.in
 factory-boy==3.3.3 \
     --hash=sha256:1c39e3289f7e667c4285433f305f8d506efc2fe9c73aaea4151ebd5cdea394fc \

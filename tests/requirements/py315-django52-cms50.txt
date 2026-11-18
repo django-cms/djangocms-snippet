@@ -194,9 +194,9 @@ djangocms-admin-style==3.3.1 \
     --hash=sha256:9b76aafda245205e0a88d57efd5097a96c1a7fcb78d7f3efa50955eb980079de \
     --hash=sha256:da20de3831f1a1a74de33fe12bbd3865a0027a982878c02aa1d102b1c799d767
     # via django-cms
-djangocms-versioning==2.8.0 \
-    --hash=sha256:4ad9b43692549d11a7b56f294043aa72cd359b74950135149eec80a84d702745 \
-    --hash=sha256:cc71d2baa139ff3a87b202eef7a25c41993e6807b55ca64f63a921b2a1b80ad0
+djangocms-versioning==2.6.1 \
+    --hash=sha256:85f1601398bc497f433068a3325454c763e076a0d8bd0060a5b996e211c8290e \
+    --hash=sha256:a271bab0503c09344539f2ea339dd4a90409034e3be9997f951c09c23c681182
     # via -r requirements.in
 factory-boy==3.3.3 \
     --hash=sha256:1c39e3289f7e667c4285433f305f8d506efc2fe9c73aaea4151ebd5cdea394fc \
